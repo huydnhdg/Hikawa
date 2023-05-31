@@ -1,0 +1,709 @@
+﻿@model WebApplication.Models.Client.E_Product_View
+@{
+    ViewBag.Title = !string.IsNullOrEmpty(ViewBag.title) ? ViewBag.title : "Sản phẩm";
+    int price = Model.ListedPrice != 0 ? Model.Price : Model.ListedPrice;
+}
+<link rel='preload' href='https://vietnamrobotics.vn/wp-content/plugins/woocommerce/assets/css/photoswipe/photoswipe.min.css?ver=6.3.1' data-rocket-async="style" as="style" onload="this.onload=null;this.rel='stylesheet'" onerror="this.removeAttribute('data-rocket-async')" type='text/css' media='all' />
+<link rel='preload' href='https://vietnamrobotics.vn/wp-content/plugins/woocommerce/assets/css/photoswipe/default-skin/default-skin.min.css?ver=6.3.1' data-rocket-async="style" as="style" onload="this.onload=null;this.rel='stylesheet'" onerror="this.removeAttribute('data-rocket-async')" type='text/css' media='all' />
+
+@*<link rel='preload' href='https://vietnamrobotics.vn/wp-content/plugins/woocommerce-deposits/assets/css/frontend.css?ver=1.5.8' data-rocket-async="style" as="style" onload="this.onload=null;this.rel='stylesheet'" onerror="this.removeAttribute('data-rocket-async')" type='text/css' media='all' />*@
+<link rel='preload' href='https://vietnamrobotics.vn/wp-content/themes/flatsome/assets/css/flatsome.css?ver=3.15.4' data-rocket-async="style" as="style" onload="this.onload=null;this.rel='stylesheet'" onerror="this.removeAttribute('data-rocket-async')" type='text/css' media='all' />
+
+<link rel='preload' href='https://vietnamrobotics.vn/wp-content/themes/flatsome/assets/css/flatsome-shop.css?ver=3.15.4' data-rocket-async="style" as="style" onload="this.onload=null;this.rel='stylesheet'" onerror="this.removeAttribute('data-rocket-async')" type='text/css' media='all' />
+<link rel='preload' href='https://vietnamrobotics.vn/wp-content/themes/flatsome-child/style.css?ver=3.0' data-rocket-async="style" as="style" onload="this.onload=null;this.rel='stylesheet'" onerror="this.removeAttribute('data-rocket-async')" type='text/css' media='all' />
+<style id="custom-css" type="text/css">
+    #ccart {
+        top: 0px;
+        right: -10px;
+    }
+    :root {
+        --primary-color: #0f994e;
+    }
+
+    .container-width, .full-width .ubermenu-nav, .container, .row {
+        max-width: 1260px
+    }
+
+        .row.row-collapse {
+            max-width: 1230px
+        }
+
+        .row.row-small {
+            max-width: 1252.5px
+        }
+
+        .row.row-large {
+            max-width: 1290px
+        }
+
+    .header-main {
+        height: 68px
+    }
+
+    #logo img {
+        max-height: 68px
+    }
+
+    #logo {
+        width: 204px;
+    }
+
+        #logo img {
+            padding: 10px 0;
+        }
+
+        #logo a {
+            max-width: 204px;
+        }
+
+    .stuck #logo img {
+        padding: 12px 0;
+    }
+
+    .header-top {
+        min-height: 30px
+    }
+
+    .transparent .header-main {
+        height: 68px
+    }
+
+    .transparent #logo img {
+        max-height: 68px
+    }
+
+    .has-transparent + .page-title:first-of-type, .has-transparent + #main > .page-title, .has-transparent + #main > div > .page-title, .has-transparent + #main .page-header-wrapper:first-of-type .page-title {
+        padding-top: 68px;
+    }
+
+    .header.show-on-scroll, .stuck .header-main {
+        height: 60px !important
+    }
+
+    .stuck #logo img {
+        max-height: 60px !important
+    }
+
+    .header-bottom {
+        background-color: #f1f1f1
+    }
+
+    .header-main .nav > li > a {
+        line-height: 16px
+    }
+
+    @@media (max-width: 549px) {
+        .header-main {
+            height: 60px
+        }
+
+        #logo img {
+            max-height: 60px
+        }
+    }
+    /* Color */
+
+    .accordion-title.active, .has-icon-bg .icon .icon-inner, .logo a, .primary.is-underline, .primary.is-link, .badge-outline .badge-inner, .nav-outline > li.active > a, .nav-outline > li.active > a, .cart-icon strong, [data-color='primary'], .is-outline.primary {
+        color: #0f994e;
+    }
+    /* Color !important */
+
+    [data-text-color="primary"] {
+        color: #0f994e !important;
+    }
+    /* Background Color */
+
+    [data-text-bg="primary"] {
+        background-color: #0f994e;
+    }
+    /* Background */
+
+    .scroll-to-bullets a, .featured-title, .label-new.menu-item > a:after, .nav-pagination > li > .current, .nav-pagination > li > span:hover, .nav-pagination > li > a:hover, .has-hover:hover .badge-outline .badge-inner, button[type="submit"], .button.wc-forward:not(.checkout):not(.checkout-button), .button.submit-button, .button.primary:not(.is-outline), .featured-table .title, .is-outline:hover, .has-icon:hover .icon-label, .nav-dropdown-bold .nav-column li > a:hover, .nav-dropdown.nav-dropdown-bold > li > a:hover, .nav-dropdown-bold.dark .nav-column li > a:hover, .nav-dropdown.nav-dropdown-bold.dark > li > a:hover, .header-vertical-menu__opener, .is-outline:hover, .tagcloud a:hover, .grid-tools a, input[type='submit']:not(.is-form), .box-badge:hover .box-text, input.button.alt, .nav-box > li > a:hover, .nav-box > li.active > a, .nav-pills > li.active > a, .current-dropdown .cart-icon strong, .cart-icon:hover strong, .nav-line-bottom > li > a:before, .nav-line-grow > li > a:before, .nav-line > li > a:before, .banner, .header-top, .slider-nav-circle .flickity-prev-next-button:hover svg, .slider-nav-circle .flickity-prev-next-button:hover .arrow, .primary.is-outline:hover, .button.primary:not(.is-outline), input[type='submit'].primary, input[type='submit'].primary, input[type='reset'].button, input[type='button'].primary, .badge-inner {
+        background-color: #0f994e;
+    }
+        /* Border */
+
+        .nav-vertical.nav-tabs > li.active > a, .scroll-to-bullets a.active, .nav-pagination > li > .current, .nav-pagination > li > span:hover, .nav-pagination > li > a:hover, .has-hover:hover .badge-outline .badge-inner, .accordion-title.active, .featured-table, .is-outline:hover, .tagcloud a:hover, blockquote, .has-border, .cart-icon strong:after, .cart-icon strong, .blockUI:before, .processing:before, .loading-spin, .slider-nav-circle .flickity-prev-next-button:hover svg, .slider-nav-circle .flickity-prev-next-button:hover .arrow, .primary.is-outline:hover {
+            border-color: #0f994e
+        }
+
+    .nav-tabs > li.active > a {
+        border-top-color: #0f994e
+    }
+
+    .widget_shopping_cart_content .blockUI.blockOverlay:before {
+        border-left-color: #0f994e
+    }
+
+    .woocommerce-checkout-review-order .blockUI.blockOverlay:before {
+        border-left-color: #0f994e
+    }
+    /* Fill */
+
+    .slider .flickity-prev-next-button:hover svg, .slider .flickity-prev-next-button:hover .arrow {
+        fill: #0f994e;
+    }
+    /* Background Color */
+
+    [data-icon-label]:after, .secondary.is-underline:hover, .secondary.is-outline:hover, .icon-label, .button.secondary:not(.is-outline), .button.alt:not(.is-outline), .badge-inner.on-sale, .button.checkout, .single_add_to_cart_button, .current .breadcrumb-step {
+        background-color: #ec881c;
+    }
+
+    [data-text-bg="secondary"] {
+        background-color: #ec881c;
+    }
+    /* Color */
+
+    .secondary.is-underline, .secondary.is-link, .secondary.is-outline, .stars a.active, .star-rating:before, .woocommerce-page .star-rating:before, .star-rating span:before, .color-secondary {
+        color: #ec881c
+    }
+    /* Color !important */
+
+    [data-text-color="secondary"] {
+        color: #ec881c !important;
+    }
+    /* Border */
+
+    .secondary.is-outline:hover {
+        border-color: #ec881c
+    }
+
+    .success.is-underline:hover, .success.is-outline:hover, .success {
+        background-color: #6ba630
+    }
+
+        .success-color, .success.is-link, .success.is-outline {
+            color: #6ba630;
+        }
+
+    .success-border {
+        border-color: #6ba630 !important;
+    }
+    /* Color !important */
+
+    [data-text-color="success"] {
+        color: #6ba630 !important;
+    }
+    /* Background Color */
+
+    [data-text-bg="success"] {
+        background-color: #6ba630;
+    }
+
+    body {
+        font-size: 110%;
+    }
+
+    @@media screen and (max-width: 549px) {
+        body {
+            font-size: 105%;
+        }
+    }
+
+    body {
+        font-family: "Questrial", sans-serif
+    }
+
+    body {
+        font-weight: 0
+    }
+
+    body {
+        color: #111111
+    }
+
+    .nav > li > a {
+        font-family: "Questrial", sans-serif;
+    }
+
+    .mobile-sidebar-levels-2 .nav > li > ul > li > a {
+        font-family: "Questrial", sans-serif;
+    }
+
+    .nav > li > a {
+        font-weight: 0;
+    }
+
+    .mobile-sidebar-levels-2 .nav > li > ul > li > a {
+        font-weight: 0;
+    }
+
+    h1, h2, h3, h4, h5, h6, .heading-font, .off-canvas-center .nav-sidebar.nav-vertical > li > a {
+        font-family: "Questrial", sans-serif;
+    }
+
+    h1, h2, h3, h4, h5, h6, .heading-font, .banner h1, .banner h2 {
+        font-weight: 0;
+    }
+
+    h1, h2, h3, h4, h5, h6, .heading-font {
+        color: #000000;
+    }
+
+    .breadcrumbs {
+        text-transform: none;
+    }
+
+    button, .button {
+        text-transform: none;
+    }
+
+    .nav > li > a, .links > li > a {
+        text-transform: none;
+    }
+
+    .section-title span {
+        text-transform: none;
+    }
+
+    h3.widget-title, span.widget-title {
+        text-transform: none;
+    }
+
+    a {
+        color: #0f994e;
+    }
+
+    @@media screen and (min-width: 550px) {
+        .products .box-vertical .box-image {
+            min-width: 300px !important;
+            width: 300px !important;
+        }
+    }
+
+    button[name='update_cart'] {
+        display: none;
+    }
+    /* Custom CSS */ /* questrial-regular - vietnamese_latin */
+
+    @@font-face {
+        font-family: 'Questrial';
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+    }
+
+    .dark .has-shadow .box:not(.box-overlay):not(.box-shade) {
+        background-color: #0f994e;
+    }
+
+    .woocommerce-products-compare-compare-button {
+        margin: 0;
+        display: inline-flex;
+        align-content: space-between;
+        justify-content: center;
+        align-items: baseline;
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: inherit;
+    }
+
+    .dark .woocommerce-products-compare-compare-button {
+        background-color: #0f994e;
+    }
+
+    .dark > .has-shadow > .col > .col-inner {
+        background-color: #0f994e;
+    }
+
+    .label-new.menu-item > a:after {
+        content: "New";
+    }
+
+    .label-hot.menu-item > a:after {
+        content: "Hot";
+    }
+
+    .label-sale.menu-item > a:after {
+        content: "Sale";
+    }
+
+    .label-popular.menu-item > a:after {
+        content: "Popular";
+    }
+</style>
+
+<div class="shop-container">
+    <div class="container">
+        <div class="woocommerce-notices-wrapper"></div>
+    </div>
+    <div id="product-17457" class="product type-product post-17457 status-publish first instock product_cat-xiaomi product_cat-may-hut-bui has-post-thumbnail shipping-taxable purchasable product-type-simple">
+        <div class="product-container">
+            <div class="product-main">
+                <div class="row content-row mb-0">
+
+                    <div class="product-gallery large-6 col">
+
+                        <div class="product-images relative mb-half has-hover woocommerce-product-gallery woocommerce-product-gallery--with-images woocommerce-product-gallery--columns-4 images" data-columns="4">
+
+                            <div class="badge-container is-larger absolute left top z-1">
+                            </div>
+
+                            <div class="image-tools absolute top show-on-hover right z-3">
+                            </div>
+
+                            <figure class="woocommerce-product-gallery__wrapper product-gallery-slider slider slider-nav-small mb-half has-image-zoom"
+                                    data-flickity-options='{
+                "cellAlign": "center",
+                "wrapAround": true,
+                "autoPlay": false,
+                "prevNextButtons":true,
+                "adaptiveHeight": true,
+                "imagesLoaded": true,
+                "lazyLoad": 1,
+                "dragThreshold" : 15,
+                "pageDots": false,
+                "rightToLeft": false       }'>
+
+                                @if (Model.ListImage != null)
+                                {
+                                    foreach (var item in Model.ListImage)
+                                    {
+                                        <div data-thumb="@item.Image"
+                                             data-thumb-alt="@Model.Name" class="woocommerce-product-gallery__image slide">
+                                            <a href="@item.Image">
+                                                <img width="600" height="600"
+                                                     src="@item.Image" class="skip-lazy"
+                                                     alt="@Model.Name" title="@Model.Name"
+                                                     data-caption="@Model.Name"
+                                                     data-src="@item.Image"
+                                                     data-large_image="@item.Image"
+                                                     data-large_image_width="800" data-large_image_height="800"
+                                                     sizes="(max-width: 600px) 100vw, 600px" />
+                                            </a>
+                                        </div>
+                                    }
+                                }
+
+                            </figure>
+
+                            <div class="image-tools absolute bottom left z-3">
+                                <a href="#product-zoom" class="zoom-button button is-outline circle icon tooltip hide-for-small" title="Zoom">
+                                    <i class="fa fa-arrows-alt"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="product-thumbnails thumbnails slider-no-arrows slider row row-small row-slider slider-nav-small small-columns-4"
+                             data-flickity-options='{
+			"cellAlign": "left",
+			"wrapAround": false,
+			"autoPlay": false,
+			"prevNextButtons": true,
+			"asNavFor": ".product-gallery-slider",
+			"percentPosition": true,
+			"imagesLoaded": true,
+			"pageDots": false,
+			"rightToLeft": false,
+			"contain": true
+		}'>
+
+                            @if (Model.ListImage != null)
+                            {
+                                foreach (var item in Model.ListImage)
+                                {
+                                    <div class="col">
+                                        <a>
+                                            <img src="@item.Image" alt="@Model.Name" width="300" height="300" class="attachment-woocommerce_thumbnail"
+                                                 data-lazy-src="@item.Image" />
+                                            <noscript>
+                                                <img src="@item.Image" alt="@Model.Name" width="300" height="300" class="attachment-woocommerce_thumbnail" />
+                                            </noscript>
+                                        </a>
+                                    </div>
+                                }
+                            }
+
+
+                        </div>
+                    </div>
+
+                    <div class="product-info summary col-fit col entry-summary product-summary text-left form-flat">
+
+                        <h1 class="product-title product_title entry-title">
+                            @Model.Name
+                        </h1>
+
+                        <div class="is-divider small"></div>
+                        <div class="price-wrapper">
+                            <p class="price product-page-price ">
+                                <span class="woocommerce-Price-amount amount"><bdi>@string.Format("{0:#,##0}", price)&nbsp;<span class="woocommerce-Price-currencySymbol">&#8363;</span></bdi></span>
+                            </p>
+                        </div>
+                        <div class="product-short-description">
+                            <h2>@Model.Description</h2>
+                            @Html.Raw(Model.LongDescription)
+                            <p><strong>Bảo hành chính hãng: @Model.Limited tháng</strong></p>
+                            @*<p>Sản phẩm được sản xuất theo tiêu chuẩn Châu Âu, nhập khẩu và phân phối chính hãng bởi Vietnam Robotics.</p>*@
+                        </div>
+
+
+                        <form class="cart" method="post" enctype='multipart/form-data'>
+                            <input type="number" id="Quantity" name="Quantity" min="1" value="1">
+
+                            <button onclick="addCart()" type="button" name="add-to-cart" class="single_add_to_cart_button button alt">Thêm vào giỏ hàng</button>
+
+                        </form>
+
+                        <a href="tel:0938%2033%2066%2033" target="_self" class="button primary is-gloss">
+                            <i class="fa fa-phone"></i>  <span>1900 638356</span>
+                        </a>
+
+                        <a href="tel:0904%2069%2088%2099" target="_self" class="button primary is-gloss">
+                            <i class="fa fa-phone"></i>  <span>1900 638356</span>
+                        </a>
+                        <div class="product_meta">
+                            <span class="posted_in">Danh mục: <a href="/dat-hang/@Model.CateLink" rel="tag">@Model.CateName</a></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-footer">
+                <div class="container">
+
+                    <div class="woocommerce-tabs wc-tabs-wrapper container tabbed-content">
+                        <ul class="tabs wc-tabs product-tabs small-nav-collapse nav nav-uppercase nav-line nav-left" role="tablist">
+                            <li class="description_tab active" id="tab-title-description" role="tab" aria-controls="tab-description">
+                                <a href="#tab-description">
+                                    Mô tả
+                                </a>
+                            </li>
+                            <li class="additional_information_tab " id="tab-title-additional_information" role="tab" aria-controls="tab-additional_information">
+                                <a href="#tab-additional_information">
+                                    Thông tin bổ sung
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-panels">
+                            <div class="woocommerce-Tabs-panel woocommerce-Tabs-panel--description panel entry-content active" id="tab-description" role="tabpanel" aria-labelledby="tab-title-description">
+                                @Html.Raw(Model.Details)
+
+                            </div>
+                            <div class="woocommerce-Tabs-panel woocommerce-Tabs-panel--additional_information panel entry-content " id="tab-additional_information" role="tabpanel" aria-labelledby="tab-title-additional_information">
+
+
+                                <table class="woocommerce-product-attributes shop_attributes">
+                                    @foreach (var item in Model.Extra)
+                                    {
+                                        <tr class="woocommerce-product-attributes-item woocommerce-product-attributes-item--attribute_pa_cong-suat">
+                                            <th class="woocommerce-product-attributes-item__label">@item.Title</th>
+                                            <td class="woocommerce-product-attributes-item__value">
+                                                <p>@item.Description</p>
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="related related-products-wrapper product-section">
+
+                        <h3 class="product-section-title container-width product-section-title-related pt-half pb-half uppercase">
+                            Sản phẩm tương tự
+                        </h3>
+                        <div class="row equalize-box large-columns-4 medium-columns-3 small-columns-1 row-small slider row-slider slider-nav-reveal slider-nav-push" data-flickity-options='{"imagesLoaded": true, "groupCells": "100%", "dragThreshold" : 5, "cellAlign": "left","wrapAround": true,"prevNextButtons": true,"percentPosition": true,"pageDots": false, "rightToLeft": false, "autoPlay" : false}'>
+
+
+                            @if (Model.ListProduct != null)
+                            {
+                                foreach (var item in Model.ListProduct)
+                                {
+                                    int itemprice = item.Price != 0 ? item.Price : item.ListedPrice;
+                                    <div class="product-small col has-hover product type-product post-16331 status-publish instock product_cat-xiaomi product_cat-may-hut-bui has-post-thumbnail shipping-taxable purchasable product-type-simple">
+                                        <div class="col-inner">
+
+                                            <div class="badge-container absolute left top z-1">
+                                            </div>
+                                            <div class="product-small box ">
+                                                <div class="box-image">
+                                                    <div class="image-fade_in_back">
+                                                        <a href="/dat-hang/@Model.CateLink/@item.Link" aria-label="@item.Link">
+                                                            <img src="@item.Thumnails" />
+                                                        </a>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="box-text box-text-products text-center grid-style-2">
+                                                    <div class="title-wrapper">
+                                                        <p class="category uppercase is-smaller no-text-overflow product-cat op-7">
+                                                            @item.Trademark
+                                                        </p>
+                                                        <p class="name product-title woocommerce-loop-product__title">
+                                                            <a href="/dat-hang/@Model.CateLink/@item.Link" class="woocommerce-LoopProduct-link woocommerce-loop-product__link">@item.Name</a>
+                                                        </p>
+                                                    </div><div class="price-wrapper">
+                                                        <span class="price">
+                                                            <span class="woocommerce-Price-amount amount">
+                                                                <bdi>
+                                                                    @string.Format("{0:#,##0}", itemprice)&nbsp;
+                                                                    <span class="woocommerce-Price-currencySymbol">&#8363;</span>
+                                                                </bdi>
+                                                            </span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                }
+                            }
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides.
+        PhotoSwipe keeps only 3 of them in the DOM to save memory.
+        Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" aria-label="Đóng (Esc)"></button>
+
+                <button class="pswp__button pswp__button--zoom" aria-label="Phóng to/ thu nhỏ"></button>
+
+                <div class="pswp__preloader">
+                    <div class="loading-spin"></div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button--arrow--left" aria-label="Ảnh trước (mũi tên trái)"></button>
+
+            <button class="pswp__button--arrow--right" aria-label="Ảnh tiếp (mũi tên phải)"></button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section scripts{
+    <script>class RocketLazyLoadScripts { constructor() { this.triggerEvents = ["keydown", "mousedown", "mousemove", "touchmove", "touchstart", "touchend", "wheel"], this.userEventHandler = this._triggerListener.bind(this), this.touchStartHandler = this._onTouchStart.bind(this), this.touchMoveHandler = this._onTouchMove.bind(this), this.touchEndHandler = this._onTouchEnd.bind(this), this.clickHandler = this._onClick.bind(this), this.interceptedClicks = [], window.addEventListener("pageshow", (e => { this.persisted = e.persisted })), window.addEventListener("DOMContentLoaded", (() => { this._preconnect3rdParties() })), this.delayedScripts = { normal: [], async: [], defer: [] }, this.allJQueries = [] } _addUserInteractionListener(e) { document.hidden ? e._triggerListener() : (this.triggerEvents.forEach((t => window.addEventListener(t, e.userEventHandler, { passive: !0 }))), window.addEventListener("touchstart", e.touchStartHandler, { passive: !0 }), window.addEventListener("mousedown", e.touchStartHandler), document.addEventListener("visibilitychange", e.userEventHandler)) } _removeUserInteractionListener() { this.triggerEvents.forEach((e => window.removeEventListener(e, this.userEventHandler, { passive: !0 }))), document.removeEventListener("visibilitychange", this.userEventHandler) } _onTouchStart(e) { "HTML" !== e.target.tagName && (window.addEventListener("touchend", this.touchEndHandler), window.addEventListener("mouseup", this.touchEndHandler), window.addEventListener("touchmove", this.touchMoveHandler, { passive: !0 }), window.addEventListener("mousemove", this.touchMoveHandler), e.target.addEventListener("click", this.clickHandler), this._renameDOMAttribute(e.target, "onclick", "rocket-onclick")) } _onTouchMove(e) { window.removeEventListener("touchend", this.touchEndHandler), window.removeEventListener("mouseup", this.touchEndHandler), window.removeEventListener("touchmove", this.touchMoveHandler, { passive: !0 }), window.removeEventListener("mousemove", this.touchMoveHandler), e.target.removeEventListener("click", this.clickHandler), this._renameDOMAttribute(e.target, "rocket-onclick", "onclick") } _onTouchEnd(e) { window.removeEventListener("touchend", this.touchEndHandler), window.removeEventListener("mouseup", this.touchEndHandler), window.removeEventListener("touchmove", this.touchMoveHandler, { passive: !0 }), window.removeEventListener("mousemove", this.touchMoveHandler) } _onClick(e) { e.target.removeEventListener("click", this.clickHandler), this._renameDOMAttribute(e.target, "rocket-onclick", "onclick"), this.interceptedClicks.push(e), e.preventDefault(), e.stopPropagation(), e.stopImmediatePropagation() } _replayClicks() { window.removeEventListener("touchstart", this.touchStartHandler, { passive: !0 }), window.removeEventListener("mousedown", this.touchStartHandler), this.interceptedClicks.forEach((e => { e.target.dispatchEvent(new MouseEvent("click", { view: e.view, bubbles: !0, cancelable: !0 })) })) } _renameDOMAttribute(e, t, n) { e.hasAttribute && e.hasAttribute(t) && (event.target.setAttribute(n, event.target.getAttribute(t)), event.target.removeAttribute(t)) } _triggerListener() { this._removeUserInteractionListener(this), "loading" === document.readyState ? document.addEventListener("DOMContentLoaded", this._loadEverythingNow.bind(this)) : this._loadEverythingNow() } _preconnect3rdParties() { let e = []; document.querySelectorAll("script[type=rocketlazyloadscript]").forEach((t => { if (t.hasAttribute("src")) { const n = new URL(t.src).origin; n !== location.origin && e.push({ src: n, crossOrigin: t.crossOrigin || "module" === t.getAttribute("data-rocket-type") }) } })), e = [...new Map(e.map((e => [JSON.stringify(e), e]))).values()], this._batchInjectResourceHints(e, "preconnect") } async _loadEverythingNow() { this.lastBreath = Date.now(), this._delayEventListeners(), this._delayJQueryReady(this), this._handleDocumentWrite(), this._registerAllDelayedScripts(), this._preloadAllScripts(), await this._loadScriptsFromList(this.delayedScripts.normal), await this._loadScriptsFromList(this.delayedScripts.defer), await this._loadScriptsFromList(this.delayedScripts.async); try { await this._triggerDOMContentLoaded(), await this._triggerWindowLoad() } catch (e) { } window.dispatchEvent(new Event("rocket-allScriptsLoaded")), this._replayClicks() } _registerAllDelayedScripts() { document.querySelectorAll("script[type=rocketlazyloadscript]").forEach((e => { e.hasAttribute("src") ? e.hasAttribute("async") && !1 !== e.async ? this.delayedScripts.async.push(e) : e.hasAttribute("defer") && !1 !== e.defer || "module" === e.getAttribute("data-rocket-type") ? this.delayedScripts.defer.push(e) : this.delayedScripts.normal.push(e) : this.delayedScripts.normal.push(e) })) } async _transformScript(e) { return await this._littleBreath(), new Promise((t => { const n = document.createElement("script");[...e.attributes].forEach((e => { let t = e.nodeName; "type" !== t && ("data-rocket-type" === t && (t = "type"), n.setAttribute(t, e.nodeValue)) })), e.hasAttribute("src") ? (n.addEventListener("load", t), n.addEventListener("error", t)) : (n.text = e.text, t()); try { e.parentNode.replaceChild(n, e) } catch (e) { t() } })) } async _loadScriptsFromList(e) { const t = e.shift(); return t ? (await this._transformScript(t), this._loadScriptsFromList(e)) : Promise.resolve() } _preloadAllScripts() { this._batchInjectResourceHints([...this.delayedScripts.normal, ...this.delayedScripts.defer, ...this.delayedScripts.async], "preload") } _batchInjectResourceHints(e, t) { var n = document.createDocumentFragment(); e.forEach((e => { if (e.src) { const i = document.createElement("link"); i.href = e.src, i.rel = t, "preconnect" !== t && (i.as = "script"), e.getAttribute && "module" === e.getAttribute("data-rocket-type") && (i.crossOrigin = !0), e.crossOrigin && (i.crossOrigin = e.crossOrigin), n.appendChild(i) } })), document.head.appendChild(n) } _delayEventListeners() { let e = {}; function t(t, n) { !function (t) { function n(n) { return e[t].eventsToRewrite.indexOf(n) >= 0 ? "rocket-" + n : n } e[t] || (e[t] = { originalFunctions: { add: t.addEventListener, remove: t.removeEventListener }, eventsToRewrite: [] }, t.addEventListener = function () { arguments[0] = n(arguments[0]), e[t].originalFunctions.add.apply(t, arguments) }, t.removeEventListener = function () { arguments[0] = n(arguments[0]), e[t].originalFunctions.remove.apply(t, arguments) }) }(t), e[t].eventsToRewrite.push(n) } function n(e, t) { let n = e[t]; Object.defineProperty(e, t, { get: () => n || function () { }, set(i) { e["rocket" + t] = n = i } }) } t(document, "DOMContentLoaded"), t(window, "DOMContentLoaded"), t(window, "load"), t(window, "pageshow"), t(document, "readystatechange"), n(document, "onreadystatechange"), n(window, "onload"), n(window, "onpageshow") } _delayJQueryReady(e) { let t = window.jQuery; Object.defineProperty(window, "jQuery", { get: () => t, set(n) { if (n && n.fn && !e.allJQueries.includes(n)) { n.fn.ready = n.fn.init.prototype.ready = function (t) { e.domReadyFired ? t.bind(document)(n) : document.addEventListener("rocket-DOMContentLoaded", (() => t.bind(document)(n))) }; const t = n.fn.on; n.fn.on = n.fn.init.prototype.on = function () { if (this[0] === window) { function e(e) { return e.split(" ").map((e => "load" === e || 0 === e.indexOf("load.") ? "rocket-jquery-load" : e)).join(" ") } "string" == typeof arguments[0] || arguments[0] instanceof String ? arguments[0] = e(arguments[0]) : "object" == typeof arguments[0] && Object.keys(arguments[0]).forEach((t => { delete Object.assign(arguments[0], { [e(t)]: arguments[0][t] })[t] })) } return t.apply(this, arguments), this }, e.allJQueries.push(n) } t = n } }) } async _triggerDOMContentLoaded() { this.domReadyFired = !0, await this._littleBreath(), document.dispatchEvent(new Event("rocket-DOMContentLoaded")), await this._littleBreath(), window.dispatchEvent(new Event("rocket-DOMContentLoaded")), await this._littleBreath(), document.dispatchEvent(new Event("rocket-readystatechange")), await this._littleBreath(), document.rocketonreadystatechange && document.rocketonreadystatechange() } async _triggerWindowLoad() { await this._littleBreath(), window.dispatchEvent(new Event("rocket-load")), await this._littleBreath(), window.rocketonload && window.rocketonload(), await this._littleBreath(), this.allJQueries.forEach((e => e(window).trigger("rocket-jquery-load"))), await this._littleBreath(); const e = new Event("rocket-pageshow"); e.persisted = this.persisted, window.dispatchEvent(e), await this._littleBreath(), window.rocketonpageshow && window.rocketonpageshow({ persisted: this.persisted }) } _handleDocumentWrite() { const e = new Map; document.write = document.writeln = function (t) { const n = document.currentScript, i = document.createRange(), r = n.parentElement; let o = e.get(n); void 0 === o && (o = n.nextSibling, e.set(n, o)); const s = document.createDocumentFragment(); i.setStart(s, 0), s.appendChild(i.createContextualFragment(t)), r.insertBefore(s, o) } } async _littleBreath() { Date.now() - this.lastBreath > 45 && (await this._requestAnimFrame(), this.lastBreath = Date.now()) } async _requestAnimFrame() { return document.hidden ? new Promise((e => setTimeout(e))) : new Promise((e => requestAnimationFrame(e))) } static run() { const e = new RocketLazyLoadScripts; e._addUserInteractionListener(e) } } RocketLazyLoadScripts.run();</script>
+    <script type='text/javascript' src='https://vietnamrobotics.vn/wp-includes/js/jquery/jquery.min.js?ver=3.6.0' id='jquery-core-js' defer></script>
+
+
+    <script type="rocketlazyloadscript" data-rocket-type='text/javascript' src='https://vietnamrobotics.vn/wp-content/plugins/woocommerce/assets/js/jquery-blockui/jquery.blockUI.min.js?ver=2.7.0-wc.6.3.1' id='jquery-blockui-js' defer></script>
+
+    <script type="rocketlazyloadscript" data-rocket-type='text/javascript' src='https://vietnamrobotics.vn/wp-content/plugins/woocommerce/assets/js/frontend/add-to-cart.min.js?ver=6.3.1' id='wc-add-to-cart-js' defer></script>
+    <script type='text/javascript' src='https://vietnamrobotics.vn/wp-content/plugins/woocommerce/assets/js/photoswipe/photoswipe.min.js?ver=4.1.1-wc.6.3.1' id='photoswipe-js' defer></script>
+    <script type='text/javascript' src='https://vietnamrobotics.vn/wp-content/plugins/woocommerce/assets/js/photoswipe/photoswipe-ui-default.min.js?ver=4.1.1-wc.6.3.1' id='photoswipe-ui-default-js' defer></script>
+    <script type='text/javascript' id='wc-single-product-js-extra'>
+        /* <![CDATA[ */
+        var wc_single_product_params = { "i18n_required_rating_text": "Vui l\u00f2ng ch\u1ecdn m\u1ed9t m\u1ee9c \u0111\u00e1nh gi\u00e1", "review_rating_required": "yes", "flexslider": { "rtl": false, "animation": "slide", "smoothHeight": true, "directionNav": false, "controlNav": "thumbnails", "slideshow": false, "animationSpeed": 500, "animationLoop": false, "allowOneSlide": false }, "zoom_enabled": "", "zoom_options": [], "photoswipe_enabled": "1", "photoswipe_options": { "shareEl": false, "closeOnScroll": false, "history": false, "hideAnimationDuration": 0, "showAnimationDuration": 0 }, "flexslider_enabled": "" };
+        /* ]]> */
+    </script>
+    <script type='text/javascript' src='https://vietnamrobotics.vn/wp-content/plugins/woocommerce/assets/js/frontend/single-product.min.js?ver=6.3.1' id='wc-single-product-js' defer></script>
+    <script type="rocketlazyloadscript" data-rocket-type='text/javascript' src='https://vietnamrobotics.vn/wp-content/plugins/woocommerce/assets/js/js-cookie/js.cookie.min.js?ver=2.1.4-wc.6.3.1' id='js-cookie-js' defer></script>
+
+    <script type="rocketlazyloadscript" data-rocket-type='text/javascript' src='https://vietnamrobotics.vn/wp-content/plugins/woocommerce/assets/js/frontend/woocommerce.min.js?ver=6.3.1' id='woocommerce-js' defer></script>
+
+    <script type="rocketlazyloadscript" data-rocket-type='text/javascript' src='https://vietnamrobotics.vn/wp-content/plugins/woocommerce/assets/js/frontend/cart-fragments.min.js?ver=6.3.1' id='wc-cart-fragments-js' defer></script>
+    <script type="rocketlazyloadscript" data-rocket-type='text/javascript' src='https://vietnamrobotics.vn/wp-content/plugins/woocommerce/assets/js/jquery-cookie/jquery.cookie.min.js?ver=1.4.1-wc.6.3.1' id='jquery-cookie-js' defer></script>
+
+    @*<script type="rocketlazyloadscript" data-rocket-type='text/javascript' src='https://vietnamrobotics.vn/wp-content/plugins/woocommerce-products-compare/assets/js/frontend.min.js?ver=1.0.24' id='wc_products_compare_script-js' defer></script>*@
+    <script type="rocketlazyloadscript" data-rocket-type='text/javascript' id='rocket-browser-checker-js-after'>
+        "use strict";var _createClass=function(){function defineProperties(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||!1,descriptor.configurable=!0,"value"in descriptor&&(descriptor.writable=!0),Object.defineProperty(target,descriptor.key,descriptor)}}return function(Constructor,protoProps,staticProps){return protoProps&&defineProperties(Constructor.prototype,protoProps),staticProps&&defineProperties(Constructor,staticProps),Constructor}}();function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor))throw new TypeError("Cannot call a class as a function")}var RocketBrowserCompatibilityChecker=function(){function RocketBrowserCompatibilityChecker(options){_classCallCheck(this,RocketBrowserCompatibilityChecker),this.passiveSupported=!1,this._checkPassiveOption(this),this.options=!!this.passiveSupported&&options}return _createClass(RocketBrowserCompatibilityChecker,[{key:"_checkPassiveOption",value:function(self){try{var options={get passive(){return!(self.passiveSupported=!0)}};window.addEventListener("test",null,options),window.removeEventListener("test",null,options)}catch(err){self.passiveSupported=!1}}},{key:"initRequestIdleCallback",value:function(){!1 in window&&(window.requestIdleCallback=function(cb){var start=Date.now();return setTimeout(function(){cb({didTimeout:!1,timeRemaining:function(){return Math.max(0,50-(Date.now()-start))}})},1)}),!1 in window&&(window.cancelIdleCallback=function(id){return clearTimeout(id)})}},{key:"isDataSaverModeOn",value:function(){return"connection"in navigator&&!0===navigator.connection.saveData}},{key:"supportsLinkPrefetch",value:function(){var elem=document.createElement("link");return elem.relList&&elem.relList.supports&&elem.relList.supports("prefetch")&&window.IntersectionObserver&&"isIntersecting"in IntersectionObserverEntry.prototype}},{key:"isSlowConnection",value:function(){return"connection"in navigator&&"effectiveType"in navigator.connection&&("2g"===navigator.connection.effectiveType||"slow-2g"===navigator.connection.effectiveType)}}]),RocketBrowserCompatibilityChecker}();
+    </script>
+
+    <script type="rocketlazyloadscript" data-rocket-type='text/javascript' src='https://vietnamrobotics.vn/wp-includes/js/dist/vendor/regenerator-runtime.min.js?ver=0.13.9' id='regenerator-runtime-js' defer></script>
+    <script type="rocketlazyloadscript" data-rocket-type='text/javascript' src='https://vietnamrobotics.vn/wp-includes/js/dist/vendor/wp-polyfill.min.js?ver=3.15.0' id='wp-polyfill-js'></script>
+    <script type="rocketlazyloadscript" data-rocket-type='text/javascript' src='https://vietnamrobotics.vn/wp-includes/js/hoverIntent.min.js?ver=1.10.2' id='hoverIntent-js' defer></script>
+    <script type='text/javascript' id='flatsome-js-js-extra'>
+        /* <![CDATA[ */
+        var flatsomeVars = { "theme": { "version": "3.15.4" }, "ajaxurl": "https:\/\/vietnamrobotics.vn\/wp-admin\/admin-ajax.php", "rtl": "", "sticky_height": "60", "assets_url": "https:\/\/vietnamrobotics.vn\/wp-content\/themes\/flatsome\/assets\/js\/", "lightbox": { "close_markup": "<button title=\"%title%\" type=\"button\" class=\"mfp-close\"><svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"28\" height=\"28\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"feather feather-x\"><line x1=\"18\" y1=\"6\" x2=\"6\" y2=\"18\"><\/line><line x1=\"6\" y1=\"6\" x2=\"18\" y2=\"18\"><\/line><\/svg><\/button>", "close_btn_inside": false }, "user": { "can_edit_pages": false }, "i18n": { "mainMenu": "Main Menu" }, "options": { "cookie_notice_version": "1", "swatches_layout": false, "swatches_box_select_event": false, "swatches_box_behavior_selected": false, "swatches_box_update_urls": "1", "swatches_box_reset": false, "swatches_box_reset_extent": false, "swatches_box_reset_time": 300, "search_result_latency": "500" }, "is_mini_cart_reveal": "1" };
+        /* ]]> */
+    </script>
+    <script type="rocketlazyloadscript" data-rocket-type='text/javascript' src='https://vietnamrobotics.vn/wp-content/themes/flatsome/assets/js/flatsome.js?ver=dfed7b62b19c7bfa50899e873935db6f' id='flatsome-js-js' defer></script>
+    <script type="rocketlazyloadscript" data-rocket-type='text/javascript' src='https://vietnamrobotics.vn/wp-content/themes/flatsome/inc/integrations/wp-rocket/flatsome-wp-rocket.js?ver=3' id='flatsome-wp-rocket-js' defer></script>
+    <script type="rocketlazyloadscript" data-rocket-type='text/javascript' src='https://vietnamrobotics.vn/wp-content/themes/flatsome/inc/extensions/flatsome-live-search/flatsome-live-search.js?ver=3.15.4' id='flatsome-live-search-js' defer></script>
+    <script type="rocketlazyloadscript" data-rocket-type='text/javascript' src='https://vietnamrobotics.vn/wp-content/themes/flatsome/assets/js/woocommerce.js?ver=7a63f7aa2c4bbf851812535d8e4e7958' id='flatsome-theme-woocommerce-js-js' defer></script>
+
+    @*<script type="rocketlazyloadscript" data-rocket-type='text/javascript' src='https://vietnamrobotics.vn/wp-content/plugins/woocommerce-deposits/assets/js/frontend.min.js?ver=1.5.8' id='wc-deposits-frontend-js' defer></script>*@
+    <script>
+        window.lazyLoadOptions = { elements_selector: "img[data-lazy-src],.rocket-lazyload,iframe[data-lazy-src]", data_src: "lazy-src", data_srcset: "lazy-srcset", data_sizes: "lazy-sizes", class_loading: "lazyloading", class_loaded: "lazyloaded", threshold: 300, callback_loaded: function (element) { if (element.tagName === "IFRAME" && element.dataset.rocketLazyload == "fitvidscompatible") { if (element.classList.contains("lazyloaded")) { if (typeof window.jQuery != "undefined") { if (jQuery.fn.fitVids) { jQuery(element).parent().fitVids() } } } } } }; window.addEventListener('LazyLoad::Initialized', function (e) {
+            var lazyLoadInstance = e.detail.instance; if (window.MutationObserver) {
+                var observer = new MutationObserver(function (mutations) {
+                    var image_count = 0; var iframe_count = 0; var rocketlazy_count = 0; mutations.forEach(function (mutation) {
+                        for (var i = 0; i < mutation.addedNodes.length; i++) {
+                            if (typeof mutation.addedNodes[i].getElementsByTagName !== 'function') { continue }
+                            if (typeof mutation.addedNodes[i].getElementsByClassName !== 'function') { continue }
+                            images = mutation.addedNodes[i].getElementsByTagName('img'); is_image = mutation.addedNodes[i].tagName == "IMG"; iframes = mutation.addedNodes[i].getElementsByTagName('iframe'); is_iframe = mutation.addedNodes[i].tagName == "IFRAME"; rocket_lazy = mutation.addedNodes[i].getElementsByClassName('rocket-lazyload'); image_count += images.length; iframe_count += iframes.length; rocketlazy_count += rocket_lazy.length; if (is_image) { image_count += 1 }
+                            if (is_iframe) { iframe_count += 1 }
+                        }
+                    }); if (image_count > 0 || iframe_count > 0 || rocketlazy_count > 0) { lazyLoadInstance.update() }
+                }); var b = document.getElementsByTagName("body")[0]; var config = { childList: !0, subtree: !0 }; observer.observe(b, config)
+            }
+        }, !1)</script>
+
+    <script data-no-minify="1" async src="https://vietnamrobotics.vn/wp-content/plugins/wp-rocket/assets/js/lazyload/17.5/lazyload.min.js"></script>
+    <script>function lazyLoadThumb(e) { var t = '<img data-lazy-src="https://i.ytimg.com/vi/ID/hqdefault.jpg" alt="" width="480" height="360"><noscript><img src="https://i.ytimg.com/vi/ID/hqdefault.jpg" alt="" width="480" height="360"></noscript>', a = '<button class="play" aria-label="play Youtube video"></button>'; return t.replace("ID", e) + a } function lazyLoadYoutubeIframe() { var e = document.createElement("iframe"), t = "ID?autoplay=1"; t += 0 === this.parentNode.dataset.query.length ? '' : '&' + this.parentNode.dataset.query; e.setAttribute("src", t.replace("ID", this.parentNode.dataset.src)), e.setAttribute("frameborder", "0"), e.setAttribute("allowfullscreen", "1"), e.setAttribute("allow", "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"), this.parentNode.parentNode.replaceChild(e, this.parentNode) } document.addEventListener("DOMContentLoaded", function () { var e, t, p, a = document.getElementsByClassName("rll-youtube-player"); for (t = 0; t < a.length; t++)e = document.createElement("div"), e.setAttribute("data-id", a[t].dataset.id), e.setAttribute("data-query", a[t].dataset.query), e.setAttribute("data-src", a[t].dataset.src), e.innerHTML = lazyLoadThumb(a[t].dataset.id), a[t].appendChild(e), p = e.querySelector('.play'), p.onclick = lazyLoadYoutubeIframe });</script>
+    <script type="rocketlazyloadscript">"use strict";function wprRemoveCPCSS(){var preload_stylesheets=document.querySelectorAll('link[data-rocket-async="style"][rel="preload"]');if(preload_stylesheets&&0<preload_stylesheets.length)for(var stylesheet_index=0;stylesheet_index<preload_stylesheets.length;stylesheet_index++){var media=preload_stylesheets[stylesheet_index].getAttribute("media")||"all";if(window.matchMedia(media).matches)return void setTimeout(wprRemoveCPCSS,200)}var elem=document.getElementById("rocket-critical-css");elem&&"remove"in elem&&elem.remove()}window.addEventListener?window.addEventListener("load",wprRemoveCPCSS):window.attachEvent&&window.attachEvent("onload",wprRemoveCPCSS);</script><noscript><link rel='stylesheet' id='photoswipe-css' href='https://vietnamrobotics.vn/wp-content/plugins/woocommerce/assets/css/photoswipe/photoswipe.min.css?ver=6.3.1' type='text/css' media='all' /><link rel='stylesheet' id='photoswipe-default-skin-css' href='https://vietnamrobotics.vn/wp-content/plugins/woocommerce/assets/css/photoswipe/default-skin/default-skin.min.css?ver=6.3.1' type='text/css' media='all' /><link rel='stylesheet' id='wc-deposits-frontend-css' href='#' type='text/css' media='all' /><link rel='stylesheet' id='flatsome-main-css' href='https://vietnamrobotics.vn/wp-content/themes/flatsome/assets/css/flatsome.css?ver=3.15.4' type='text/css' media='all' /><link rel='stylesheet' id='flatsome-shop-css' href='https://vietnamrobotics.vn/wp-content/themes/flatsome/assets/css/flatsome-shop.css?ver=3.15.4' type='text/css' media='all' /><link rel='stylesheet' id='flatsome-style-css' href='https://vietnamrobotics.vn/wp-content/themes/flatsome-child/style.css?ver=3.0' type='text/css' media='all' /></noscript>
+
+
+    @* scripts cart *@
+    <script>
+        function addCart() {
+            var product = $('#ProductID').val();
+            var quantity = $('#Quantity').val();
+            $.ajax({
+                url: '/OrderProduct/AddCart',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    ProductID: product, Quantity: quantity
+                },
+                success: function (result) {
+                    if (result == -1) {
+
+                        alert("Không thể tạo đơn hàng thành công.");
+                    } else {
+                        $("#ccart").html(result);
+                        alert("Đã thêm thành công vào giỏ hàng.");
+                    }
+                }
+            });
+        }
+    </script>
+}

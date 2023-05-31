@@ -1,0 +1,304 @@
+﻿@model IEnumerable<WebApplication.Models.Article>
+@{ ViewBag.Title = "trang chủ"; }
+<div class="carousel slide" data-ride="carousel" id="demo">
+
+    <!-- Indicators -->
+    <!--<ul class="carousel-indicators">
+        <li data-target="#demo" data-slide-to="0" class="active"></li>
+        <li data-target="#demo" data-slide-to="1"></li>
+    </ul>-->
+    <!-- The slideshow -->
+    <!--<div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="https://deborah.vn/wp-content/uploads/2021/09/slide-4.jpg" alt="">
+        </div>
+        <div class="carousel-item">
+            <img src="https://deborah.vn/wp-content/uploads/2021/09/slide-2.jpg" alt="">
+        </div>
+    </div>-->
+    <!-- Indicators -->
+    <ul class="carousel-indicators">
+        @foreach (var item in Model)
+        {
+            <li data-target="#demo" data-slide-to="@item.Cate" class="@(item.Title == "banner 1" ? "active" : "")"></li>
+        }
+        <li data-target="#demo" data-slide-to="banner-web" class=""></li>
+        <li data-target="#demo" data-slide-to="banner-web" class="active"></li>
+    </ul>
+    <!-- The slideshow -->
+    <div class="carousel-inner">
+        @foreach (var item in Model)
+        {
+            <div class="carousel-item @(item.Title == "banner 1" ? "active" : "")">
+                <img src="@item.Image" alt="@item.Title">
+            </div>
+        }
+        <div class="carousel-item active">
+            <img src="~/Image/HikawaBanner.png" alt="banner 1">
+        </div>
+        <div class="carousel-item">
+            <img src="~/Image/HikawaBanner.png" alt="banner 2">
+        </div>
+    </div>
+    <!-- Left and right controls -->
+    <a class="carousel-control-prev" href="#demo" data-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+    </a>
+    <a class="carousel-control-next" href="#demo" data-slide="next">
+        <span class="carousel-control-next-icon"></span>
+    </a>
+</div>
+<style>
+    h2 {
+    }
+
+    form p {
+        padding-top: 10px;
+    }
+
+    #sends {
+        background-color: #dd3333;
+    }
+
+    .h-box {
+        overflow: hidden;
+    }
+
+        .h-box .h-box-ct {
+            margin: auto;
+        }
+
+    .h-box-ct {
+        width: 90%;
+        text-align: center;
+        padding: 20px 30px;
+        border: 1px solid #000;
+        border-radius: 15px;
+    }
+
+        .h-box-ct:hover {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .h-box-ct p {
+            margin-bottom: 0;
+        }
+
+        .h-box-ct:hover p {
+            color: white !important;
+        }
+
+        .h-box-ct:hover .at {
+            display: block !important;
+        }
+
+        .h-box-ct:hover .nat {
+            display: none !important;
+        }
+
+        .h-box-ct a {
+            text-decoration: none;
+        }
+
+        .h-box-ct img {
+            margin: 0 auto;
+            max-width: 50px;
+        }
+
+        .h-box-ct p {
+            font-weight: bold;
+            color: black;
+        }
+
+    .bot-ic {
+        width: 70%;
+        margin: auto;
+    }
+
+    .txt-des-ic {
+        text-align: center;
+        padding: 10px 30px;
+    }
+
+    @@media (max-width:768px) {
+        .bot-ic {
+            width: 100%;
+        }
+    }
+</style>
+<div class="main container" style="padding-top:10px">
+
+    <div class="col-md-12">
+        <div class="home-act-content">
+            <h2>KÍCH HOẠT BẢO HÀNH</h2>
+            <p style="text-align: center;">
+                Khách hàng tìm tem bảo hành được dán trên sản phẩm và vào lớp phủ bạc để lấy mã cào.<br />
+                Sử dụng mã cào để kích hoạt qua tin nhắn, web bảo hành hoặc quét mã QR code trên tem bảo hành để tự dộng lấy thông tin kích hoạt.
+            </p>
+
+        </div>
+    </div>
+    <div class="row box-home-pc">
+        <table>
+            <tr>
+                <td>
+                    <div>
+                        <h3 class="text-center font-weight-bold">APP</h3>
+                        <p class="text-center">
+                            Kích hoạt qua App
+                        </p>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <h3 class="text-center font-weight-bold">WEB</h3>
+                        <p class="text-center">
+                            Kích hoạt qua web bảo hành
+                        </p>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <h3 class="text-center font-weight-bold">Quét QR code</h3>
+                        <p class="text-center">
+                            Quét QR code trên tem bảo hành
+                        </p>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <div>
+                        <div class="h-box box-texted">
+                            <p>
+                                Khách hàng tải App trên CH Play hoặc App Store<br />
+                                <div class="social">
+                                    <a target="_blank" href="https://play.google.com/store/apps/details?id=com.deborah.insurance&pli=1"><img src="~/Image/Google-Play-Store-Button (1).png"></a>
+                                    <a target="_blank" href="https://apps.apple.com/us/app/deborah-home/id1660422209"><img src="~/Image/App-Store-Button-transparent (1).png"></a>
+                                </div>
+                                @*<span class="black">DEBORAH</span>&lt;dấu cách&gt;<span class="black">Mã cào</span> gửi đến <span class="black">8077</span><br />
+        để kích hoạt bảo hành (1000đ/tin)*@
+                            </p>
+                        </div>
+                    </div>
+                </td>
+                <td class="col-md-4">
+                    <div>
+                        <div class="h-box box-active">
+                            <div class="h-box-ct">
+                                <a href="/kich-hoat" title="kích hoạt bảo hành">
+                                    <img src="~/Image/h-kich-hoat.png" alt="" class="img-responsive nat" />
+                                    <img src="~/Image/h-kich-hoat-at.png" alt="" class="img-responsive at" style="display:none" />
+                                    <p>KÍCH HOẠT BẢO HÀNH</p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <td class="col-md-4" style="padding-right: 15px;">
+                    <div>
+                        <div class="text-center">
+                            <img src="~/Image/TemDeborahOk.jpg" class="img-responsive" alt="tem-cao" />
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="row box-home-mb">
+        <div class="col-xs-12">
+            <div>
+                <h3 class="text-center font-weight-bold">APP</h3>
+                <p class="text-center">
+                    Kích hoạt qua App
+                </p>
+            </div>
+            <div>
+                <div class="h-box box-texted">
+                    <p>
+                        Khách hàng tải App trên CH Play hoặc App Store<br />
+                        <div class="social">
+                                    <a target="_blank" href="https://play.google.com/store/apps/details?id=com.deborah.insurance&pli=1"><img src="~/Image/Google-Play-Store-Button (1).png"></a>
+                                    <a target="_blank" href="https://apps.apple.com/us/app/deborah-home/id1660422209"><img src="~/Image/App-Store-Button-transparent (1).png"></a>
+                        </div>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <div>
+                <h3 class="text-center font-weight-bold">WEB</h3>
+                <p class="text-center">
+                    Kích hoạt qua web bảo hành
+                </p>
+            </div>
+            <div>
+                <div class="h-box box-active">
+                    <div class="h-box-ct">
+                        <a href="/kich-hoat" title="kích hoạt bảo hành">
+                            <img src="~/Image/h-kich-hoat.png" alt="" class="img-responsive nat" />
+                            <img src="~/Image/h-kich-hoat-at.png" alt="" class="img-responsive at" style="display:none" />
+                            <p>KÍCH HOẠT BẢO HÀNH</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <div>
+                <h3 class="text-center font-weight-bold">Quét QR code</h3>
+                <p class="text-center">
+                    Quét QR code trên tem bảo hành
+                </p>
+            </div>
+            <div>
+                <div class="text-center">
+                    <img src="~/Image/TemDeborahOk.jpg" class="img-responsive" alt="tem-cao" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row box-home">
+        <div class="col-md-4">
+            <div class="h-box">
+                <div class="h-box-ct">
+                    <a href="/tra-cuu-bao-hanh" title="tra cứu bảo hành">
+                        <img src="~/Image/h-tra-cuu.png" alt="" class="img-responsive nat" />
+                        <img src="~/Image/h-tra-cuu-at.png" alt="" class="img-responsive at" style="display:none" />
+                        <p>TRA CỨU BẢO HÀNH</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="h-box">
+                <div class="h-box-ct" style="padding:10px 30px;">
+                    <a href="/bao-hanh" title="yêu cầu bảo hành">
+                        <img src="~/Image/h-yeu-cau.png" alt="" class="img-responsive nat" />
+                        <img src="~/Image/h-yeu-cau-at.png" alt="" class="img-responsive at" style="display:none" />
+                        <p>YÊU CẦU BẢO HÀNH, SỬA CHỮA</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="h-box">
+                <div class="h-box-ct">
+                    <a href="/huong-dan" title="hướng dẫn">
+                        <img src="~/Image/h-huong-dan.png" alt="" class="img-responsive nat" />
+                        <img src="~/Image/h-huong-dan-at.png" alt="" class="img-responsive at" style="display:none" />
+                        <p>HƯỚNG DẪN</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<p class="text-center" style="padding-top:30px;">
+    <b>
+        Đối với Quý khách hàng, chúng tôi luôn mang đến những sản phẩm với chất lượng tốt nhất. <br />
+        Cùng với đó, sự quan tâm hàng đầu của chúng tôi là đặc biệt chú trọng đến dịch vụ chăm sóc, bảo hành trong suốt vòng đời sản phẩm.
+    </b>
+</p>

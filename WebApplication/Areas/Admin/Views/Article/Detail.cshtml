@@ -1,0 +1,9 @@
+﻿@model WebApplication.Models.Article
+@{
+    ViewBag.Title = "Help";
+}
+
+
+<h2>@Model.Title</h2>
+<p>@Model.Createdate</p>
+<p>@Html.Raw(Model.Detail)</p>

@@ -1,0 +1,21 @@
+﻿@using WebApplication.Models
+@model LoginViewModel
+@using (Html.BeginForm("Register", "Account", new { area = "" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="text-center">
+        <div class="form-group">
+            <input class="form-control hidden" type="text" required id="UserName" name="UserName" value="@Model.UserName" style="margin:auto" />
+        </div>
+        <div class="form-group">
+            <input class="form-control hidden" type="text" required id="Role" name="Role" style="margin:auto" value="Customer" />
+        </div>
+        <div class="form-group">
+            <input placeholder="Mật khẩu" class="form-control" type="password" required id="Password" name="Password" style="margin:auto" />
+        </div>
+        <div class="form-group">
+            <input placeholder="Nhập lại mật khẩu" class="form-control" type="password" required id="ConfirmPassword" name="ConfirmPassword" style="margin:auto" />
+        </div>
+        <button type="submit" class="btn btn-danger rounded-pill" id="btn-register "> XÁC NHẬN</button>
+    </div>
+}

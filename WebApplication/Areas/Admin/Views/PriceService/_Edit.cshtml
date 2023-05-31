@@ -1,0 +1,43 @@
+﻿
+@model WebApplication.Models.Service_Price
+@{
+
+}
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Phí dịch vụ</h3>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("EditConfirm", "PriceService", new { area = "Admin" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.Id)
+                @Html.HiddenFor(model => model.Createdate)
+                <div class="form-group">
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @placeholder = "Khoảng cách", @required = "required" } })
+                </div>
+                <div class="form-group">
+                    @Html.EditorFor(model => model.Capacity, new { htmlAttributes = new { @class = "form-control", @placeholder = "Công suất", @required = "required" } })
+                </div>
+                <div class="form-group">
+                    @Html.TextAreaFor(model => model.Price, new { @class = "form-control", @placeholder = "Giá" })
+                </div>
+
+
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-primary"><i class="ti ti-check"></i> Lưu</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="ti ti-close"></i> Thoát</button>
+                </div>
+
+            </div>
+        }
+    </div>
+</div>
+
+
+
+
+

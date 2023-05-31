@@ -1,0 +1,20 @@
+﻿@model WebApplication.Models.Article
+@{
+    ViewBag.Title = "hướng dẫn";
+}
+
+<div class="home-act">
+    <div class="container">
+        <div class="title">
+            @*<h1>@Model.Title</h1>*@
+            <h3>@Model.Description</h3>
+            <div class="line-space">
+                @*<img src="/Image/line_space.png" class="img-responsive">*@
+            </div>
+        </div>
+        <div class="content">
+            @Html.Raw(Model.Detail)
+        </div>
+    </div>
+</div>
+

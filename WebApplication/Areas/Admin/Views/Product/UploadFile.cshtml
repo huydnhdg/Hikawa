@@ -1,0 +1,98 @@
+﻿@model List<WebApplication.Models.Product>
+@{
+    ViewBag.Title = "Product";
+    var index = 0;
+    var done = 0;
+    var fail = 0;
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">Form</div>
+                <div class="card-body">
+                    @using (Html.BeginForm("UploadFile", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        <div class="input-group mb-3">
+                            <div class="col-md-8">
+                                <input type="file" name="UploadedFile" class="form-control" />
+                            </div>
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-primary"><i class="ti ti-upload"></i> Upload</button>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="col-md-6">
+                                <a href="~/File/temp_product.xlsx" class="btn btn-outline-warning"><i class="ti ti-file"></i> File mẫu</a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">Database</div>
+                <div class="card-body">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Tên sản phẩm</th>
+                                <th>Serial máy</th>
+                                <th>Loại</th>
+                                <th>Model</th>
+                                <th>Thương hiệu</th>
+                                <th>Hạn</th>
+                                <th>Ngày xuất</th>
+                                <th>Đại lý</th>
+                                @*<th>Serial máy</th>*@
+                                <th>#</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                index++;
+                                <tr>
+                                    <td>@index</td>
+                                    <td>@item.Name</td>
+                                    <td>@item.SerialBrand</td>
+                                    @*<td>@item.Code</td>*@
+                                    <td>@item.ProductCate</td>
+                                    <td>@item.Model</td>
+                                    <td>@item.Trademark</td>
+                                    <td>@item.Limited</td>
+                                    <td>@if (item.Exportdate != null) {<span>@item.Exportdate.Value.ToString("dd/MM/yyyy")</span>}</td>
+                                    <td>@item.AgentC1</td>
+                                    @*<td>@item.SerialBrand</td>*@
+                                    <td>
+                                        @if (item.Id == 0)
+                                        {
+                                            <span class="text-danger">serial máy đã tồn tại/ không đúng</span>
+                                            fail++;
+                                        }
+                                        else
+                                        {
+                                            <span class="text-success">thành công</span>
+                                            done++;
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                Tạo thành công: <content class="text-success">@done</content> --- tạo thất bại: <content><a class="text-danger" href="/Admin/Product/UploadFail">Chi tiết</a></content>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+

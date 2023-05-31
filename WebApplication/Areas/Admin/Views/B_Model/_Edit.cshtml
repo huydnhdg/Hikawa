@@ -1,0 +1,72 @@
+﻿@model WebApplication.Areas.Admin.Data.B_Model_List
+@{
+
+}
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Thông tin Model</h3>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("EditConfirm", "B_Model", new { area = "Admin" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.Id)
+                <div class="form-group">
+                    @Html.EditorFor(model => model.Model, new { htmlAttributes = new { @class = "form-control", @placeholder = "Model",@readonly="readonly" } })
+                </div>
+                <div class="form-group">
+                    @Html.TextAreaFor(model => model.Iframe, new { @class = "form-control", @placeholder = "Link Iframe" })
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        @Html.Label("Chương trình KM", htmlAttributes: new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-8">
+                        @for (int i = 0; i < Model.Data.Count(); i++)
+                        {
+                            <div class="form-group row">
+                                @Html.HiddenFor(model => model.Data[i].Id)
+                                @Html.HiddenFor(model => model.Data[i].IdProcess)
+                                @Html.CheckBoxFor(model => model.Data[i].Status, new { @class = "form-control col-md-1" })
+                                <label class="control-label">@Model.Data[i].Description</label>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+
+
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-primary"><i class="ti ti-check"></i> Lưu</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="ti ti-close"></i> Thoát</button>
+                </div>
+
+            </div>
+        }
+    </div>
+</div>
+<script>
+    $("#Model").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: "/Admin/B_Model/GetModel",
+                type: "POST",
+                dataType: "json",
+                data: { text: request.term },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        return { label: item.Model, value: item.Model };
+                    }))
+
+                }
+            })
+        },
+        messages: {
+            noResults: "", results: ""
+        }
+    });
+</script>
+

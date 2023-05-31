@@ -1,0 +1,205 @@
+﻿@model PagedList.IPagedList<WebApplication.Areas.Admin.Data.UserView>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "User";
+    var index = 0;
+}
+
+
+<!-- validation by Bootstrap -->
+<div class="card">
+    <div class="card-header">Form filter</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12">
+                <form class="needs-validation" novalidate>
+                    <div class="form-row">
+                        <div class="col-md-2 mb-2">
+                            <label for="ticket-name" class="col-form-label">Tìm kiếm</label>
+                            <div class="">
+                                <input type="text" class="form-control" name="textsearch" value="@ViewBag.textsearch">
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-2">
+                            <label for="ticket-type" class="col-sm-9 col-form-label">Quyền</label>
+                            <div class="">
+                                @Html.DropDownList("chanel", new SelectList(ViewBag.role, "Name", "Name"), "--Chọn quyền--", new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="ticket-type" class="col-sm-9 col-form-label">Ngày tạo</label>
+                            <div class="input-daterange input-group" data-provide="datepicker" data-date-format="dd/mm/yyyy">
+                                <input class="form-control" name="start_date" value="@ViewBag.start_date">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">to</span>
+                                </div>
+                                <input class="form-control" name="end_date" value="@ViewBag.end_date">
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" type="submit"><i class="ti ti-filter"></i> Tìm kiếm</button>
+                    @if (User.IsInRole("Admin - Quản trị toàn hệ thống"))
+                    {
+                        <a class="btn btn-info" href="#" id="add"><i class="ti ti-plus"></i> Tạo mới</a>
+                        <a class="btn btn-info" href="/admin/user/UploadFile"><i class="ti ti-upload"></i> Tạo tài khoản</a>
+                        <a class="btn btn-success" href="/admin/user/Export_User"><i class="ti ti-download"></i> Xuất file</a>
+                    }
+                    else if (User.IsInRole("Trạm - Trưởng trạm"))
+                    {
+                        <a class="btn btn-info" href="#" id="add"><i class="ti ti-plus"></i> Tạo mới</a>
+
+                    }
+                    else if(User.IsInRole("Đại lý")) 
+                    {
+                        <a class="btn btn-info" href="#" id="add"><i class="ti ti-plus"></i> Tạo mới</a>
+                    }
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Table database</h3>
+    </div>
+    <div class="card-body">
+        <table class="table table-sm" id="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th style="display:none"></th>
+                    <th>Tài khoản</th>
+                    <th>Quyền</th>
+                    <th>Số điện thoại</th>
+                    <th>Tên đầy đủ</th>
+                    <th>Email</th>
+                    <th>Địa chỉ</th>
+                    <th>Thông tin tài khoản</th>
+                    <th>Ngày tạo</th>
+                    <th>#</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    index++;
+                    <tr>
+                        <td style="display:none">@item.Id</td>
+                        <td>@index</td>
+                        <td>@item.UserName</td>
+                        <td>@item.Role</td>
+                        <td>@item.PhoneNumber</td>
+                        <td>@item.FullName</td>
+                        <td>@item.Email</td>
+                        <td>@item.Address</td>
+                        <td>
+                            Trưởng trạm: @item.StationHead <br />
+                            Phí cố đính: @item.Fee <br />
+                            Công ty: @item.Company <br />
+                            Mã số thuế: @item.Tax <br />
+                            Ngân hàng: @item.Bank <br />
+                            STK: @item.BankNumber <br />
+                            Loại hoá đơn: @item.InvoiceType
+                        </td>
+                        <td>
+                            @if (item.Createdate != null)
+                            {@item.Createdate.Value.ToString("dd/MM/yyyy")}
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <a class="btn btn-outline-light edit" href="#"><i class="ti ti-pencil-alt"></i></a>
+                                <a class="btn btn-outline-light reset" href="#" title="reset mật khẩu"><i class="ti ti-reload"></i></a>
+                                @if (User.IsInRole("Admin - Quản trị toàn hệ thống"))
+                                {
+                                    if (item.StatusConfirm == 777)
+                                    {
+                                        <a class="btn btn-outline-light confirm" href="#" title="duyệt tài khoản"><i class="ti ti-check"></i></a>
+                                    }
+
+                                    <a class="btn btn-outline-light" href="/admin/user/delete/@item.Id" onclick="return confirm('Xóa tài khoản này?')" title="xóa tài khoản"><i class="ti ti-trash text-danger"></i></a>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="showing">Showing @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount</div>
+            </div>
+            <div class="col-sm-6">
+                @Html.PagedListPager(Model, page => Url.Action("Index", new { page, textsearch = ViewBag.textsearch, chanel = ViewBag.chanel, status = ViewBag.status, start_date = ViewBag.start_date, end_date = ViewBag.end_date }))
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section scripts{
+    <script>
+
+        $("#add").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "/Admin/User/Create",
+                success: function (response) {
+                    $('#createbody').html(response);
+                    $('#createmodal').modal('show');
+                }
+            });
+        });
+        $("#table .edit").click(function () {
+            var Id = $(this).closest("tr").find("td").eq(0).html();
+            $.ajax({
+                type: "POST",
+                url: "/Admin/User/Edit",
+                data: '{Id: "' + Id + '" }',
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (response) {
+                    $('#createbody').html(response);
+                    $('#createmodal').modal('show');
+                }
+            });
+        });
+        $("#table .confirm").click(function () {
+            var Id = $(this).closest("tr").find("td").eq(0).html();
+            debugger;
+            $.ajax({
+                type: "GET",
+                url: "/Admin/User/ConfirmAccount/" + Id,
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (response) {
+                    $('#createbody').html(response);
+                    $('#createmodal').modal('show');
+                }
+            });
+        });
+        $("#table .reset").click(function () {
+            if (confirm("Bạn muốn reset về mật khẩu mặc định?")) {
+
+                var Id = $(this).closest("tr").find("td").eq(0).html();
+                $.ajax({
+                    type: "POST",
+                    url: "/Admin/Manage/SetPassword",
+                    data: '{Id: "' + Id + '" }',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "html",
+                    success: function (response) {
+                        alert("Mật khẩu hiện tại là techz@123456");
+                    }
+                });
+            }
+
+        });
+    </script>
+
+}

@@ -1,0 +1,95 @@
+﻿@model List<WebApplication.Models.AspNetUser>
+@{
+    ViewBag.Title = "User";
+    var index = 0;
+    var done = 0;
+    var fail = 0;
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">Form</div>
+                <div class="card-body">
+                    @using (Html.BeginForm("UploadFile", "User", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        <div class="input-group mb-3">
+                            <div class="col-md-8">
+                                <input type="file" name="UploadedFile" class="form-control" />
+                            </div>
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-primary"><i class="ti ti-upload"></i> Upload</button>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="col-md-6">
+                                <a href="~/File/temp_create_account.xlsx" class="btn btn-outline-warning"><i class="ti ti-file"></i> File mẫu</a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">Database</div>
+                <div class="card-body">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Tài khoản</th>
+                                <th>Địa chỉ</th>
+                                <th>Số điện thoại</th>
+                                <th>Tên đầy đủ</th>
+                                <th>Email</th>
+                                <th>#</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                index++;
+                                <tr>
+                                    <td>@index</td>
+                                    <td>@item.UserName</td>
+                                    <td>@item.Address</td>
+                                    <td>@item.PhoneNumber</td>
+                                    <td>@item.FullName</td>
+                                    <td>@item.Email</td>
+                                    <td>
+                                        @if (item.AspNetRoles.Count() > 0)
+                                        {
+                                            @item.AspNetRoles.FirstOrDefault().Id
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(item.Id))
+                                        {
+                                            <span class="text-success">thành công</span>
+                                            done++;
+                                        }
+                                        else
+                                        {
+                                            <span class="text-danger">chưa lưu được</span>
+                                            fail++;
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                Tạo khoản tạo thành công: <content class="text-success">@done</content> --- tạo thất bại: <content><a class="text-danger" href="/Admin/User/UploadFail">Chi tiết</a></content>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+

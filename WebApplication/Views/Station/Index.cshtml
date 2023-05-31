@@ -1,0 +1,68 @@
+﻿@model List<WebApplication.Areas.Admin.Data.UserView>
+@{
+    ViewBag.Title = "trạm bảo hành";
+    var index = 0;
+}
+<style>
+    table tr td button {
+        margin-top: 0;
+    }
+
+    table thead tr th {
+        text-align: center;
+    }
+</style>
+<div class="home-act">
+    <div class="container">
+        <div class="title">
+            <h1>DANH SÁCH TRẠM BẢO HÀNH</h1>
+            @*<h3>@Model.Description</h3>*@
+            <div class="line-space">
+                @*<img src="/Image/line_space.png" class="img-responsive">*@
+            </div>
+        </div>
+        <div class="content">
+            <div class="col-12">
+                <form>
+                    <table>
+                        <tr>
+                            <td><input type="text" class="form-control" id="txtSearch" name="txtSearch" placeholder="Tìm kiếm" value="@ViewBag.txtSearch"/></td>
+                            <td>
+                                @Html.DropDownList("chanel", new SelectList(ViewBag.role, "Name", "Name"), "--Chọn Tỉnh/ Thành phố--", new { @class = "form-control" })
+                            </td>
+                            <td><button type="submit" class="btn btn-success" id="btnSearch">Tìm kiếm</button></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+            <div class="col-12">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Trạm bảo hành</th>
+                            <th>Địa chỉ</th>
+                            <th>Điện thoại</th>
+                            <th>Tỉnh/ Thành phố</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            index++;
+                            <tr>
+                                <td>@index</td>
+                                <td>@item.FullName</td>
+                                <td>@item.Address</td>
+                                <td>@item.PhoneNumber</td>
+                                <td>@item.Province</td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

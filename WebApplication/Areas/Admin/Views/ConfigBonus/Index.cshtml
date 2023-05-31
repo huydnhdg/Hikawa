@@ -1,0 +1,73 @@
+﻿@model IEnumerable<WebApplication.Models.Config_Bonus>
+@{
+    ViewBag.Group = "AgentBonus";
+    ViewBag.Title = "Config Bonus";
+}
+<style>
+    .btn-active strong {
+        color: forestgreen;
+    }
+</style>
+<!-- validation by Bootstrap -->
+<div class="card">
+    <div class="card-header">Form config</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table">
+                    <tr>
+                        <th>Mã chương trình</th>
+                        <th>Tên chương trình</th>
+                        <th>Trạng thái</th>
+                        <td>#</td>
+                    </tr>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.Code</td>
+                                <td>@item.Name</td>
+                                <td style="text-align:left">
+                                    <a href="#" class="btn-active" data-id="@item.Id">@Html.Raw(item.Status ? "<strong>Đang chạy</strong>" : "Đang Tắt")</a>
+                                </td>
+                                <td style="text-align:left">
+                                    <p>
+                                        Đang tắt: chương trình không hoạt động<br />
+                                        Đang chạy: chương trình đang hoạt đông
+                                    </p>
+                                </td>
+                            </tr>
+
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        $('.btn-active').off('click').on('click', function (e) {
+            e.preventDefault();
+            var btn = $(this);
+            var id = btn.data('id');
+            $.ajax({
+                url: "/Admin/ConfigBonus/ChangeStatus",
+                data: { id: id },
+                dataType: "json",
+                type: "POST",
+                success: function (response) {
+                    console.log(response);
+                    if (response.status == true) {
+                        btn.text('Đang Chạy');
+                    }
+                    else {
+                        btn.text('Đang Tắt');
+                    }
+                }
+            });
+        });
+    </script>
+}

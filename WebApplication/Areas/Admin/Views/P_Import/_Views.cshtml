@@ -1,0 +1,72 @@
+﻿@model List<WebApplication.Areas.Admin.Data.P_Import_Details>
+@{
+    int index = 0;
+}
+<style>
+    .money {
+        text-align: right;
+    }
+
+    @@media (min-width: 576px) {
+        .modal-dialog {
+            max-width: 915px;
+        }
+    }
+
+    #myTable .form-control {
+        padding: 0;
+        border: unset;
+        text-align: right;
+    }
+
+    tr th {
+        text-align: center;
+    }
+
+    td {
+        text-align: center;
+    }
+
+    #myTable tr th, #myTable tr td {
+        font-size: 13px;
+        padding: 3px;
+        vertical-align: middle;
+    }
+
+    .number-input {
+        width: 50px;
+        float: left;
+    }
+</style>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Thông tin phiếu nhập hàng <span class="text-danger"></span></h3>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered" id="myTable">
+            <thead class="bg-danger text-white">
+                <tr>
+                    <th>STT</th>
+                    <th>Serial</th>
+                    <th>Mã cào</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    index++;
+                    <tr>
+                        <td>@index</td>
+                        <td>@item.Serial</td>
+                        <td>@item.Code</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="form-group text-center">
+            <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="ti ti-close"></i> Thoát</button>
+        </div>
+    </div>
+</div>
+
+

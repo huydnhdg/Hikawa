@@ -1,0 +1,234 @@
+﻿@model WebApplication.Areas.Admin.Data.E_Product_Extra_Create
+@{
+    ViewBag.Title = "Order Product";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Thông tin sản phẩm<span class="text-danger"></span></h3>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("Edit", "OrderProduct", FormMethod.Post, new { area = "Admin", enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.Id)
+                @Html.HiddenFor(model => model.Createdate)
+                <div class="form-group row">
+                    @Html.Label("Phân loại", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">
+                        <select id="Cate" name="Cate" class="form-control">
+
+                            @foreach (var item in ViewBag.cate)
+                            {
+                                if (item.Id == Model.Cate)
+                                {
+                                    <option value="@item.Id" selected>@item.Name</option>
+                                }
+                                else
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+
+                </div>
+                <div class="form-group row">
+                    @Html.Label("Mã sản phẩm", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">@Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control" } })</div>
+                </div>
+                <div class="form-group row">
+                    @Html.Label("Tên sản phẩm", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">@Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })</div>
+                </div>
+                <div class="form-group row">
+                    @Html.Label("Link", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">@Html.EditorFor(model => model.Link, new { htmlAttributes = new { @class = "form-control" } })</div>
+                </div>
+                <div class="form-group row">
+                    @Html.Label("Ảnh đại diện", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.Thumnails, new { htmlAttributes = new { @class = "form-control", id = "txtImage" } })
+                        <a href="#" id="btnSelectImage">Chọn ảnh</a>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    @Html.Label("Banner", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.Banner, new { htmlAttributes = new { @class = "form-control", id = "txtImage2" } })
+                        <a href="#" id="btnSelectImage2">Chọn ảnh</a>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    @Html.Label("Ảnh sản phẩm", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">
+                        <input type="file" multiple id="Images" name="Images" class="form-control" />
+                        @foreach (var item in ViewBag.images)
+                        {
+                            <div class="image-area" style="float:left;">
+                                <img src="@item.Image" alt="Preview" width="100" onclick="onClick(this)">
+                                <a class="remove-image" onclick="return confirm('Xóa ảnh này?')" style="display: inline;" href="/Admin/orderproduct/DeleteImage/@item.Id">&#215;</a>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    @Html.Label("Mô tả ngắn", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">@Html.TextAreaFor(model => model.Description, new { @class = "form-control" })</div>
+                </div>
+                <div class="form-group row">
+                    @Html.Label("Giá niêm yết", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">@Html.EditorFor(model => model.ListedPrice, new { htmlAttributes = new { @class = "form-control" } })</div>
+                </div>
+                <div class="form-group row">
+                    @Html.Label("Giá bán", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">@Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })</div>
+                </div>
+                <div class="form-group row">
+                    @Html.Label("Khuyến mãi", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">@Html.EditorFor(model => model.Discount, new { htmlAttributes = new { @class = "form-control" } })</div>
+                </div>
+                <div class="form-group row">
+                    @Html.Label("Kho hàng", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">@Html.CheckBoxFor(model => model.Status, new { htmlAttributes = new { @class = "form-control" } })</div>
+                </div>
+                <div class="form-group row">
+                    @Html.Label("Mới", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">@Html.CheckBoxFor(model => model.IsNew, new { htmlAttributes = new { @class = "form-control" } })</div>
+                </div>
+                <div class="form-group row">
+                    @Html.Label("Sắp xếp", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">@Html.EditorFor(model => model.Sort, new { htmlAttributes = new { @class = "form-control" } })</div>
+                </div>
+                <div class="form-group row">
+                    @Html.Label("Model", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">@Html.EditorFor(model => model.Model, new { htmlAttributes = new { @class = "form-control" } })</div>
+                </div>
+                <div class="form-group row">
+                    @Html.Label("Thương hiệu", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">@Html.EditorFor(model => model.Trademark, new { htmlAttributes = new { @class = "form-control" } })</div>
+                </div>
+                <div class="form-group row">
+                    @Html.Label("Đơn vị tính", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">@Html.EditorFor(model => model.Unit, new { htmlAttributes = new { @class = "form-control" } })</div>
+                </div>
+                <div class="form-group row">
+                    @Html.Label("Bảo hành", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">@Html.EditorFor(model => model.Limited, new { htmlAttributes = new { @class = "form-control" } })</div>
+                </div>
+
+                <div class="form-group row">
+                    @Html.Label("Mô tả thêm", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextAreaFor(model => model.LongDescription, new { htmlAttributes = new { @class = "form-control" }, id = "editor1" })
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    @Html.Label("Chi tiết", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.TextAreaFor(model => model.Details, new { htmlAttributes = new { @class = "form-control" }, id = "editor" })
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    @Html.Label("Thông số", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-5">
+                        <table class="table-tech" style="width: 100%">
+                            <thead>
+                                <tr>
+                                    <th>Tiêu đề</th>
+                                    <th>Chi tiết</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tblBills">
+                                @if (Model.Extras.Count() > 0)
+                                {
+                                    for (var i = 0; i < Model.Extras.Count(); i++)
+                                    {
+                                        <tr>
+
+                                            <td>@Html.EditorFor(model => model.Extras[i].Title, new { htmlAttributes = new { @class = "form-control" } })</td>
+                                            <td>@Html.EditorFor(model => model.Extras[i].Description, new { htmlAttributes = new { @class = "form-control" } })</td>
+                                            <td><a onclick="return confirm('Hãy lưu lại nội dung đã nhập trước khi xoá dòng này !')" href="/admin/OrderProduct/BackExtra?id=@Model.Extras[i].ID" title="xoá" class="text-danger"><i class="ti ti-close"></i></a></td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                        <div>
+                            <a href="javascript:void(0)" id="addRow" title="thêm thông số" style="font-size:21px;font-weight:bold" class="text-danger" onclick="addRow();"><i class="ti ti-plus" data-name="mdi-plus"></i> </a>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-primary"><i class="ti ti-check"></i> Lưu</button>
+                    <a href="/admin/orderproduct" class="btn btn-danger"><i class="ti ti-close"></i> Thoát</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+@section scripts{
+    <script>
+        function onClick(element) {
+            document.getElementById("img01").src = element.src;
+            document.getElementById("modal01").style.display = "block";
+        }
+        $(document).ready(function () {
+            $('#btnSelectImage2').on('click', function (e) {
+                e.preventDefault();
+                var finder = new CKFinder();
+                finder.selectActionFunction = function (url) {
+                    $('#txtImage2').val(url);
+                };
+                finder.popup();
+            })
+        })
+        function bodauTiengViet(str) {
+            str = str.toLowerCase();
+
+            str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+            str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+            str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+            str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+            str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+            str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+            str = str.replace(/đ/g, "d");
+            return str;
+        }
+
+        function changeToUrlRewrite(str) {
+            str = bodauTiengViet(str).trim().replace(/[/]/g, "-");
+
+            return str;
+        }
+        $(document).ready(function () {
+            $("#Name").keypress(function () {
+                var khongdau = bodauTiengViet($("#Name").val()).trim().replace(/[/ ]/g, "-");
+                $("#Link").val(khongdau);
+            });
+        })
+
+        CKEDITOR.replace("editor1");
+
+        function addRow() {
+            var index = $("#tblBills").children("tr").length;
+
+            var title = '<td><input class="form-control" id="Extras_' + index + '__Title" name="Extras[' + index + '].Title" type="text" /></td >';
+            var description = '<td><input class="form-control " id="Extras_' + index + '__Description" name="Extras[' + index + '].Description" type="text" /></td >';
+
+            var newRow = "<tr id='trBook" + index + "'>" + title + description + "</tr>";
+            $("#tblBills").append(newRow);
+
+
+        }
+    </script>
+}

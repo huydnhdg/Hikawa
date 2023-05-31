@@ -1,0 +1,52 @@
+﻿@model WebApplication.Models.Article_Cate
+@{
+
+}
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Phân loại bài viết</h3>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("CreateConfirm", "Article_Cate", new { area = "Admin" }))
+        {
+            @Html.AntiForgeryToken()
+        <div class="form-horizontal">
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.EditorFor(model => model.Cate, new { htmlAttributes = new { @class = "form-control", @placeholder = "Mã" } })
+            </div>
+            <div class="form-group">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @placeholder = "Tên chi tiết" } })
+            </div>
+            <div class="form-group">
+                @Html.EditorFor(model => model.Link, new { htmlAttributes = new { @class = "form-control", @placeholder = "Link" } })
+            </div>
+            <div class="form-group">
+                @Html.EditorFor(model => model.Image, new { htmlAttributes = new { @class = "form-control", id = "txtImage" } })
+                <a href="#" id="btnSelectImage">Chọn ảnh</a>
+            </div>
+
+            <div class="form-group text-center">
+                <button type="submit" class="btn btn-primary"><i class="ti ti-check"></i> Lưu</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="ti ti-close"></i> Thoát</button>
+            </div>
+
+        </div>
+        }
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $('#btnSelectImage').on('click', function (e) {
+            e.preventDefault();
+            var finder = new CKFinder();
+            finder.selectActionFunction = function (url) {
+                $('#txtImage').val(url);
+            };
+            finder.popup();
+        })
+    })
+</script>

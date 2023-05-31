@@ -1,0 +1,319 @@
+﻿@model WebApplication.Areas.Admin.Data.PrintModel
+@{
+
+}
+<style>
+    #printDiv {
+        font-family: Arial,sans-serif;
+    }
+
+    label {
+        margin: 0;
+    }
+
+    .lb-input {
+        padding: 0 3px;
+    }
+
+    .hd-top label {
+        font-size: 13px;
+        font-style: italic;
+    }
+
+    .logo {
+        float: right;
+    }
+
+    h1 {
+        font-size: 21px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    td:last-child {
+        text-align: left;
+    }
+
+    p {
+        margin-bottom: 0;
+    }
+
+    .sign-box {
+        padding-bottom: 50px;
+        text-align: center;
+    }
+
+    .lien {
+        padding: 5px 15px;
+    }
+
+    .table-bordered td, .table-bordered th {
+        border: 1px solid #5e6773;
+    }
+
+    #pdf {
+        margin: 0 auto;
+    }
+
+    .footer p {
+        line-height: 16px;
+        font-style: italic;
+        color: gray;
+        font-size: 13px;
+    }
+
+    #printDiv td {
+        width: 50%;
+        padding: .35rem;
+    }
+</style>
+<div id="printDiv" style="position:relative;">
+    @*<div class="nenhd" style="position:absolute;top:20%">
+        <img style="max-width:100%; opacity:0.5;" src="https://hikawa.com.vn/public/upload/logo.png" />
+    </div>*@
+    <div class="row">
+        <div class="col-md-8">
+            <label><b>PHỤ LỤC SỐ 2</b></label>
+            <div class="hd-top">
+                <label>Trung tâm bảo hành:</label><label class="lb-input">@Model.Station</label>
+            </div>
+            <div class="hd-top">
+                <label>Địa chỉ:</label><label class="lb-input">@Model.StationAddress</label>
+            </div>
+            <div class="hd-top">
+                <label>Số điện thoại:</label><label class="lb-input">@Model.StationPhone</label>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <img class="logo" src="https://hikawa.com.vn/public/upload/logo.png" />
+        </div>
+    </div>
+
+    <h1>PHIẾU THEO DÕI BẢO HÀNH SẢN PHẨM CÔNG TY HIKAWA</h1>
+    <div class="row lien">
+        <div class="col-md-8">
+            <div>
+                <label>Liên 1: </label><label class="lb-input">Bên B giữ</label>
+            </div>
+            <div>
+                <label>Liên 2: </label><label class="lb-input">Giao cho bên A</label>
+            </div>
+            <div>
+                <label>Liên 3: </label><label class="lb-input">Giao cho khách hàng</label>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div>
+                <label>Số: </label><label class="lb-input">@Model.Code</label>
+            </div>
+            <div>
+                <label>Phân loại: </label><label class="lb-input">@Model.Warranti_Cate</label>
+            </div>
+        </div>
+    </div>
+    <div>
+        <table class="table table-bordered">
+            <tr>
+                <td colspan="2">
+                    <b>I. THÔNG TIN TIẾP NHẬN SẢN PHẨM</b>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <label>Họ tên khách hàng: </label><label class="lb-input">@Model.CusName</label>
+                    </div>
+                    <div>
+                        <label>Địa chỉ: </label><label class="lb-input">@Model.CusAddress</label>
+                    </div>
+                    <div>
+                        <label>Điện thoại: </label><label class="lb-input">@Model.CusPhone</label>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <label>Tên sản phẩm: </label><label class="lb-input">@Model.ProdName</label>
+                    </div>
+                    <div>
+                        <label>Mã cào: </label><label class="lb-input">@Model.ProdCode</label>
+                    </div>
+                    <div>
+                        <label>Serial: </label><label class="lb-input">@Model.Serial</label>
+                    </div>
+                    <div>
+                        <label>Model: </label><label class="lb-input">@Model.Model</label>
+                    </div>
+                    <div>
+                        <label>Ngày mua: </label><label class="lb-input">@Model.Buydate</label>
+                    </div>
+                    <div>
+                        <label>Nơi mua: </label><label class="lb-input">@Model.BuyAdr</label>
+                    </div>
+                    <div>
+                        <label>Điện thoại: </label><label class="lb-input">@Model.CusPhone</label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div>
+                        <label>Tình trạng sản phẩm: </label><label class="lb-input">@Model.Note</label>
+                    </div>
+                    <div>
+                        <label>Loại bảo hành: </label><label class="lb-input">@Model.Warranti_Cate</label>
+                    </div>
+                    <div>
+                        <label>Số phiếu bảo hành: </label><label class="lb-input">@Model.Code</label>
+                    </div>
+                    <div>
+                        <label>Các phụ tùng kèm theo: @Model.Extra</label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <label>Ngày nhận: </label><label class="lb-input">@Model.Createdate</label>
+                    </div>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="sign-box" style="padding-bottom:100px">
+                        <p>Khách hàng</p>
+                        <p><i>(Ký tên, ghi rõ họ tên)</i></p>
+                    </div>
+                </td>
+                <td>
+                    <div class="sign-box" style="padding-bottom:100px">
+                        <p>Nhân viên tiếp nhận SP</p>
+                        <p><i>(Ký tên, ghi rõ họ tên)</i></p>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <b>II. THÔNG TIN SỬA CHỮA – TRẢ SẢN PHẨM BẢO HÀNH</b>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        <label>Nguyên nhân: </label><label class="lb-input">@Model.Note</label>
+                    </div>
+                    <div>
+                        <label>Cách thức sửa chữa: </label>
+                        <label class="lb-input">
+                            @if (Model.Successnote != null)
+                            {
+                                <span>@Model.Successnote</span><br />
+                            }
+                            else
+                            {
+                                <span>...............................................................</span>
+                            }
+
+
+                            <span>...............................................................</span>
+                            <span>...............................................................</span>
+
+                        </label>
+                    </div>
+                    <div>
+                        <label>Phí khách hàng phải trả: </label><label class="lb-input">
+                            @if (Model.Amount != "0")
+                            {
+                                <span>@Model.Amount </span>
+                            }
+                        </label>
+                    </div>
+                </td>
+                <td>
+                    <div class="row">
+                        <div class="col-md-6 text-center">
+                            <label><b>Linh kiện thay thế</b></label>
+                        </div>
+                        <div class="col-md-6 text-center">
+                            <label><b>Mã linh kiện</b></label>
+                        </div>
+                    </div>
+                    @foreach (var item in Model.PhuTung_Export)
+                    {
+                        <div class="row">
+                            <div class="col-md-6 text-center">
+                                <label class="lb-input">@item.Name</label>
+                            </div>
+                            <div class="col-md-6 text-center">
+                                <label class="lb-input">@item.Code</label>
+                            </div>
+                        </div>
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="sign-box" style="padding-bottom:100px">
+                        <p>Khách hàng nhận SP</p>
+                        <p><i>(Ký tên, ghi rõ họ tên)</i></p>
+                    </div>
+                </td>
+                <td>
+                    <div class="sign-box" style="padding-bottom:100px">
+                        <p>Nhân viên bàn giao SP</p>
+                        <p><i>(Ký tên, ghi rõ họ tên)</i></p>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <div class="sign-box" style="padding-bottom:100px">
+                        <p>Trung Tâm Bảo Hành</p>
+                        <p><i>(Ký tên, đóng dấu)</i></p>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    @*<div class="footer">
+            <p>
+                Quý khách hàng có thể tham khảo thông tin dịch vụ bảo hành điện tử tại: baohanh.elmich.vn<br />
+                Hotline: 024) 35134 657/ (024) 32018 383 - Email: info@elmich.vn<br />
+                Website: www.elmich.vn
+            </p>
+        </div>*@
+</div>
+<div class="text-center">
+    <button class="btn btn-info" onclick="printDiv()"><i class="ti-printer"></i> Print PDF</button>
+    <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="ti ti-close"></i> Thoát</button>
+</div>
+
+<script>
+    function printDiv() {
+
+        var contents = $("#printDiv").html();
+        var frame1 = $('<iframe />');
+        frame1[0].name = "frame1";
+        frame1.css({ "position": "absolute", "top": "-1000000px" });
+        $("body").append(frame1);
+        var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
+        frameDoc.document.open();
+        //Create a new HTML document.
+        frameDoc.document.write('<html><head><title>DIV Contents</title>');
+        frameDoc.document.write('</head><body>');
+        //Append the external CSS file.
+        frameDoc.document.write('<link rel="stylesheet" href="/Content/print.css">');
+        //Append the DIV contents.
+        frameDoc.document.write(contents);
+        frameDoc.document.write('</body></html>');
+        frameDoc.document.close();
+        setTimeout(function () {
+            window.frames["frame1"].focus();
+            window.frames["frame1"].print();
+            frame1.remove();
+        }, 500);
+    }
+
+
+</script>

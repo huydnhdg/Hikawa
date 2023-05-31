@@ -1,0 +1,29 @@
+﻿@using WebApplication.Models
+@model LoginViewModel
+@{
+    ViewBag.Title = "Log in";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutLogin.cshtml";
+}
+@using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-auth-small", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label class="fancy-checkbox element-left custom-bgcolor-blue">
+            <input type="checkbox" name="RememberMe">
+            <span class="text-muted">Remember me</span>
+        </label>
+    </div>
+    <button type="submit" class="btn btn-primary btn-lg btn-block">LOGIN</button>
+    <div class="bottom">
+        @*<span class="helper-text d-block">Don't have an account? <a href="#">Register</a></span>
+            <span class="helper-text"><i class="fa fa-lock"></i> <a href="#">Forgot password?</a></span>*@
+        <p>&copy; 2022 <a href="https://bluesea.vn/" target="_blank">Bluesea Media, JSC</a></p>
+    </div>
+}

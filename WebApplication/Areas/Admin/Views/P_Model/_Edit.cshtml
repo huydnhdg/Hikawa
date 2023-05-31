@@ -1,0 +1,52 @@
+﻿@model WebApplication.Models.P_Model
+@{
+
+}
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Thông tin Model</h3>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("EditConfirm", "P_Model", new { area = "Admin" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.Id)
+                @Html.HiddenFor(model => model.Createdate)
+                @Html.HiddenFor(model => model.Createby)
+                <div class="form-group">
+                    @Html.EditorFor(model => model.Model, new { htmlAttributes = new { @class = "form-control", @placeholder = "Model" } })
+                </div>
+                <div class="form-group">
+                    @Html.EditorFor(model => model.ProductName, new { htmlAttributes = new { @class = "form-control", @placeholder = "Tên sản phẩm" } })
+                </div>
+                <div class="form-group">
+                    @Html.DropDownListFor(model => model.Capacity, new SelectList(new string[] { "9.000BTU - 12.000BTU", "18.000BTU - 25.000BTU", "Tủ đứng/ ĐH âm trần" }), new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    @Html.EditorFor(model => model.UnitPrice, new { htmlAttributes = new { @class = "form-control", @placeholder = "Đơn giá", @type = "number"} })
+                </div>
+                <div class="form-group">
+                    @Html.EditorFor(model => model.Limited, new { htmlAttributes = new { @class = "form-control", @placeholder = "Hạn bảo hành" } })
+                </div>
+                <div class="form-group">
+                    @Html.EditorFor(model => model.Trademark, new { htmlAttributes = new { @class = "form-control", @placeholder = "Thương hiệu" } })
+                </div>
+                <div class="form-group">
+                    @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @placeholder = "Ghi chú" })
+                </div>
+
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-primary"><i class="ti ti-check"></i> Lưu</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="ti ti-close"></i> Thoát</button>
+                </div>
+
+            </div>
+        }
+    </div>
+</div>
+
+
+

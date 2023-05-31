@@ -1,0 +1,509 @@
+﻿@model WebApplication.Models.Product
+@{
+    ViewBag.Title = "kích hoạt";
+}
+<style>
+
+    #rw {
+        margin-left: 0px !important;
+        margin-right: 0px !important;
+    }
+</style>
+<div class="home-act">
+    <div class="container">
+        <div class="title">
+            <h1>KÍCH HOẠT BẢO HÀNH</h1>
+            <h3>Kích hoạt bảo hành cho các sản phẩm của Hikawa bằng Mã cào.</h3>
+            <div class="line-space">
+                @*<img src="/Image/line_space.png" class="img-responsive">*@
+            </div>
+        </div>
+        <div class="content">
+            <form>
+                <div class="row" id="rw">
+                    <div class="col-md-6">
+                        <h4 style=" text-align: center;">THÔNG TIN KHÁCH HÀNG</h4>
+                        <table>
+                            <tr>
+                                <td>Số điện thoại</td>
+                                <td>
+                                    <input class="form-control" type="text" name="Phone" id="Phone" onchange="GetCustomer()" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Họ tên </td>
+                                <td>
+                                    <input class="form-control" type="text" name="CusName" id="CusName" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Tỉnh/ Thành phố</td>
+                                <td>
+                                    <select class="form-control" type="text" name="Province" id="Province"></select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Huyện/ Quận</td>
+                                <td>
+                                    <select class="form-control" type="text" name="District" id="District"></select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Xã/ Phường</td>
+                                <td>
+                                    <select class="form-control" type="text" name="Ward" id="Ward"></select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Địa chỉ</td>
+                                <td>
+                                    <input class="form-control" type="text" name="Address" id="Address" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <h4 style=" text-align: center;">THÔNG TIN SẢN PHẨM</h4>
+                        <table>
+                            <tr>
+                                <td>Serial máy</td>
+                                <td>
+                                    <input class="form-control" type="text" value="@Model.SerialBrand" name="SerialBrand" id="SerialBrand" onchange="GetProduct()" />
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Tên sản phẩm</td>
+                                <td>
+                                    <input class="form-control" type="text" value="@Model.Name" name="ProductName" id="ProductName" readonly />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Model</td>
+                                <td>
+                                    <input class="form-control" type="text" value="@Model.Model" name="Model" id="Model" readonly />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Thương hiệu</td>
+                                <td>
+                                    <input class="form-control" type="text" value="@Model.Trademark" name="Trademark" id="Trademark" readonly />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Mã cào</td>
+                                <td>
+                                    <input class="form-control" type="text" value="@Model.Code" name="Code" id="Code" onchange="GetStamps()" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Số Serial</td>
+                                <td>
+                                    <input class="form-control" type="text" value="@Model.Serial" name="Serial" id="Serial" readonly />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Ngày mua hàng</td>
+                                <td>
+                                    <div class="input-group date" data-date-autoclose="true" data-provide="datepicker" data-date-format="dd/mm/yyyy">
+                                        <input class="form-control" type="text" required id="Buydate" name="Buydate" />
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            @*<tr>
+                                    <td>Trạng thái</td>
+                                    <td>
+                                        @if (Model.Status == 0)
+                                        {
+                                            <input class="form-control" type="text" readonly required id="Status" name="Status" value="Chưa kích hoạt" />
+                                        }
+                                        else
+                                        {
+                                            <input class="form-control" type="text" readonly required id="Status" name="Status" value="Đã Kích hoạt" />
+                                        }
+
+                                    </td>
+                                </tr>*@
+                            <tr style="display:none">
+                                <td><label class="control-label">Người tạo: </label></td>
+                                <td><input class="form-control" type="text" required id="Create" name="Create" value="@User.Identity.Name" /></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-12">
+                        <div class="text-center  box-btn">
+                            <button style="margin-left:15px; margin-right:0px;" type="button" id="btnSend" class="btn btn-danger" onclick="sendForm()">KÍCH HOẠT BẢO HÀNH</button>
+                        </div>
+                        <p class="text-danger" id="rMessage"></p>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="modal-active" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div class="modal-body" id="createbody">
+                <p class="message text-center title" id="">KÍCH HOẠT THÀNH CÔNG</p>
+                <table class="table-active-success table table-striped" id="table-result" style="display:table;">
+                    <tr>
+                        <td style="color: aliceblue;">Tên sản phẩm</td>
+                        <td style="width:120px;"></td>
+                        <td style="color: aliceblue;" id="rName"></td>
+                    </tr>
+                    <tr>
+                        <td style="color: aliceblue;">Serial máy</td>
+                        <td style="width:120px;"></td>
+                        <td style="color: aliceblue;" id="rSerialBrand"></td>
+                    </tr>
+                    <tr>
+                        <td style="color: aliceblue;">Mã cào</td>
+                        <td></td>
+                        <td style="color: aliceblue;" id="rCode"></td>
+                    </tr>
+                    <tr>
+                        <td style="color: aliceblue;">Model</td>
+                        <td></td>
+                        <td style="color: aliceblue;" id="rModel"></td>
+                    </tr>
+                    <tr>
+                        <td style="color: aliceblue;">Thương hiệu</td>
+                        <td></td>
+                        <td style="color: aliceblue;" id="rTrademark"></td>
+                    </tr>
+                    <tr>
+                        <td style="color: aliceblue;">Ngày kích hoạt</td>
+                        <td></td>
+                        <td style="color: aliceblue;" id="rActive_date"></td>
+                    </tr>
+                    <tr>
+                        <td style="color: aliceblue;">Hạn bảo hành</td>
+                        <td></td>
+                        <td style="color: aliceblue;" id="rLimited"></td>
+                    </tr>
+                    <tr>
+                        <td style="color: aliceblue;">Ngày hết hạn</td>
+                        <td></td>
+                        <td style="color: aliceblue;" id="rEnd_date"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    @*huy thêm*@
+    <script>
+        $("#Province").empty();
+        $(document).ready(function () {
+            $.ajax
+                ({
+                    url: apiUrl + '/api/action/getprovince',
+                    type: 'GET',
+                    datatype: 'application/json',
+                    contentType: 'application/json',
+                    success: function (result) {
+                        $("#District").empty();
+                        $("#Ward").empty();
+                        if (result.Data.length > 0) {
+                            var product = result.Data;
+                            if ($("#Province option").length < 3) {
+                                $.each(product, function (i, province) {
+                                    $("#Province").append($('<option></option>').val(province).html(province))
+                                })
+                            }
+                        }
+
+                    }
+                });
+            $('#Province').select2();
+        });
+        $("#Province").change(function () {
+            $("#District").empty();
+            var name = $("#Province").val();
+            $.ajax
+                ({
+                    url: apiUrl + '/api/action/getdistrict?province=' + name,
+                    type: 'GET',
+                    datatype: 'application/json',
+                    contentType: 'application/json',
+                    success: function (result) {
+                        $("#Ward").empty();
+                        if (result.Data.length > 0) {
+                            var product = result.Data;
+                            if ($("#District option").length < 3) {
+                                $.each(product, function (i, district) {
+                                    $("#District").append($('<option></option>').val(district).html(district))
+                                })
+                            }
+                        }
+
+                    }
+                });
+            $('#District').select2();
+        });
+        $("#District").change(function () {
+            var name = $("#District").val();
+            $.ajax
+                ({
+                    url: apiUrl + '/api/action/getward?district=' + name,
+                    type: 'GET',
+                    datatype: 'application/json',
+                    contentType: 'application/json',
+                    success: function (result) {
+                        if (result.Data.length > 0) {
+                            var product = result.Data;
+                            if ($("#Ward option").length < 3) {
+                                $.each(product, function (i, ward) {
+                                    $("#Ward").append($('<option></option>').val(ward).html(ward))
+                                })
+                            }
+                        }
+
+                    }
+                });
+            $('#Ward').select2();
+        });
+    </script>
+    @*huy thêm*@
+    <script>
+        var apiUrl = '@System.Configuration.ConfigurationManager.AppSettings["DOMAIN"]';
+        $("#Province").click(function () {
+            $.ajax
+                ({
+                    url: apiUrl + '/api/action/getprovince',
+                    type: 'GET',
+                    datatype: 'application/json',
+                    contentType: 'application/json',
+                    success: function (result) {
+                        $("#District").empty();
+                        $("#Ward").empty();
+                        if (result.Data.length > 0) {
+                            var product = result.Data;
+                            if ($("#Province option").length < 3) {
+
+                                $.each(product, function (i, province) {
+                                    $("#Province").append($('<option></option>').val(province).html(province))
+                                })
+                            }
+                        }
+                    }
+                });
+        });
+        $("#District").click(function () {
+            var name = $("#Province").val();
+            $.ajax
+                ({
+                    url: apiUrl + '/api/action/getdistrict?province=' + name,
+                    type: 'GET',
+                    datatype: 'application/json',
+                    contentType: 'application/json',
+                    success: function (result) {
+                        $("#Ward").empty();
+                        if (result.Data.length > 0) {
+                            var product = result.Data;
+                            if ($("#District option").length < 3) {
+                                $.each(product, function (i, district) {
+                                    $("#District").append($('<option></option>').val(district).html(district))
+                                })
+                            }
+                        }
+                    }
+                });
+        });
+        $("#Ward").click(function () {
+            var name = $("#District").val();
+            $.ajax
+                ({
+                    url: apiUrl + '/api/action/getward?district=' + name,
+                    type: 'GET',
+                    datatype: 'application/json',
+                    contentType: 'application/json',
+                    success: function (result) {
+                        if (result.Data.length > 0) {
+                            var product = result.Data;
+                            if ($("#Ward option").length < 3) {
+                                $.each(product, function (i, ward) {
+                                    $("#Ward").append($('<option></option>').val(ward).html(ward))
+                                })
+                            }
+                        }
+                    }
+                });
+        });
+
+        function GetCustomer() {
+            var phone = $("#Phone").val();
+            $.ajax
+                ({
+                    url: apiUrl + '/api/action/getcustomer?phone=' + phone,
+                    type: 'GET',
+                    datatype: 'application/json',
+                    contentType: 'application/json',
+                    success: function (result) {
+                        $('#District').empty();
+                        $('#Ward').empty();
+                        $("#Address").val("");
+                        if (result.Data.length > 0) {
+                            var product = result.Data[0];
+                            if (product.Province != null) {
+                                $('#Province').append(new Option(product.Province, product.Province, true, true));
+                            }
+                            if (product.District != null) {
+                                $('#District').append(new Option(product.District, product.District, true, true));
+                            }
+                            if (product.Ward!=null) {
+                                $('#Ward').append(new Option(product.Ward, product.Ward, true, true));
+                            }
+                            if (product.Address.length != null) {
+                                $("#Address").val(product.Address);
+                            }
+                            $("#CusName").val(product.Name);
+                        }
+
+                    }
+                });
+        }
+        function GetProduct() {
+            var code = $("#SerialBrand").val();
+            $.ajax
+                ({
+                    url: apiUrl + '/api/action/getproduct?code=' + code,
+                    type: 'GET',
+                    datatype: 'application/json',
+                    contentType: 'application/json',
+                    success: function (result) {
+                        $('#ProductName').val("");
+                        $('#Model').val("");
+                        $('#Trademark').val("");
+                        if (result.Data.length > 0) {
+                            var product = result.Data[0];
+                            if (product.Status == 0 || product.Status == 3) {
+
+                                $("#ProductName").val(product.Name);
+                                $("#Model").val(product.Model);
+                                $("#Trademark").val(product.Trademark);
+                                //$("#Serial").val(product.Serial);
+                                //$("#SerialBrand").val(product.SerialBrand);
+                            }
+                            else if (product.Status == 1) {
+                                alert("Mã cào sản phẩm đã được kích hoạt trước đó.")
+                            }
+                            else {
+                                alert("Mã cào sản phẩm chưa đúng. Vui lòng kiểm tra lại.")
+                            }
+                        }
+
+                    }
+                });
+        }
+        function GetStamps() {
+            var code = $("#Code").val();
+            $.ajax
+                ({
+                    url: apiUrl + '/api/action/getstamps?code=' + code,
+                    type: 'GET',
+                    datatype: 'application/json',
+                    contentType: 'application/json',
+                    success: function (result) {
+                        $('#Serial').val("");
+                        //$('#Model').val("");
+                        //$('#Trademark').val("");
+                        if (result.Data.length > 0) {
+                            var product = result.Data[0];
+                            if (product.Status == 0 || product.Status == 3) {
+
+                                //$("#ProductName").val(product.Name);
+                                //$("#Model").val(product.Model);
+                                //$("#Trademark").val(product.Trademark);
+                                $("#Serial").val(product.Serial);
+                                //$("#SerialBrand").val(product.SerialBrand);
+                            }
+                            else if (product.Status == 1) {
+                                alert("Mã cào sản phẩm đã được kích hoạt trước đó.")
+                            }
+                            else {
+                                alert("Mã cào sản phẩm chưa đúng. Vui lòng kiểm tra lại.")
+                            }
+                        }
+
+                    }
+                });
+        }
+    </script>
+    <script>
+        function sendForm() {
+            var code = $('#Code').val();
+            var serialbrand = $('#SerialBrand').val();
+            var serial = $('#Serial').val();
+            var phone = $('#Phone').val();
+            var cusname = $('#CusName').val();
+            var province = $('#Province').val();
+            var district = $('#District').val();
+            var ward = $('#Ward').val();
+            var address = $('#Address').val();
+            var buydate = $('#Buydate').val();
+            var create = $('#Create').val();
+
+            if (phone == "") {
+                $('#rMessage').html("/* Nhập số điện thoại bảo hành");
+            }
+            //else if (province == "" || district == "" || ward == "" || address == "") {
+            //    $('#rMessage').html("/* Nhập đầy đủ địa chỉ");
+            //}
+            else if (serialbrand == "") {
+                $('#rMessage').html("/* Nhập Serial máy sản phẩm");
+            }
+            else if (code == "") {
+                $('#rMessage').html("/* Nhập Mã cào sản phẩm");
+            }
+            else {
+                $.ajax({
+                    url: apiUrl + '/api/action/active',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        Chanel: "WEB", Phone: phone, CusName: cusname,
+                        Province: province, District: district, Ward: ward, Address: address,
+                        Code: code, SerialBrand: serialbrand, Serial: serial, Buydate: buydate, Active_by: create
+                    },
+                    success: function (result) {
+                        //hien thi thong tin san pham
+                        if (result.Data.length > 0) {
+                            var product = result.Data[0];
+                            $('#rName').html(product.Name);
+                            $('#rSerialBrand').html(product.SerialBrand);
+                            $('#rCode').html(product.Code);
+                            $('#rModel').html(product.Model);
+                            $('#rTrademark').html(product.Trademark);
+                            $('#rActive_date').html(product.Activedate);
+                            $('#rLimited').html(product.Limited);
+                            $('#rEnd_date').html(product.Enddate);
+
+                            $('#modal-active').modal('show');
+                        } else {
+                            $('#rMessage').html(result.Message);
+                        }
+                    }
+                });
+            }
+
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+        })
+    </script>
+
+}

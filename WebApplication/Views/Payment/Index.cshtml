@@ -1,0 +1,478 @@
+﻿@model IEnumerable<WebApplication.Models.B_Cate>
+@{
+    ViewBag.Title = "Index";
+    int index = 0;
+
+}
+<style>
+    body {
+        background-color: #f7f7f7;
+    }
+
+    #content {
+        margin: 0px auto;
+        text-align: center;
+    }
+
+    #carousel_container {
+        width: 95%;
+        max-width: 800px;
+        height: 400px;
+        margin: 0 auto;
+        position: relative;
+        overflow: hidden;
+    }
+
+    #carousel {
+        width: 800px;
+        height: 400px;
+        margin: 0;
+        padding: 0;
+        position: absolute;
+        list-style-type: none;
+    }
+
+        #carousel li {
+            position: absolute;
+            margin: 0;
+            padding: 0;
+            float: left;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.5);
+            border-radius: 5px;
+        }
+
+            #carousel li img {
+                width: 100%;
+                height: 100%;
+                box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+            }
+
+    .t-first {
+        width: 520px;
+        height: auto;
+        left: 150px;
+        top: 25px;
+        z-index: 3;
+    }
+
+    .t-second {
+        width: 400px;
+        height: 200px;
+        left: 400px;
+        top: 50px;
+        z-index: 2;
+        opacity: 0.7;
+    }
+
+    .t-item {
+        width: 180px;
+        height: 150px;
+        left: 420px;
+        top: 75px;
+        z-index: 1;
+        opacity: 0.7;
+    }
+
+    .t-end {
+        width: 400px;
+        height: 200px;
+        left: 0px;
+        top: 50px;
+        z-index: 2;
+        opacity: 0.7;
+    }
+
+    .move img {
+        width: 50px;
+        height: 30px;
+        border: 3px solid #333;
+    }
+
+    .move.active img {
+        border: 3px solid #5a5;
+    }
+
+    #move_mark {
+        margin: 5px auto;
+        position: relative;
+        bottom: 0;
+    }
+
+        #move_mark a {
+            color: #c5c4c4;
+            font-size: 70px;
+            /*font-weight: bold;*/
+            text-decoration: none;
+        }
+
+            #move_mark a.active, #move_mark a:hover {
+                color: #333;
+            }
+
+    #move_back {
+        margin: 0 10px;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+    }
+
+    #move_next {
+        margin: 0 10px;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+    }
+
+    .dq-item {
+        background-color: #fff;
+        padding: 5px;
+        border-radius: 5px;
+    }
+
+    .des {
+        text-align: left;
+        padding: 15px;
+        color: #000;
+    }
+
+        .des p {
+            margin: 0;
+        }
+
+            .des p i {
+                color: #000;
+            }
+
+    .bt-doiqua {
+        background-color: #dc3545;
+        width: 100%;
+        color: #fff;
+        border-radius: 10px;
+        border-top-left-radius: unset;
+        border-top-right-radius: unset;
+    }
+
+    .home-act-content {
+        position: relative;
+    }
+
+    .box-move {
+        position: absolute;
+        width: 100%;
+        top: 50%;
+    }
+
+    .hidden {
+        display: none;
+    }
+</style>
+
+<div class="home-act">
+    <h2 class="text-center">ĐỔI QUÀ</h2>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="home-act-content">
+                <div class="box-move">
+                    <div id="move_mark">
+                        @*<a class="move" href="#"><img src="~/Image/bn-doiqua.png" /></a>
+                            <a class="move" href="#"><img src="~/Image/product-item.png"></a>
+                            <a class="move" href="#"><img src="~/Image/product-item.png"></a>
+                            <a class="move" href="#"><img src="~/Image/product-item.png"></a>
+                            <a class="move" href="#"><img src="~/Image/product-item.png"></a>*@
+                        <div id="move_back"><a href="#">&lsaquo;</a></div>
+                        <div id="move_next"><a href="#">&rsaquo;</a></div>
+                    </div>
+                </div>
+                <div id="content">
+                    <div id="carousel_container">
+                        <ul id="carousel">
+                            @foreach (var item in Model)
+                            {
+                                int count = ViewBag.cate;
+                                index++;
+                                if (index == 1)
+                                {
+                                    <li id="c_@index" class="t-first">
+                                        <a href="#">
+                                            <div class="dq-item">
+                                                <span style="display:none;">@item.Id</span>
+                                                <img src="@item.Image" />
+                                                <div class="des">
+                                                    <p>@item.Name</p>
+                                                    <p>	&#8226; <i>Số điểm: @item.Point</i></p>
+                                                    <p>
+                                                        &#8226; <i>
+                                                            Ngày hết hạn: @if (item.Enddate != null)
+                                                            {<i>@item.Enddate.Value.ToString("dd/MM/yyyy")</i>}
+                                                        </i>
+                                                    </p>
+                                                </div>
+                                                <div class="btn btn-default bt-doiqua">
+                                                    ĐỔI NGAY
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                }
+                                else if (index == count)
+                                {
+                                    <li id="c_@index" class="t-end">
+                                        <a href="#">
+                                            <div class="dq-item">
+                                                <span style="display:none;">@item.Id</span>
+                                                <img src="@item.Image" />
+                                                <div class="des">
+                                                    <p>@item.Name</p>
+                                                    <p>	&#8226; <i>Số điểm: @item.Point</i></p>
+                                                    <p>
+                                                        &#8226; <i>
+                                                            Ngày hết hạn: @if (item.Enddate != null)
+                                                            {<i>@item.Enddate.Value.ToString("dd/MM/yyyy")</i>}
+                                                        </i>
+                                                    </p>
+                                                </div>
+                                                <div class="btn btn-default bt-doiqua">
+                                                    ĐỔI NGAY
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                }
+                                else if (index == 2)
+                                {
+                                    <li id="c_@index" class="t-second">
+                                        <a href="#">
+                                            <div class="dq-item">
+                                                <span style="display:none;">@item.Id</span>
+                                                <img src="@item.Image" />
+                                                <div class="des">
+                                                    <p>@item.Name</p>
+                                                    <p>	&#8226; <i>Số điểm: @item.Point</i></p>
+                                                    <p>
+                                                        &#8226; <i>
+                                                            Ngày hết hạn: @if (item.Enddate != null)
+                                                            {<i>@item.Enddate.Value.ToString("dd/MM/yyyy")</i>}
+                                                        </i>
+                                                    </p>
+                                                </div>
+                                                <div class="btn btn-default bt-doiqua">
+                                                    ĐỔI NGAY
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li id="c_@index" class="t-end">
+                                        <a href="#">
+                                            <div class="dq-item">
+                                                <span style="display:none;">@item.Id</span>
+                                                <img src="@item.Image" />
+                                                <div class="des">
+                                                    <p>@item.Name</p>
+                                                    <p>	&#8226; <i>Số điểm: @item.Point</i></p>
+                                                    <p>
+                                                        &#8226; <i>
+                                                            Ngày hết hạn: @if (item.Enddate != null)
+                                                            {<i>@item.Enddate.Value.ToString("dd/MM/yyyy")</i>}
+                                                        </i>
+                                                    </p>
+                                                </div>
+                                                <div class="btn btn-default bt-doiqua">
+                                                    ĐỔI NGAY
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                }
+
+                            }
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="model-bonus" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h3 class="text-center">NHẬP SỐ ĐIỆN THOẠI NHẬN THƯỞNG</h3>
+            <div class="modal-body" id="">
+                <div class="form-group hidden">
+                    <input class="form-control" type="text" required id="bProcess" name="bProcess" style="margin:auto" />
+                </div>
+                <div class="form-group">
+                    <input class="form-control" type="text" required id="bPhone" name="bPhone" style="margin:auto" />
+                </div>
+                <img src="~/image/ajax-loader.gif" class="loader" id="loader" style="display:none;margin:0 auto;" />
+                <div class="text-center">
+                    <button type="button" class="btn btn-danger rounded-pill" id="btn-bonus"> XÁC NHẬN</button>
+                </div>
+                <div class="text-center">
+                    <p id="rMessage"></p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="modal" tabindex="-1" role="dialog" id="modal-bonus-err" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <div class="modal-body" id="">
+                <p class="text-center" id="bMes">BẠN KHÔNG ĐỦ ĐIỀU KIỆN THAM GIA CHƯƠNG TRÌNH</p>
+                <p class="text-center" id="bBonus"></p>
+            </div>
+            <div class="text-center form-group">
+                <button class="btn btn-outline-light rounded-pill btn-doithuong" data-dismiss="modal">ĐÓNG</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script src="~/Scripts/jquery.acarousel.min.js"></script>
+    <script>
+        $(function () {
+            var len = $("#carousel").children().length;
+            var acarousel = $("#carousel").acarousel({
+                moveStep: function (elem, index, pos_index, t) {
+                    if (pos_index >= 2 && pos_index < len - 2 || pos_index == len - 2 && t == 0) {
+                        elem.hide();
+                    }
+                }
+            });
+
+            //changeActive();
+
+            //$("#carousel li a").click(function () {
+            //    var move = acarousel.moveByElem($(this).parent());
+            //    changeActive(move);
+            //    return false;
+            //});
+
+            $("#move_back").click(function () {
+                var moveb = acarousel.move(1);
+                changeActive(moveb);
+                return false;
+            });
+
+            $("#move_next").click(function () {
+                var moven = acarousel.move(-1);
+                changeActive(moven);
+                return false;
+            });
+
+            //$(".move").click(function () {
+
+            //    var pos = acarousel.getPos();
+            //    pos = pos.index % 5 + pos.point;
+            //    pos = parseInt($(".move").index(this)) - pos;
+
+            //    var diff1 = Math.abs(pos) % 5 * (pos < 0 ? 1 : -1);
+            //    var diff2 = (10 - (Math.abs(pos) + 5)) % 5 * (pos < 0 ? -1 : 1);
+
+            //    move = acarousel.move(Math.abs(diff1) < Math.abs(diff2) ? diff1 : diff2);
+            //    changeActive(move);
+            //    return false;
+            //});
+
+            function changeActive(move) {
+                var index = acarousel.getPos(move).index % 5;
+                $(".move").removeClass("active").eq(index).addClass("active");
+            }
+
+            //$(window).resize(function () {
+            //    var parent = $("#carousel_container");
+            //    var self = $("#carousel");
+            //    self.css({
+            //        left: parent.width() / 2 - self.width() / 2
+            //        , top: parent.height() / 2 - self.height() / 2
+            //    });
+            //}).trigger("resize");
+
+        });
+    </script>
+    <script>
+        $('.dq-item .btn').click(function () {
+            var Id = $(this).closest('.dq-item').find('span').html();
+            $('#model-bonus').modal('show');
+            $('#bProcess').val(Id);
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            //$('#model-bonus').modal('show');
+            //$('#modal-bonus-err').modal('show');
+        });
+
+        var apiUrl = '@System.Configuration.ConfigurationManager.AppSettings["DOMAIN"]';
+        $('#btn-bonus').click(function () {
+            $('#loader').css('display', 'block');
+            var phone = $('#bPhone').val();
+            var process = $('#bProcess').val();
+            $.ajax({
+                url: apiUrl + '/api/action/payment',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    Phone: phone, Process: process
+                },
+                success: function (result) {
+                    $('#loader').css('display', 'none');
+                    if (result.Status == 0) {
+                        var cate = result.Data[0];
+                        $('#bMes').html('');
+                        $('#bBonus').html('Bạn nhận được mã voucher: <span style="font-weight: bold;text-transform: uppercase;">' + result.Message +'</span><br/>' + cate);
+                    } else {
+                        $('#bMes').html(result.Message);
+                        $('#bBonus').html('');
+                    }
+
+                    $('#model-bonus').modal('hide');
+                    $('#modal-bonus-err').modal('show');
+                }
+            });
+        });
+    </script>
+    @*<script>
+
+            var apiUrl = '@System.Configuration.ConfigurationManager.AppSettings["DOMAIN"]';
+            function sendForm() {
+                //reset result
+                $("#table-result").css("display", "none");
+                $("#box-result").css("display", "none");
+                $('#loader').css('display', 'block');
+
+                var phone = $('#UserName').val();
+                var process = $('#Process').val();
+
+                $.ajax({
+                    url: apiUrl +'/api/action/payment',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        Phone: phone, Process: process
+                    },
+                    success: function (result) {
+                        //hien thi message
+                        $('#loader').css('display', 'none');
+                        $("#box-result").css("display", "block");
+                        $('#rMessage').html(result.Message);
+                    }
+                });
+
+            }
+        </script>*@
+}
+
+

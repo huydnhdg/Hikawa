@@ -1,0 +1,341 @@
+﻿
+@{
+    //ViewBag.Title = "tra cứu bảo hành";
+    ViewBag.Title = "tra cứu";
+}
+<style>
+    .table tr td {
+        border: outset;
+        padding: 3px 0;
+        text-align: left;
+        /*font-style: italic;*/
+        font-size: 14px;
+    }
+
+        /*.table tr td:first-child {
+            width: 150px;
+        }*/
+
+    .message {
+        font-weight: bold;
+        color: #f5ebec;
+    }
+    td {
+        color: aliceblue;
+    }
+    .alert {
+        background-color: #424242 !important;
+    }
+
+    #box-result {
+        display: none;
+        max-width: 500px;
+        margin: 15px auto;
+
+    }
+    #box-resultt {
+        display: none;
+        max-width: 500px;
+        margin: 15px auto;
+    }
+    table tr td button {
+        margin-top: 15px;
+    }
+
+    #table-result {
+        color: black;
+        overflow-x: scroll;
+    }
+/*
+    .btn-danger {
+        color: #fff;
+        background-color: #424242 !important;
+        border: none;
+    }
+
+        .btn-danger:hover {
+            background-color: #211b1b !important;
+        }
+*/
+    ::after {
+        box-sizing: border-box;
+    }
+    #rw {
+        margin-left: 0px!important;
+        margin-right: 0px!important;
+    }
+    h1 {
+        margin-top: 10px;
+        margin-bottom: 0px;
+    }
+</style>
+<div class="home-act">
+    <div class="container">
+        <div class="title">
+            <h1>TRA CỨU THÔNG TIN BẢO HÀNH</h1>
+            <h3>Tra cứu thông tin bảo hành của một sản phẩm của Hikawa bằng số điện thoại khách hàng.</h3>
+            <div class="line-space">
+                @*<img src="/Image/line_space.png" class="img-responsive">*@
+            </div>
+        </div>
+        <div class="content">
+            <form>
+                <div class="row" id="rw">
+                    <div class="col-12">
+                        <div class="text-center">
+                            <input type="text" class="form-control" id="Phone" name="Phone" style="margin: auto" />
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="text-center box-btn">
+                            <button id="btnSend" class="btn btn-danger" type="button" onclick="sendFormSW()">TRA CỨU</button>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="alert alert-success w3-animate-right" id="box-resultt">
+                            <div class="panel">
+                                <p class="message" id="rMessage"></p>
+                                <table class="table" id="table-resultt">
+                                    <tr>
+                                        <td>Mã phiếu</td>
+                                        <td id="rCode"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ngày tạo</td>
+                                        <td id="rCreate"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Mã cào</td>
+                                        <td id="rSerial"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Trạng thái</td>
+                                        <td id="rStatus"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Dự kiến</td>
+                                        <td id="rDeadline"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Trạm bảo hành</td>
+                                        <td id="rStation"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Thợ bảo hành</td>
+                                        <td id="rKTV"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ngày hoàn thành</td>
+                                        <td id="rSuccess"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Kết quả</td>
+                                        <td id="rNote"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="container">
+        <div class="title">
+            <h1>TRA CỨU THÔNG TIN SẢN PHẨM</h1>
+            <h3>Tra cứu thông tin hạn bảo hành của một sản phẩm của Hikawa bằng Mã cào hoặc Số điện thoại kích hoạt.</h3>
+            <div class="line-space">
+                @*<img src="/Image/line_space.png" class="img-responsive">*@
+            </div>
+        </div>
+        <div class="content">
+            <form>
+                <div class="row" id="rw">
+                    <div class="col-12">
+                        <div class="text-center">
+                            <input type="text" class="form-control" id="Data" name="Data" style="margin: auto" />
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="text-center box-btn">
+                            <button id="btnSend" class="btn btn-danger" type="button" onclick="sendFormSA()">TRA CỨU</button>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="alert alert-success w3-animate-right" id="box-result">
+                            <div class="panel">
+                                <p class="message" id="cMessage" style="text-align: center;"></p>
+                                <table class="table" id="table-result">
+                                    <tr>
+                                        <td>Tên sản phẩm </td>
+                                        <td id="cName"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Mã cào </td>
+                                        <td id="cCode"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Model </td>
+                                        <td id="cModel"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Thương hiệu </td>
+                                        <td id="cTrademark"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ngày kích hoạt </td>
+                                        <td id="cActive_date"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Hạn bảo hành </td>
+                                        <td id="cLimited"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ngày hết hạn </td>
+                                        <td id="cEnd_date"></td>
+                                    </tr>
+                                </table>
+                                @*<table>
+                                    <tr>
+                                        <th>Tên sản phẩm</th>
+                                        <th>Serial</th>
+                                        <th>Mã cào</th>
+                                        <th>Model</th>
+                                        <th>Thương hiệu</th>
+                                        <th>Ngày kích hoạt</th>
+                                        <th>Ngày hết hạn</th>
+                                        <th>Hạn bảo hành</th>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                    </tr>
+                                </table>*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        var apiUrl = '@System.Configuration.ConfigurationManager.AppSettings["DOMAIN"]';
+        function reverseString(str) {
+            // Step 1. Use the split() method to return a new array
+            var splitString = str.split("-"); // var splitString = "hello".split("");
+            // ["h", "e", "l", "l", "o"]
+
+            // Step 2. Use the reverse() method to reverse the new created array
+            var reverseArray = splitString.reverse(); // var reverseArray = ["h", "e", "l", "l", "o"].reverse();
+            // ["o", "l", "l", "e", "h"]
+
+            // Step 3. Use the join() method to join all elements of the array into a string
+            var joinArray = reverseArray.join("-"); // var joinArray = ["o", "l", "l", "e", "h"].join("");
+            // "olleh"
+
+            //Step 4. Return the reversed string
+            return joinArray; // "olleh"
+        }
+        function sendFormSW() {
+            //reset result
+            $("#table-resultt").css("display", "none");
+            $("#box-resultt").css("display", "none");
+
+            var phone = $('#Phone').val();
+            $.ajax({
+                url: apiUrl +'/api/action/searchwarranti?phone=' + phone,
+                type: 'GET',
+                dataType: 'json',
+                success: function (result) {
+                    //hien thi message
+                    $("#box-resultt").css("display", "table");
+                    $('#rMessage').html(result.Message);
+
+                    //hien thi thong tin san pham
+                    if (result.Data.length > 0) {
+                        var product = result.Data[0];
+                        $("#table-resultt").css("display", "table");
+                        $('#rCode').html(product.Code);
+                        $('#rCreate').html(product.Createdate);
+                        $('#rSerial').html(product.ProductCode);
+                        $('#rStatus').html(product.Status);
+                        $('#rDeadline').html(product.Deadline);
+                        $('#rStation').html(product.Station_Warranti);
+                        $('#rKTV').html(product.KTV_Warranti);
+                        $('#rSuccess').html(product.Successdate);
+                        $('#rNote').html(product.Successnote);
+                    }
+                }
+            });
+
+        }
+        function sendFormSA() {
+            //reset result
+            $("#table-result").css("display", "none");
+            //$("#table-result2").css("display", "none");
+            $("#box-result").css("display", "none");
+
+            var data = $('#Data').val();
+            $.ajax({
+                url: apiUrl + '/api/action/searchproduct?data=' + data,
+                type: 'GET',
+                dataType: 'json',
+                success: function (result) {
+                    //hien thi message
+                    $("#box-result").css("display", "block");
+                    $('#cMessage').html(result.Message);
+                    //hien thi thong tin san pham khi search sđt
+                    if (result.Status == 2) {
+                        var products = result.ListActives;
+                        $("#table-result").css("display", "block");
+                        $("#table-result").css("overflow-x", "srcoll");
+                        $("#table-result").css("white-space", "nowrap");
+                        var render = '<tr>' +
+                            //'<td>#</td>' +
+                            '<td>Tên SP</td>' +
+                            '<td>Mã</td>' +
+                            '<td>Model</td>' +
+                            '<td>Ngày kích hoạt</td>' +
+                            '<td>Hạn</td>' +
+                            '<td>Ngày hết hạn</td>' +
+                            '</tr>';
+                        var index = 1;
+                        for (var i = 0; i < products.length; i++) {
+                            render +=
+                                '<tr>' +
+                                    //'<td>' + index++ + '</td>' +
+                                    '<td>' + products[i].Name + '</td>' +
+                                    '<td>' + products[i].Code + '</td>' +
+                                    '<td>' + products[i].Model + '</td>' +
+                                    '<td>' + reverseString(products[i].Active_date.split('T')[0]) + '</td>' +
+                                    '<td>' + products[i].Limited + '</td>' +
+                                    '<td>' + reverseString(products[i].End_date.split('T')[0]) + '</td>' +
+                                '</tr>';
+
+                        }
+                        $("#table-result").html(render);
+                    }
+                    else {
+                        //hien thi thong tin san pham khi search code
+                        if (result.Data.length > 0) {
+                            var product = result.Data[0];
+                            $("#table-result").css("display", "block");
+                            $("#table-result").css("overflow-x", "srcoll");
+                            $("#table-result").css("white-space", "nowrap");
+                            $('#cName').html(product.Name);
+                            $('#cCode').html(product.Code);
+                            $('#cModel').html(product.Model);
+                            $('#cTrademark').html(product.Trademark);
+                            $('#cActive_date').html(product.Activedate);
+                            $('#cLimited').html(product.Limited);
+                            $('#cEnd_date').html(product.Enddate);
+                        }
+                    }
+                }
+            });
+
+        }
+    </script>
+}

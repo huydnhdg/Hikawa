@@ -1,0 +1,77 @@
+﻿@model PagedList.IPagedList<WebApplication.Models.B_Payment>
+@using PagedList.Mvc;
+@{
+    ViewBag.Group = "BonusCustomer";
+    ViewBag.Title = "Payment";
+    var index = 0;
+}
+
+
+<!-- validation by Bootstrap -->
+<div class="card">
+    <div class="card-header">Form filter</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12">
+                <form class="needs-validation" novalidate>
+                    <div class="form-row">
+                        <div class="col-md-2 mb-2">
+                            <label for="ticket-name" class="col-form-label">Tìm kiếm</label>
+                            <div class="">
+                                <input type="text" class="form-control" name="textsearch" value="@ViewBag.textsearch">
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" type="submit"><i class="ti ti-filter"></i> Tìm kiếm</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Table database</h3>
+    </div>
+    <div class="card-body">
+        <table class="table table-sm" id="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Ngày tạo</th>
+                    <th>Số điện thoại</th>
+                    <th>Phân loại</th>
+                    <th>Số điểm tích lũy</th>
+                    <th>Số điểm đổi</th>
+                    <th>Nội dung</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    index++;
+                    <tr>
+                        <td style="display:none">@item.Id</td>
+                        <td>@index</td>
+                        <td>@item.Createdate.Value.ToString("dd/MM/yyyy")</td>
+                        <td>@item.Phone</td>
+                        <td>@item.PayCate</td>
+                        <td>@item.Point</td>
+                        <td>@item.PointCharge</td>
+                        <td>@item.PayContent</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="showing">Showing @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount</div>
+            </div>
+            <div class="col-sm-6">
+                @Html.PagedListPager(Model, page => Url.Action("Index", new { page, textsearch = ViewBag.textsearch, chanel = ViewBag.chanel, status = ViewBag.status, start_date = ViewBag.start_date, end_date = ViewBag.end_date }))
+            </div>
+        </div>
+    </div>
+</div>

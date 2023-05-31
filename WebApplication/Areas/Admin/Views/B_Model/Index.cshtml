@@ -1,0 +1,148 @@
+﻿@model PagedList.IPagedList<WebApplication.Models.B_Model>
+@using PagedList.Mvc;
+@{
+    ViewBag.Group = "BonusCustomer";
+    ViewBag.Title = "Model";
+    var index = 0;
+}
+
+
+<!-- validation by Bootstrap -->
+<div class="card">
+    <div class="card-header">Form filter</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12">
+                <form class="needs-validation" novalidate>
+                    <div class="form-row">
+                        <div class="col-md-2 mb-2">
+                            <label for="ticket-name" class="col-form-label">Tìm kiếm</label>
+                            <div class="">
+                                <input type="text" class="form-control" name="textsearch" value="@ViewBag.textsearch">
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" type="submit"><i class="ti ti-filter"></i> Tìm kiếm</button>
+                    <a class="btn btn-info" href="#" id="add"><i class="ti ti-plus"></i> Tạo mới</a>
+                    <a class="btn btn-warning" href="/admin/b_model/uploadfile"><i class="ti ti-import"></i> Upload file</a>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Table database</h3>
+    </div>
+    <div class="card-body">
+        <table class="table table-sm" id="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Model</th>
+                    <th>IFrame</th>
+                    <th>Ngày tạo</th>
+                    <th>Người tạo</th>
+                    <th>#</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    index++;
+                    <tr>
+                        <td style="display:none">@item.Id</td>
+                        <td>@index</td>
+                        <td>@item.Model</td>
+                        <td style="max-width:300px">@item.Iframe</td>
+                        <td>
+                            @if (item.Createdate != null)
+                            {@item.Createdate.Value.ToString("dd/MM/yyyy")}
+                                            
+                        </td>
+                        <td>@item.Createby</td>
+                        <td>
+                            <div class="btn-group">
+                                <a class="btn btn-outline-light view" href="#"><i class="ti ti-eye"></i></a>
+                                <a class="btn btn-outline-light edit" href="#"><i class="ti ti-pencil-alt"></i></a>
+                                @if (User.IsInRole("Admin - Quản trị toàn hệ thống"))
+                                {
+                                    <a class="btn btn-outline-light" href="/admin/b_model/delete/@item.Id" onclick="return confirm('Bạn muốn xóa dòng này?')" title="xóa dòng"><i class="ti ti-trash text-danger"></i></a>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="showing">Showing @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount</div>
+            </div>
+            <div class="col-sm-6">
+                @Html.PagedListPager(Model, page => Url.Action("Index", new { page, textsearch = ViewBag.textsearch, chanel = ViewBag.chanel, status = ViewBag.status, start_date = ViewBag.start_date, end_date = ViewBag.end_date }))
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    @@media (min-width: 576px) {
+        #iframemodal .modal-dialog {
+            max-width: 90%;
+            margin: 0 auto;
+        }
+
+        #iframemodal .modal-body {
+            padding: 0;
+        }
+    }
+</style>
+<!-- MODAL CREATE -->
+<div class="modal fade" id="iframemodal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body" id="iframebody">
+                <iframe style="width:100%; height:700px;" src="" id="iframe"></iframe>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $("#add").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "/Admin/B_Model/Create",
+                success: function (response) {
+                    $('#createbody').html(response);
+                    $('#createmodal').modal('show');
+                }
+            });
+        });
+        $("#table .edit").click(function () {
+            var Id = $(this).closest("tr").find("td").eq(0).html();
+            $.ajax({
+                type: "POST",
+                url: "/Admin/B_Model/Edit",
+                data: '{Id: "' + Id + '" }',
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (response) {
+                    $('#createbody').html(response);
+                    $('#createmodal').modal('show');
+                }
+            });
+        });
+        $("#table .view").click(function () {
+            var Id = $(this).closest("tr").find("td").eq(3).html();
+            document.getElementById('iframe').src = Id;
+            $('#iframemodal').modal('show');
+        });
+    </script>
+}
+

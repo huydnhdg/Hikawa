@@ -1,0 +1,356 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <title>@ViewBag.Title | HIKAWA 2022</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+    <!-- jQuery UI required by datepicker editable -->
+    <link href="/assets/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet" type="text/css" />
+    <!--Plugin-->
+    <link href="/assets/plugins/bootstrap-datepicker/bootstrap-datepicker3.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- App css -->
+    <link href="/assets/css/bootstrap-custom.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+    <style>
+
+        .hidden{
+            display: none;
+        }
+        .pagination {
+            margin: 2px 0;
+            white-space: nowrap;
+            justify-content: flex-end;
+        }
+
+            .pagination li a {
+                position: relative;
+                display: block;
+                padding: .5rem .75rem;
+                margin-left: -1px;
+                line-height: 1.25;
+                color: #0af;
+                background-color: #fff;
+                border: 1px solid #dee2e6;
+            }
+
+            .pagination .active a {
+                z-index: 3;
+                color: #fff;
+                background-color: #0af;
+                border-color: #0af;
+            }
+
+        .showing {
+            padding-top: 0.85em;
+            white-space: nowrap;
+        }
+
+        .btn-group .btn {
+            padding: 2px 6px;
+        }
+
+
+        .content-heading {
+            padding: 0;
+        }
+
+        .modal-backdrop {
+            width: 100%;
+            height: 100%;
+        }
+
+        @@media (min-width: 576px) {
+            .modal-dialog {
+                max-width: 800px;
+            }
+        }
+
+        .ui-front {
+            z-index: 5000;
+        }
+
+        .dropdown-menu a, .dropdown-menu > li > a {
+            padding: 15px 20px;
+            font-size: 14px;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        .txt-process {
+            padding: 1px 8px;
+            border-radius: 10px;
+        }
+        .navbar {
+            background: linear-gradient(to right ,#40c41d, #00dbff 100%)!important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- WRAPPER -->
+    <div id="wrapper">
+
+        <!-- NAVBAR -->
+        <nav class="navbar navbar-expand fixed-top">
+            <div class="navbar-brand d-none d-lg-block" style="width: 200px; text-align:center;">
+                <a href="index.html" ><img width="100" height="40" src="https://hikawa.com.vn/public/upload/Logo-Hikawa-Final.png" alt="Logo" class="img-fluid logo" style="width:100px; "></a>
+            </div>
+            <div class="container-fluid p-0">
+                <button id="tour-fullwidth" type="button" class="btn btn-default btn-toggle-fullwidth"><i class="ti-menu"></i></button>
+
+                <div id="navbar-menu">
+                    <ul class="nav navbar-nav align-items-center">
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="https://i.imgur.com/M701HZb.jpg" class="user-picture" alt="Avatar"> <span>@User.Identity.Name</span></a>
+                            <ul class="dropdown-menu dropdown-menu-right logged-user-menu">
+                                @*<li><a href="#"><i class="ti-user"></i> <span>My Profile</span></a></li>*@
+                                <li><a href="/admin/manage/changepassword"><i class="ti-settings"></i> <span>Đổi mật khẩu</span></a></li>
+                                <li>
+                                    @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <a href="javascript:document.getElementById('logoutForm').submit()">
+                                            <i class="ti-power-off"></i> <span>Logout</span>
+                                        </a>
+                                    }
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- END NAVBAR -->
+        <!-- LEFT SIDEBAR -->
+        <div id="sidebar-nav" class="sidebar">
+            <nav>
+                <ul class="nav" id="sidebar-nav-menu">
+
+                    @if (User.IsInRole("Admin - Quản trị toàn hệ thống"))
+                    {
+                        <li class="menu-group">Main</li>
+                        <li><a href="/admin/report" class="@(ViewBag.Title == "Report" ? "active" : "")"><i class="ti-home"></i> <span class="product">Thống kê</span></a></li>
+                        <li><a href="/admin/customer" class="@(ViewBag.Title == "Customer" ? "active" : "")"><i class="ti-id-badge"></i> <span class="product">Khách hàng</span></a></li>
+                        <li><a href="/admin/user" class="@(ViewBag.Title == "User" ? "active" : "")"><i class="ti-user"></i> <span class="product">Tài khoản</span></a></li>
+                        @*<li><a href="/admin/log_mo" class="@(ViewBag.Title == "Log MO" ? "active" : "")"><i class="ti-receipt"></i> <span class="product">Tin nhắn</span></a></li>*@
+                        <li class="panel">
+                            <a href="#subAgents" data-toggle="collapse" data-parent="#sidebar-nav-menu" aria-expanded="" class="@(ViewBag.Group == "AgentBonus" ? "active" : "")"><i class="ti-gift"></i> <span class="title">Thưởng đại lý</span> <i class="icon-submenu ti-angle-left"></i></a>
+                            <div id="subAgents" class="collapse  @(ViewBag.Group == "AgentBonus" ? "show" : "")">
+                                <ul class="submenu">
+                                    <li><a href="/admin/configbonus" class="@(ViewBag.Title == "Config Bonus" ? "active" : "")">Cấu hình</a></li>
+                                    <li><a href="/admin/pricemodel" class="@(ViewBag.Title == "Price Model" ? "active" : "")">Model</a></li>
+                                    <li><a href="/admin/agentbonus" class="@(ViewBag.Title == "Agent Bonus" ? "active" : "")">Lịch sử</a></li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li class="panel">
+                            <a href="#subCustomers" data-toggle="collapse" data-parent="#sidebar-nav-menu" aria-expanded="" class="@(ViewBag.Group == "BonusCustomer" ? "active" : "")"><i class="ti-gift"></i> <span class="title">Thưởng khách hàng</span> <i class="icon-submenu ti-angle-left"></i></a>
+                            <div id="subCustomers" class="collapse  @(ViewBag.Group == "BonusCustomer" ? "show" : "")">
+                                <ul class="submenu">
+                                    <li><a href="/admin/b_process" class="@(ViewBag.Title == "Process" ? "active" : "")">Cấu hình CTKM</a></li>
+                                    <li><a href="/admin/b_model" class="@(ViewBag.Title == "Model" ? "active" : "")">Cấu hình Model</a></li>
+                                    <li><a href="/admin/b_voucher" class="@(ViewBag.Title == "Voucher" ? "active" : "")">DS Voucher</a></li>
+                                    <li><a href="/admin/b_topup" class="@(ViewBag.Title == "Topup" ? "active" : "")">DS Topup</a></li>
+                                    <li><a href="/admin/b_cate" class="@(ViewBag.Title == "Cate" ? "active" : "")">Cấu hình điểm</a></li>
+                                    <li><a href="/admin/B_Active" class="@(ViewBag.Title == "History Active" ? "active" : "")">Lịch sử tích điểm</a></li>
+                                    <li><a href="/admin/B_Payment" class="@(ViewBag.Title == "Payment" ? "active" : "")">Lịch sử trả thưởng</a></li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li class="menu-group">Product</li>
+                        <li><a href="/admin/product" class="@(ViewBag.Title == "Product" ? "active" : "")"><i class="ti-package"></i> <span class="product">Sản phẩm</span></a></li>
+                        <li><a href="/admin/productstamps" class="@(ViewBag.Title == "ProductStamps" ? "active" : "")"><i class="ti-stamp"></i> <span class="product">Tem cào</span></a></li>
+                        <li><a href="/admin/productcate" class="@(ViewBag.Title == "ProductCate" ? "active" : "")"><i class="ti-layout"></i> <span class="product">Nhóm sản phẩm</span></a></li>
+                        <li><a href="/admin/p_model" class="@(ViewBag.Title == "P_Model" ? "active" : "")"><i class="ti-hummer"></i> <span class="product">Model</span></a></li>
+                        <li><a href="/admin/p_import" class="@(ViewBag.Title == "P_Import" ? "active" : "")"><i class="ti-upload"></i> <span class="product">Nhập kho</span></a></li>
+                        <li><a href="/admin/p_export" class="@(ViewBag.Title == "P_Export" ? "active" : "")"><i class="ti-download"></i> <span class="product">Xuất kho</span></a></li>
+
+
+
+                        <li class="menu-group">Warranti</li>
+                        <li><a href="/admin/warranti" class="@(ViewBag.Title == "Warranti" ? "active" : "")"><i class="ti-support"></i> <span class="product">Phiếu bảo hành</span></a></li>
+                        <li><a href="/admin/typeerr" class="@(ViewBag.Title == "Typeerr" ? "active" : "")"><i class="ti-agenda"></i> <span class="product">Nhóm lỗi</span></a></li>
+                        <li><a href="/admin/priceRepair" class="@(ViewBag.Title == "PriceRepair" ? "active" : "")"><i class="ti-money"></i> <span class="product">Phí bảo hành</span></a></li>
+                        <li><a href="/admin/pricemove" class="@(ViewBag.Title == "PriceMove" ? "active" : "")"><i class="ti-truck"></i> <span class="product">Phí di chuyển</span></a></li>
+                        <li><a href="/admin/priceservice" class="@(ViewBag.Title == "PriceService" ? "active" : "")"><i class="ti-target"></i> <span class="product">Phí dịch vụ</span></a></li>
+
+                        <li class="menu-group">Accessary</li>
+                        <li><a href="/admin/abig" class="@(ViewBag.Title == "Accessary" ? "active" : "")"><i class="ti-unlink"></i> <span class="product">Linh kiện</span></a></li>
+                        <li><a href="/admin/aimport" class="@(ViewBag.Title == "Accessary Import" ? "active" : "")"><i class="ti-cloud-up"></i> <span class="product">Phiếu nhập</span></a></li>
+                        <li><a href="/admin/aexport" class="@(ViewBag.Title == "Accessary Export" ? "active" : "")"><i class="ti-cloud-down"></i> <span class="product">Phiếu xuất</span></a></li>
+                        <li><a href="/admin/akey" class="@(ViewBag.Title == "Accessary Key" ? "active" : "")"><i class="ti-unlink"></i> <span class="product">Linh kiện trạm</span></a></li>
+
+                        <li class="menu-group">Order</li>
+                        <li><a href="/admin/order" class="@(ViewBag.Title == "Order" ? "active" : "")"><i class="ti-shopping-cart"></i> <span class="product">Đặt hàng</span></a></li>
+                        <li><a href="/admin/orderproductcate" class="@(ViewBag.Title == "Product Cate Order" ? "active" : "")"><i class="ti-archive"></i> <span class="product">Phân loại</span></a></li>
+                        <li><a href="/admin/orderproduct" class="@(ViewBag.Title == "Order Product" ? "active" : "")"><i class="ti-package"></i> <span class="product">Sản phẩm</span></a></li>
+
+                        <li class="menu-group">Article</li>
+                        <li><a href="/admin/article_cate" class="@(ViewBag.Title == "Article Cate" ? "active" : "")"><i class="ti-write"></i> <span class="product">Loại bài viết</span></a></li>
+                        <li><a href="/admin/article" class="@(ViewBag.Title == "Article" ? "active" : "")"><i class="ti-write"></i> <span class="product">Bài viết</span></a></li>
+                        <li><a href="/admin/article/detail?url=huong-dan-su-dung" class="@(ViewBag.Title == "Help" ? "active" : "")"><i class="ti-files"></i> <span class="product">Hướng dẫn</span></a></li>
+                    }
+                    @if (User.IsInRole("Nhân viên"))
+                    {
+                        <li><a href="@System.Configuration.ConfigurationManager.AppSettings["DOMAIN"]kich-hoat" target="_blank"><i class="ti-home"></i> <span class="product">Kích hoạt bảo hành</span></a></li>
+
+                        <li class="menu-group">Action</li>
+
+                        <li><a href="/admin/customer" class="@(ViewBag.Title == "Customer" ? "active" : "")"><i class="ti-id-badge"></i> <span class="product">Khách hàng</span></a></li>
+                        <li><a href="/admin/product" class="@(ViewBag.Title == "Product" ? "active" : "")"><i class="ti-package"></i> <span class="product">Sản phẩm</span></a></li>
+                        <li><a href="/admin/warranti" class="@(ViewBag.Title == "Warranti" ? "active" : "")"><i class="ti-support"></i> <span class="product">Phiếu bảo hành</span></a></li>
+                        <li><a href="/admin/user" class="@(ViewBag.Title == "User" ? "active" : "")"><i class="ti-user"></i> <span class="product">Tài khoản</span></a></li>
+                    }
+                    @if (User.IsInRole("Đại lý"))
+                    {
+                        <li><a href="@System.Configuration.ConfigurationManager.AppSettings["DOMAIN"]kich-hoat" target="_blank"><i class="ti-home"></i> <span class="product">Kích hoạt bảo hành</span></a></li>
+                        <li><a href="@System.Configuration.ConfigurationManager.AppSettings["DOMAIN"]dat-hang" target="_blank"><i class="ti-shopping-cart"></i> <span class="product">Đặt hàng</span></a></li>
+                        <li class="menu-group">Action</li>
+                        <li><a href="/admin/order" class="@(ViewBag.Title == "Order" ? "active" : "")"><i class="ti-shopping-cart"></i> <span class="product">Lịch sử đặt hàng</span></a></li>
+                        <li><a href="/admin/customer" class="@(ViewBag.Title == "Customer" ? "active" : "")"><i class="ti-id-badge"></i> <span class="product">Khách hàng</span></a></li>
+                        <li><a href="/admin/product" class="@(ViewBag.Title == "Product" ? "active" : "")"><i class="ti-package"></i> <span class="product">Sản phẩm</span></a></li>
+                        <li><a href="/admin/warranti" class="@(ViewBag.Title == "Warranti" ? "active" : "")"><i class="ti-support"></i> <span class="product">Phiếu bảo hành</span></a></li>
+                        <li><a href="/admin/user" class="@(ViewBag.Title == "User" ? "active" : "")"><i class="ti-user"></i> <span class="product">Tài khoản</span></a></li>
+                    }
+                    @if (User.IsInRole("Trạm - Trưởng trạm"))
+                    {
+                        <li><a href="@System.Configuration.ConfigurationManager.AppSettings["DOMAIN"]kich-hoat" target="_blank"><i class="ti-home"></i> <span class="product">Kích hoạt bảo hành</span></a></li>
+                        <li class="menu-group">Action</li>
+                        <li><a href="/admin/customer" class="@(ViewBag.Title == "Customer" ? "active" : "")"><i class="ti-id-badge"></i> <span class="product">Khách hàng</span></a></li>
+                        <li><a href="/admin/product" class="@(ViewBag.Title == "Product" ? "active" : "")"><i class="ti-package"></i> <span class="product">Sản phẩm</span></a></li>
+                        <li><a href="/admin/warranti" class="@(ViewBag.Title == "Warranti" ? "active" : "")"><i class="ti-support"></i> <span class="product">Phiếu bảo hành</span></a></li>
+                        <li><a href="/admin/akey" class="@(ViewBag.Title == "Accessary Key" ? "active" : "")"><i class="ti-unlink"></i> <span class="product">Linh kiện trạm</span></a></li>
+                        <li><a href="/admin/user" class="@(ViewBag.Title == "User" ? "active" : "")"><i class="ti-user"></i> <span class="product">Tài khoản</span></a></li>
+                    }
+                    @if (User.IsInRole("Trạm - Nhân viên kỹ thuật"))
+                    {
+                        <li><a href="@System.Configuration.ConfigurationManager.AppSettings["DOMAIN"]kich-hoat" target="_blank"><i class="ti-home"></i> <span class="product">Kích hoạt bảo hành</span></a></li>
+                        <li class="menu-group">Action</li>
+                        <li><a href="/admin/customer" class="@(ViewBag.Title == "Customer" ? "active" : "")"><i class="ti-id-badge"></i> <span class="product">Khách hàng</span></a></li>
+                        <li><a href="/admin/product" class="@(ViewBag.Title == "Product" ? "active" : "")"><i class="ti-package"></i> <span class="product">Sản phẩm</span></a></li>
+                        <li><a href="/admin/warranti" class="@(ViewBag.Title == "Warranti" ? "active" : "")"><i class="ti-support"></i> <span class="product">Phiếu bảo hành</span></a></li>
+                        <li><a href="/admin/akey" class="@(ViewBag.Title == "Accessary Key" ? "active" : "")"><i class="ti-unlink"></i> <span class="product">Linh kiện trạm</span></a></li>
+                    }
+                    @if (User.IsInRole("Thủ kho"))
+                    {
+                        <li class="menu-group">Product</li>
+                        <li><a href="/admin/product" class="@(ViewBag.Title == "Product" ? "active" : "")"><i class="ti-package"></i> <span class="product">Sản phẩm</span></a></li>
+                        <li><a href="/admin/p_import" class="@(ViewBag.Title == "P_Import" ? "active" : "")"><i class="ti-upload"></i> <span class="product">Nhập kho</span></a></li>
+                        <li><a href="/admin/p_export" class="@(ViewBag.Title == "P_Export" ? "active" : "")"><i class="ti-download"></i> <span class="product">Xuất kho</span></a></li>
+                    }
+                </ul>
+                <button type="button" class="btn-toggle-minified" title="Toggle Minified Menu"><i class="ti-arrows-horizontal"></i></button>
+            </nav>
+        </div>
+        <!-- END LEFT SIDEBAR -->
+        <!-- MAIN -->
+        <div class="main">
+            @if (TempData["AlertMessage"] != null)
+            {
+                <div id="AlertBox" class="alert @TempData["AlertType"] alert-dismissible hide" role="alert">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>@TempData["Alert"]</strong> @TempData["AlertMessage"]
+                </div>
+            }
+            <!-- MAIN CONTENT -->
+            <div class="main-content">
+                <div class="content-heading">
+                    <div class="heading-left">
+                    </div>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                        </ol>
+                    </nav>
+                </div>
+
+                @RenderBody()
+
+
+                <!-- MODAL CREATE -->
+                <div class="modal fade" id="createmodal" role="dialog" data-backdrop="static" data-keyboard="false">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-body" id="createbody">
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <!-- END MAIN CONTENT -->
+
+
+        </div>
+        <!-- END MAIN -->
+
+        <div class="clearfix"></div>
+
+        <!-- footer -->
+        <footer style="position:unset;">
+            <div class="container-fluid">
+                <p>&copy; 2022 <a href="https://bluesea.vn/" target="_blank">Bluesea Media, JSC</a></p>
+            </div>
+        </footer>
+        <!-- end footer -->
+
+
+
+    </div>
+    <!-- END WRAPPER -->
+    <!-- Vendor -->
+    <script src="/assets/js/vendor.min.js"></script>
+
+    <!--Plugin-->
+    <script src="/assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="/assets/plugins/jquery-ui/jquery-ui.min.js"></script>
+
+
+    <!-- App -->
+    <script src="/assets/js/app.min.js"></script>
+
+    <script>
+        $(function () {
+            $('#AlertBox').removeClass('hide');
+            $('#AlertBox').delay(5000).slideUp(500);
+        });
+
+    </script>
+
+    <script src="~/ckeditor/ckeditor.js"></script>
+    <script src="~/ckfinder/ckfinder.js"></script>
+    <script>
+
+        CKEDITOR.replace("editor");
+        $(document).ready(function () {
+            $('#btnSelectImage').on('click', function (e) {
+                e.preventDefault();
+                var finder = new CKFinder();
+                finder.selectActionFunction = function (url) {
+                    $('#txtImage').val(url);
+                };
+                finder.popup();
+            })
+        })
+    </script>
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

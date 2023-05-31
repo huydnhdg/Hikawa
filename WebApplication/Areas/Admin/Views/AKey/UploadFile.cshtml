@@ -1,0 +1,78 @@
+﻿@model List<WebApplication.Models.Accessary_Key>
+@{
+    ViewBag.Title = "Accessary Key";
+    var index = 0;
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">Form</div>
+                <div class="card-body">
+                    @using (Html.BeginForm("UploadFile", "AKey", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        <div class="input-group mb-3">
+                            <div class="col-md-8">
+                                <input type="file" name="UploadedFile" class="form-control" />
+                            </div>
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-primary"><i class="ti ti-upload"></i> Upload</button>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="col-md-6">
+                                <a href="~/File/temp_accessary.xlsx" class="btn btn-outline-warning"><i class="ti ti-file"></i> File mẫu</a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">Database</div>
+                <div class="card-body">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Mã</th>
+                                <th>Tên linh kiện</th>
+                                <th>Sản phẩm</th>
+                                <th>Giá</th>
+                                <th>#</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                index++;
+                                <tr>
+                                    <td>@index</td>
+                                    <td>@item.Code</td>
+                                    <td>@item.Name</td>
+                                    <td>@item.ProductName</td>
+                                    <td>@item.KeyPrice</td>
+                                    <td>
+                                        @if (item.Id == "0")
+                                        {
+                                            <span class="text-danger">chưa lưu được</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-success">thành công</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+

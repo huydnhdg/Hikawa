@@ -1,0 +1,118 @@
+﻿@model PagedList.IPagedList<WebApplication.Areas.Admin.Data.A_B_Model>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Accessary";
+    var index = 0;
+}
+
+<!-- validation by Bootstrap -->
+<div class="card">
+    <div class="card-header">Form filter</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12">
+                <form class="needs-validation" novalidate>
+                    <div class="form-row">
+                        <div class="col-md-2 mb-2">
+                            <label for="ticket-name" class="col-form-label">Tìm kiếm</label>
+                            <div class="">
+                                <input type="text" class="form-control" name="textsearch" value="@ViewBag.textsearch">
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" type="submit"><i class="ti ti-filter"></i> Tìm kiếm</button>
+                    <a class="btn btn-info" href="#" id="add"><i class="ti ti-plus"></i> Tạo mới</a>
+                    <a class="btn btn-warning" href="/admin/abig/uploadfile"><i class="ti-cloud-up"></i> Nhập linh kiện</a>
+                    <a class="btn btn-warning" href="/admin/abig/export"><i class="ti-cloud-down"></i> Xuất linh kiện</a>
+                    @*<a class="btn btn-warning" href="/admin/abig/UploadAExport"><i class="ti-cloud-down"></i> Exel linh kiện</a>*@
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Table database</h3>
+    </div>
+    <div class="card-body">
+        <table class="table table-sm" id="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Mã</th>
+                    <th>Tên linh kiện</th>
+                    <th>Sản phẩm</th>
+                    <th>Model</th>
+                    <th>Giá</th>
+                    <th>Tổng nhập</th>
+                    <th>Tổng xuất</th>
+                    <th>Tồn kho</th>
+                    <th>#</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    index++;
+                    <tr>
+                        <td style="display:none">@item.Id</td>
+                        <td>@index</td>
+                        <td>@item.Code</td>
+                        <td>@item.Name</td>
+                        <td>@item.ProductName</td>
+                        <td>@item.Model</td>
+                        <td>@item.KeyPrice</td>
+                        <td>@item.CountImport</td>
+                        <td>@item.CountExport</td>
+                        <td>@item.Exist</td>
+                        <td>
+                            <div class="btn-group">
+                                <a class="btn btn-outline-light edit" href="#"><i class="ti ti-pencil-alt"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="showing">Showing @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount</div>
+            </div>
+            <div class="col-sm-6">
+                @Html.PagedListPager(Model, page => Url.Action("Index", new { page, textsearch = ViewBag.textsearch, chanel = ViewBag.chanel, status = ViewBag.status, start_date = ViewBag.start_date, end_date = ViewBag.end_date }))
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $("#add").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "/Admin/abig/Create",
+                success: function (response) {
+                    $('#createbody').html(response);
+                    $('#createmodal').modal('show');
+                }
+            });
+        });
+        $("#table .edit").click(function () {
+            var Id = $(this).closest("tr").find("td").eq(0).html();
+            $.ajax({
+                type: "POST",
+                url: "/Admin/abig/Edit",
+                data: '{Id: "' + Id + '" }',
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (response) {
+                    $('#createbody').html(response);
+                    $('#createmodal').modal('show');
+                }
+            });
+        });
+    </script>
+}

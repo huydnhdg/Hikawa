@@ -1,0 +1,226 @@
+﻿@model WebApplication.Models.AspNetUser
+@{
+    var apiUrl = System.Configuration.ConfigurationManager.AppSettings["DOMAIN"];
+}
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Thông tin tài khoản</h3>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("EditConfirm", "User", FormMethod.Post, new { area = "Admin", enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+        <div class="form-horizontal row">
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.Id)
+            @Html.HiddenFor(model => model.EmailConfirmed)
+            @Html.HiddenFor(model => model.PasswordHash)
+            @Html.HiddenFor(model => model.SecurityStamp)
+            @Html.HiddenFor(model => model.PhoneNumberConfirmed)
+            @Html.HiddenFor(model => model.TwoFactorEnabled)
+            @Html.HiddenFor(model => model.LockoutEndDateUtc)
+            @Html.HiddenFor(model => model.LockoutEnabled)
+            @Html.HiddenFor(model => model.AccessFailedCount)
+            @Html.HiddenFor(model => model.Createdate)
+            @Html.HiddenFor(model => model.Createby)
+            @Html.HiddenFor(model => model.ImgIDBack)
+            @Html.HiddenFor(model => model.ImgIDFront)
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control", @placeholder = "Tài khoản", @required = "required", @readonly = "readonly" } })
+                </div>
+                @if (User.IsInRole("Admin - Quản trị toàn hệ thống"))
+                {
+                    <div class="form-group">
+                        <select id="Roler" name="Roler" class="form-control">
+                            <option>@Model.AspNetRoles.FirstOrDefault().Name</option>
+                            @foreach (var item in ViewBag.role)
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        </select>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-group">
+                        @Html.Editor("Roler", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly", @Value = Model.AspNetRoles.FirstOrDefault().Name } })
+                    </div>
+                }
+                <div class="form-group">
+                    @Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control", @placeholder = "Số điện thoại" } })
+                </div>
+                <div class="form-group">
+                    @Html.EditorFor(model => model.FullName, new { htmlAttributes = new { @class = "form-control", @placeholder = "Tên đầy đủ" } })
+                </div>
+                <div class="form-group">
+                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @placeholder = "Email" } })
+                </div>
+                <div class="form-group" id="img" style="display:none;">
+                    <p style="padding-left:10px;" class="text-danger">* Yêu cầu tải lên CMND/ CCCD 2 mặt</p>
+                    <div class="col-6 float-left" style="padding-bottom:10px;">
+                        <input type="file" id="ImgIDFront" name="ImgIDFront" accept="image/png, image/jpeg" onchange="document.getElementById('imgfront').src = window.URL.createObjectURL(this.files[0])">
+                        @if (Model.ImgIDBack == null)
+                        {
+                            <img id="imgfront" width="300" height="200" />
+                        }
+                        else
+                        {
+                            <img id="imgfront" src="@apiUrl/@Model.ImgIDFront" width="300" height="200" />
+                        }
+
+                    </div>
+                    <div class="float-right col-6">
+                        <input type="file" id="ImgIDBack" name="ImgIDBack" accept="image/png, image/jpeg" onchange="document.getElementById('imgback').src = window.URL.createObjectURL(this.files[0])">
+                        @if (Model.ImgIDFront == null)
+                        {
+                            <img id="imgback" width="300" height="200" />
+                        }
+                        else
+                        {
+                            <img id="imgback" src="@apiUrl/@Model.ImgIDBack" width="300" height="200" />
+                        }
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.DropDownListFor(model => model.Province, new List<SelectListItem> { new SelectListItem { Value = Model.Province, Text = Model.Province } }, new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    @Html.DropDownListFor(model => model.District, new List<SelectListItem> { new SelectListItem { Value = Model.District, Text = Model.District } }, new { @class = "form-control" })
+                </div>
+
+                <div class="form-group">
+                    @Html.DropDownListFor(model => model.Ward, new List<SelectListItem> { new SelectListItem { Value = Model.Ward, Text = Model.Ward } }, new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control", @placeholder = "Địa chỉ" } })
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.EditorFor(model => model.StationHead, new { htmlAttributes = new { @class = "form-control", @placeholder = "Trưởng trạm" } })
+                </div>
+                <div class="form-group">
+                    @Html.EditorFor(model => model.Fee, new { htmlAttributes = new { @class = "form-control", @placeholder = "Phí cố định", @type = "number" } })
+                </div>
+                <div class="form-group">
+                    @Html.EditorFor(model => model.Company, new { htmlAttributes = new { @class = "form-control", @placeholder = "Tên công ty" } })
+                </div>
+                <div class="form-group">
+                    @Html.EditorFor(model => model.Tax, new { htmlAttributes = new { @class = "form-control", @placeholder = "Mã số thuế" } })
+                </div>
+                <div class="form-group">
+                    <div>
+                        @Html.DropDownListFor(model => model.Bank, new SelectList(new List<SelectListItem>
+                                        {
+                                    new SelectListItem { Value = "Vietcombank", Text = "Ngân hàng Ngoại thương Việt Nam (Vietcombank)" },
+                                    new SelectListItem { Value = "ACB", Text = "Ngân hàng Thương mại Cổ phần Á Châu (ACB)" },
+                                    new SelectListItem { Value = "VietinBank", Text = "Ngân hàng Thương mại Cổ phần Ngoại thương Việt Nam (VietinBank)" },
+                                    new SelectListItem { Value = "Sacombank", Text = "Ngân hàng TMCP Sài Gòn Thương Tín (Sacombank)" },
+                                    new SelectListItem { Value = "MB", Text = "Ngân hàng TMCP Quân Đội (MB)" },
+                                    new SelectListItem { Value = "Techcombank", Text = "Ngân hàng TMCP Kỹ thương Việt Nam (Techcombank)" },
+                                    new SelectListItem { Value = "DongA Bank", Text = "Ngân hàng TMCP Đông Á (DongA Bank)" },
+                                    new SelectListItem { Value = "VietABank", Text = "Ngân hàng TMCP Việt Á (VietABank)" },
+                                    new SelectListItem { Value = "TPBank", Text = "Ngân hàng TMCP Tiên Phong (TPBank)" },
+                                    new SelectListItem { Value = "SCB", Text = "Ngân hàng TMCP Sài Gòn (SCB)" },
+                                    new SelectListItem { Value = "MSB", Text = "Ngân hàng TMCP Hàng Hải Việt Nam (MSB)" },
+                                    new SelectListItem { Value = "OceanBank", Text = "Ngân hàng TMCP Đại Dương (OceanBank)" },
+                                    new SelectListItem { Value = "CB", Text = "Ngân hàng TMCP Xây dựng Việt Nam (CB)" },
+                                    new SelectListItem { Value = "OCB", Text = "Ngân hàng TMCP Phương Đông (OCB)" },
+                                    new SelectListItem { Value = "NamABank", Text = "Ngân hàng TMCP Nam Á (NamABank)" },
+                                    new SelectListItem { Value = "BacABank", Text = "Ngân hàng TMCP Bắc Á (BacABank)" },
+                                    new SelectListItem { Value = "SHB", Text = "Ngân hàng TMCP Hàng Hóa (SHB)" },
+                                    new SelectListItem { Value = "VPBank", Text = "Ngân hàng TMCP Việt Nam Thịnh Vượng (VPBank)" },
+                                }, "Value", "Text"), "Ngân hàng", new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.EditorFor(model => model.BankNumber, new { htmlAttributes = new { @class = "form-control", @placeholder = "Số tài khoản" } })
+                </div>
+                <div class="form-group">
+                    @Html.EditorFor(model => model.InvoiceType, new { htmlAttributes = new { @class = "form-control", @placeholder = "Loại hoá đơn" } })
+                </div>
+            </div>
+                <div class="form-group text-center col-md-12">
+                    <button type="submit" class="btn btn-primary"><i class="ti ti-check"></i> Lưu</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="ti ti-close"></i> Thoát</button>
+                </div>
+
+            </div>
+            }
+        </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var nameRole = $("#Name").val();
+        debugger;
+        if (nameRole == "Trạm - Nhân viên kỹ thuật") {
+            $("#img").css("display", "block");
+        }
+        else {
+            $("#img").css("display", "none");
+        }
+        $("#Province").click(function () {
+            $.ajax
+                ({
+                    url: '/User/GetProvince',
+                    type: 'POST',
+                    datatype: 'application/json',
+                    contentType: 'application/json',
+                    success: function (data) {
+                        $("#District").empty();
+                        $("#Ward").empty();
+                        if ($("#Province option").length < 3) {
+                            $.each(data, function (i, province) {
+                                $("#Province").append($('<option></option>').val(province.Name).html(province.Name))
+                            })
+                        }
+                    }
+                });
+        });
+        $("#District").click(function () {
+            var name = $("#Province").val();
+            $.ajax
+                ({
+                    url: '/User/GetDistrict',
+                    type: 'POST',
+                    datatype: 'application/json',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        text: name
+                    }),
+                    success: function (data) {
+                        $("#Ward").empty();
+                        if ($("#District option").length < 3) {
+                            $.each(data, function (i, district) {
+                                $("#District").append($('<option></option>').val(district.Name).html(district.Name))
+                            })
+                        }
+                    }
+                });
+        });
+        $("#Ward").click(function () {
+            var name = $("#District").val();
+            $.ajax
+                ({
+                    url: '/User/GetWard',
+                    type: 'POST',
+                    datatype: 'application/json',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        text: name
+                    }),
+                    success: function (data) {
+                        if ($("#Ward option").length < 3) {
+                            $.each(data, function (i, district) {
+                                $("#Ward").append($('<option></option>').val(district.Name).html(district.Name))
+                            })
+                        }
+                    }
+                });
+        });
+    })
+</script>

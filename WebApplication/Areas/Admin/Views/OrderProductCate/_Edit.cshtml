@@ -1,0 +1,84 @@
+﻿
+@model WebApplication.Models.E_ProductCate
+@{
+
+}
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Phân loại</h3>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("EditConfirm", "OrderProductCate", new { area = "Admin" }))
+        {
+            @Html.AntiForgeryToken()
+        <div class="form-horizontal">
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.Id)
+            @Html.HiddenFor(model => model.Createdate)
+            <div class="form-group">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @placeholder = "Tên loại", @required = "required" } })
+            </div>
+            <div class="form-group">
+                @Html.EditorFor(model => model.Link, new { htmlAttributes = new { @class = "form-control", @placeholder = "Link", @required = "required" } })
+            </div>
+            <div class="form-group">
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", @placeholder = "Mô tả" } })
+            </div>
+            <div class="form-group">
+                @Html.EditorFor(model => model.Sort, new { htmlAttributes = new { @class = "form-control", @placeholder = "Sắp xếp" } })
+            </div>
+            <div class="form-group">
+                @Html.EditorFor(model => model.Thumnails, new { htmlAttributes = new { @class = "form-control", id = "txtImage" } })
+                <a href="#" id="btnSelectImage">Chọn ảnh</a>
+            </div>
+
+            <div class="form-group text-center">
+                <button type="submit" class="btn btn-primary"><i class="ti ti-check"></i> Lưu</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="ti ti-close"></i> Thoát</button>
+            </div>
+
+        </div>
+        }
+    </div>
+</div>
+
+
+
+
+<script>
+    $(document).ready(function () {
+        $('#btnSelectImage').on('click', function (e) {
+            e.preventDefault();
+            var finder = new CKFinder();
+            finder.selectActionFunction = function (url) {
+                $('#txtImage').val(url);
+            };
+            finder.popup();
+        })
+    })
+    function bodauTiengViet(str) {
+        str = str.toLowerCase();
+
+        str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+        str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+        str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+        str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+        str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+        str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+        str = str.replace(/đ/g, "d");
+        return str;
+    }
+
+    function changeToUrlRewrite(str) {
+        str = bodauTiengViet(str).trim().replace(/[/]/g, "-");
+
+        return str;
+    }
+    $(document).ready(function () {
+        $("#Name").keypress(function () {
+            var khongdau = bodauTiengViet($("#Name").val()).trim().replace(/[/ ]/g, "-");
+            $("#Link").val(khongdau);
+        });
+    })
+</script>

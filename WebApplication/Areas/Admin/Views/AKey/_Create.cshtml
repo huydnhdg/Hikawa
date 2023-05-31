@@ -1,0 +1,42 @@
+﻿
+@model WebApplication.Models.Accessary_Key
+@{
+
+}
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Phí bảo hành</h3>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("CreateConfirm", "AKey", new { area = "Admin" }))
+        {
+            @Html.AntiForgeryToken()
+        <div class="form-horizontal">
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control", @placeholder = "Mã", @required = "required" } })
+            </div>
+            <div class="form-group">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @placeholder = "Tên linh kiện", @required = "required" } })
+            </div>
+            <div class="form-group">
+                @Html.EditorFor(model => model.ProductName, new { htmlAttributes = new { @class = "form-control", @placeholder = "Sản phẩm", @required = "required" } })
+            </div>
+            <div class="form-group">
+                @Html.EditorFor(model => model.KeyPrice, new { htmlAttributes = new { @class = "form-control", @placeholder = "Giá", @required = "required" } })
+            </div>
+
+            <div class="form-group text-center">
+                <button type="submit" class="btn btn-primary"><i class="ti ti-check"></i> Lưu</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="ti ti-close"></i> Thoát</button>
+            </div>
+
+        </div>
+        }
+    </div>
+</div>
+
+
+
+

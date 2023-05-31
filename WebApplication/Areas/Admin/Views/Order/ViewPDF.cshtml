@@ -1,0 +1,214 @@
+﻿@model WebApplication.Areas.Admin.Data.E_Order_Details
+@{
+    Layout = null;
+    int index = 0;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Chi tiết đơn hàng @Model.AgentName</title>
+    <style>
+        body {
+            width: 915px;
+            margin: auto;
+            font-family: Arial;
+            font-size: 14px;
+        }
+
+
+        table {
+            width: 100%;
+        }
+
+        .table-product {
+            border-collapse: unset;
+            border-spacing: 0px;
+        }
+
+            .table-product, .table-product th, .table-product td {
+                border: 1px solid grey;
+            }
+
+                .table-product tr th {
+                    height: 50px;
+                }
+
+                .table-product tr td {
+                    padding: 5px;
+                }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .big-bill {
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .table-amount tr td {
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <tr>
+            <td>
+                <img src="~/Image/logo_pdf.png" />
+            </td>
+            <td>
+                <div class="head-title">
+                    <p><b>VIETNAM ROBOTICS</b></p>
+                    <p><b>37 Nguyễn Văn Huyên, Quan Hoa,<br /> Cầu Giấy, Hà Nội</b></p>
+                    <p><b>0938336633</b></p>
+                    <p><b>info@vietnamrobotics.vn</b></p>
+                </div>
+            </td>
+            <td>
+                <div class="head-title">
+                    <p>Mã đơn hàng: <b>@Model.Code</b></p>
+                    <p>Ngày tạo: <b>@Model.Checkdate.Value.ToString("dd-MM-yyyy")</b></p>
+                    <p><b>NVBH: @Model.Checkby</b></p>
+                    <p><b>Vietnam Robotics NVH</b></p>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <p class="text-center big-bill">ĐƠN HÀNG</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>Hoá đơn đến:</p>
+                <p>@Model.AgentName</p>
+                <p>@Model.Address</p>
+            </td>
+            <td>
+                <p>Giao hàng đến:</p>
+                <p>@Model.AgentName</p>
+                <p>@Model.Address</p>
+            </td>
+            <td>
+                <p>Điện thoại: <b>@Model.Phone</b></p>
+                <p>Email: @Model.Email</p>
+                <p></p>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <table class="table-product">
+                    <thead>
+                        <tr>
+                            <th>
+                                STT
+                            </th>
+                            <th>
+                                Mã sản phẩm
+                            </th>
+                            <th>
+                                Tên sản phẩm
+                            </th>
+                            <th>
+                                Đơn vị
+                            </th>
+                            <th>
+                                Số lượng
+                            </th>
+                            <th>
+                                Đơn giá
+                            </th>
+                            <th>
+                                Chiết khấu
+                            </th>
+                            <th>
+                                Thành tiền
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var item in Model.Items)
+                        {
+                            index++;
+                            <tr>
+                                <td style="text-align:center">@index</td>
+                                <td>@item.ProductCode</td>
+                                <td>@item.Product</td>
+                                <td>@item.ProductUnit</td>
+                                <td style="text-align:right">@item.Quantity</td>
+                                <td style="text-align:right">@item.Price.ToString("N0")</td>
+                                <td style="text-align:right">@item.Discount%</td>
+                                <td style="text-align:right">@item.Total.ToString("N0")</td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <table>
+                    <tr>
+                        <td style="width: 50%"></td>
+                        <td>
+                            <table class="table-amount" style="border-collapse: collapse;">
+                                <tr>
+                                    <td>Tổng số lượng</td>
+                                    <td class="text-right">@Model.Quantity.ToString("N0")</td>
+                                </tr>
+                                <tr style="border-top: 2px solid grey">
+                                    <td>Tổng Tiền</td>
+                                    <td class="text-right">@Model.Amount.ToString("N0")</td>
+                                </tr>
+                                <tr style="border-top: 2px solid grey">
+                                    <td>Chiết khấu</td>
+                                    <td class="text-right">@Model.Discount.ToString("N0")</td>
+                                </tr>
+                                <tr style="border-top: 2px solid #000">
+                                    <td><b>Khách phải trả</b></td>
+                                    <td class="text-right"><b>@Model.Total.ToString("N0")</b></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <p>
+                    Tài khoản thanh toán:
+                </p><p>
+                    Công ty CP Robotics Việt Nam
+                </p><p>
+                    STK: 101 820 3371 Tại: Ngân Hàng TMCP Ngoại thương Việt Nam (VCB) CN Tây Hồ, Hà Nội.
+                </p><p>
+                    Vũ Hoài Nam STK: 19011.888666888 NH Techcombank Hà Nội.
+                </p>
+                <table>
+                    <tr>
+                        <td style="width: 50%">
+                            <p class="text-center">NVBH: @Model.Checkby</p>
+                        </td>
+                        <td style="width: 50%">
+                            <p class="text-center">Khách hàng: @Model.AgentName</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+    </table>
+</body>
+</html>

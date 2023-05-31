@@ -1,0 +1,17 @@
+﻿@model int
+<li class="cart-item has-icon has-dropdown" style="font-size: 21px;">
+
+    <a href="/dat-hang/gio-hang" title="Giỏ hàng" class="header-cart-link is-small">
+        @if (Model > 0)
+        {
+            <i class="fa fa-cart-plus"></i>
+            <i id="ccart">@Model</i>
+        }
+        else
+        {
+            <i class="fa fa-cart-plus"></i>
+        }
+
+    </a>
+
+</li>

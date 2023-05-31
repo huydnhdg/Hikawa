@@ -1,0 +1,309 @@
+﻿@model PagedList.IPagedList<WebApplication.Areas.Admin.Data.WarrantiDetail>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Warranti";
+    var index = 0;
+}
+
+
+<!-- validation by Bootstrap -->
+<div class="card">
+    <div class="card-header">Form filter</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12">
+                <form class="needs-validation" novalidate>
+                    <div class="form-row">
+                        <div class="col-md-2 mb-2">
+                            <label for="ticket-name" class="col-form-label">Tìm kiếm</label>
+                            <div class="">
+                                <input type="text" class="form-control" name="textsearch" value="@ViewBag.textsearch">
+                                <input type="text" class="form-control hide" name="status" value="@ViewBag.status">
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-2">
+                            <label for="ticket-name" class="col-form-label">Trạm bảo hành</label>
+                            <div class="">
+                                <input type="text" class="form-control" name="station" value="@ViewBag.station">
+                            </div>
+                        </div>
+                        @*<div class="col-md-2 mb-2">
+                                <label for="ticket-type" class="col-form-label">Dịch vụ</label>
+                                <div class="">
+                                    @Html.DropDownList("service", new List<SelectListItem>{
+                                    new SelectListItem { Value = "" , Text = "--chọn--" },
+                                    new SelectListItem { Value = "bảo hành" , Text = "bảo hành" },
+                                    new SelectListItem { Value = "lắp đặt" , Text = "lắp đặt" },
+                                    new SelectListItem { Value = "sửa chửa" , Text = "sửa chửa" }}, new { @class = "form-control" })
+                                </div>
+                            </div>*@
+                        <div class="col-md-2 mb-2">
+                            <label for="ticket-type" class="col-sm-9 col-form-label">Kênh</label>
+                            <div class="">
+                                @Html.DropDownList("chanel", new List<SelectListItem>{
+                                new SelectListItem { Value = "" , Text = "--chọn--" },
+                                new SelectListItem { Value = "WEB" , Text = "WEB" },
+                                new SelectListItem { Value = "APP" , Text = "APP" },
+                                new SelectListItem { Value = "SMS" , Text = "SMS" },
+                                new SelectListItem { Value = "CMS" , Text = "CSKH" }}, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="ticket-type" class="col-sm-9 col-form-label">Tạo phiếu</label>
+                            <div class="input-daterange input-group" data-provide="datepicker" data-date-format="dd/mm/yyyy">
+                                <input class="form-control" name="start_date" value="@ViewBag.start_date">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">to</span>
+                                </div>
+                                <input class="form-control" name="end_date" value="@ViewBag.end_date">
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="ticket-type" class="col-sm-9 col-form-label">Hoàn thành</label>
+                            <div class="input-daterange input-group" data-provide="datepicker" data-date-format="dd/mm/yyyy">
+                                <input class="form-control" name="im_start_date" value="@ViewBag.im_start_date">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">to</span>
+                                </div>
+                                <input class="form-control" name="im_end_date" value="@ViewBag.im_end_date">
+                            </div>
+                        </div>
+
+                    </div>
+                    <button class="btn btn-primary" type="submit"><i class="ti ti-filter"></i> Tìm kiếm</button>
+                    <a class="btn btn-info" href="#" id="add"><i class="ti ti-plus"></i> Tạo mới</a>
+                    <a class="btn btn-success" href="/Admin/Warranti/Phieubaohanh"><i class="ti ti-export"></i> Xuất file</a>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Table database</h3>
+        <div class="col-md-12 text-right">
+            <div class="btn-group row">
+                <a href="/Admin/Warranti/Index?status=" class="btn btn-outline-light @(ViewBag.status == "" ? "active" : "")">Tất cả @ViewBag.countstatus.all</a>
+                <a href="/Admin/Warranti/Index?status=0" class="btn btn-outline-danger @(ViewBag.status == "0" ? "active" : "")">Mới tạo @ViewBag.countstatus.s0</a>
+                <a href="/Admin/Warranti/Index?status=2" class="btn btn-outline-warning @(ViewBag.status == "2" ? "active" : "")">Chuyển trạm @ViewBag.countstatus.s2</a>
+                <a href="/Admin/Warranti/Index?status=4" class="btn btn-outline-secondary @(ViewBag.status == "4" ? "active" : "")">Từ chối @ViewBag.countstatus.s4</a>
+                <a href="/Admin/Warranti/Index?status=5" class="btn btn-outline-warning @(ViewBag.status == "5" ? "active" : "")">Đang xử lý @ViewBag.countstatus.s5</a>
+                @*<a href="/Admin/Warranti/Index?status=11" class="btn btn-outline-danger @(ViewBag.status == "11" ? "active" : "")">Sửa xong @ViewBag.countstatus.s11</a>*@
+                <a href="/Admin/Warranti/Index?status=6" class="btn btn-outline-warning @(ViewBag.status == "6" ? "active" : "")">Đem về trạm @ViewBag.countstatus.s6</a>
+                <a href="/Admin/Warranti/Index?status=7" class="btn btn-outline-warning @(ViewBag.status == "7" ? "active" : "")">Đợi linh kiện @ViewBag.countstatus.s7</a>
+                <a href="/Admin/Warranti/Index?status=8" class="btn btn-outline-info @(ViewBag.status == "8" ? "active" : "")">Chờ phản hồi @ViewBag.countstatus.s8</a>
+                <a href="/Admin/Warranti/Index?status=-1" class="btn btn-outline-danger @(ViewBag.status == "-1" ? "active" : "")">Quá hạn @ViewBag.countstatus.outdate</a>
+                <a href="/Admin/Warranti/Index?status=9" class="btn btn-outline-dark @(ViewBag.status == "9" ? "active" : "")">Hủy bỏ @ViewBag.countstatus.s9</a>
+                <a href="/Admin/Warranti/Index?status=1" class="btn btn-outline-success @(ViewBag.status == "1" ? "active" : "")">Hoàn thành @ViewBag.countstatus.s1</a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <table class="table table-sm" id="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Phiếu bảo hành</th>
+                    <th>Mô tả lỗi</th>
+                    <th>Thông tin khách hàng</th>
+                    <th>Thông tin sản phẩm</th>
+                    <th>Trạm bảo hành</th>
+                    <th>Kết quả</th>
+                    <th>Phí bảo hành</th>
+                    <th>Ghi chú</th>
+                    <th>#</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    index++;
+                    <tr>
+                        <td style="display:none">@item.Id</td>
+                        <td>@index</td>
+                        <td class="viewlog">
+                            <a href="javascript:void(0)">
+                                <span class="text-danger">@item.Code</span><br />
+                            </a>
+                            @item.Createdate.Value.ToString("dd/MM/yyyy")<br />
+                            @item.Chanel<br />
+                            @if (item.Status == 0)
+                            {
+                                <span class="alert-danger">Mới tạo</span>
+                            }
+                            else if (item.Status == 1)
+                            {
+                                <span class="alert-success">Hoàn thành</span>
+                            }
+                            else if (item.Status == 2)
+                            {
+                                <span class="alert-primary">Chuyển trạm</span>
+                            }
+                            else if (item.Status == 3)
+                            {
+                                <span class="alert-primary"></span>
+                            }
+                            else if (item.Status == 4)
+                            {
+                                <span class="alert-dark">Từ chối</span>
+                            }
+                            else if (item.Status == 5)
+                            {
+                                <span class="alert-warning">Đang xử lý</span>
+                            }
+
+                            else if (item.Status == 11)
+                            {
+                                <span class="alert-danger">Sửa xong</span>
+                            }
+                            else if (item.Status == 6)
+                            {
+                                <span class="alert-warning">Đem về trạm</span>
+                            }
+                            else if (item.Status == 7)
+                            {
+                                <span class="alert-warning">Đợi linh kiện</span>
+                            }
+                            else if (item.Status == 8)
+                            {
+                                <span class="alert-info">chờ phản hồi</span>
+                            }
+                            else if (item.Status == 9)
+                            {
+                                <span class="alert-dark">Hủy bỏ</span>
+                            }
+                            <br />
+                            @item.Warranti_Cate<br />
+                            @*@item.Note<br />*@
+                            @item.Createby
+                        </td>
+                        <td>
+                            @item.Note<br />
+                        </td>
+                        <td>
+                            @item.Phone<br />
+                            @item.CusName<br />
+                            @item.Address<br />
+
+                        </td>
+                        <td>
+                            @item.ProductName<br />
+                            @item.ProductCode<br />
+                            @item.Model<br />
+                            @item.BuyAdr
+                        </td>
+                        <td>
+                            @item.Station_Warranti - @item.Station<br />
+                            @item.KTV_Warranti - @item.KTV<br />
+                            @if (item.Deadline != null)
+                            {
+                                <span class="text-info">@item.Deadline.Value.ToString("dd/MM/yyyy")</span>
+                            }
+                        </td>
+                        <td>
+                            @if (item.Successdate != null)
+                            {
+                                <span class="text-success">@item.Successdate.Value.ToString("dd/MM/yyyy")</span>
+                            }
+                            <br />
+                            @item.Successnote
+                        </td>
+                        <td>
+                            <span class="text-success">@item.Amount</span><br />
+                            @item.Price<br />
+                            @item.Price_Move<br />
+                            @item.Price_Accessary
+                        </td>
+                        <td>
+                            @item.SuccessExtra
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <a class="btn btn-outline-info views" href="#"><i class="ti-receipt"></i></a>
+                                <a class="btn btn-outline-light edit" href="#"><i class="ti ti-pencil-alt"></i></a>
+                                @if (!User.IsInRole("Đại lý"))
+                                {
+                                    <a class="btn btn-outline-primary" href="/Admin/Warranti/Detail/@item.Id"><i class="ti ti-comment-alt"></i></a>
+                                }
+                                @if (User.IsInRole("Admin - Quản trị toàn hệ thống"))
+                                {
+                                    <a class="btn btn-outline-light" href="/Admin/Warranti/Delete/@item.Id" onclick="return confirm('Bạn muốn xóa phiếu này?')" title="xóa phiếu bảo hành"><i class="ti ti-trash text-danger"></i></a>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="showing">Showing @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount</div>
+            </div>
+            <div class="col-sm-6">
+                @Html.PagedListPager(Model, page => Url.Action("Index", new { page, textsearch = ViewBag.textsearch, station = ViewBag.station, chanel = ViewBag.chanel, status = ViewBag.status, start_date = ViewBag.start_date, end_date = ViewBag.end_date, im_start_date = ViewBag.im_start_date, im_end_date = ViewBag.im_end_date }))
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script>
+        $("#add").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "/Admin/Warranti/Create",
+                success: function (response) {
+                    $('#createbody').html(response);
+                    $('#createmodal').modal('show');
+                }
+            });
+        });
+        $("#table .viewlog").click(function () {
+            var Id = $(this).closest("tr").find("td").eq(0).html();
+            $.ajax({
+                type: "POST",
+                url: "/Admin/Warranti/ViewLog",
+                data: '{Id: "' + Id + '" }',
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (response) {
+                    $('#createbody').html(response);
+                    $('#createmodal').modal('show');
+                }
+            });
+        });
+        $("#table .edit").click(function () {
+            var Id = $(this).closest("tr").find("td").eq(0).html();
+            $.ajax({
+                type: "POST",
+                url: "/Admin/Warranti/Edit",
+                data: '{Id: "' + Id + '" }',
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (response) {
+                    $('#createbody').html(response);
+                    $('#createmodal').modal('show');
+                }
+            });
+        });
+        $("#table .views").click(function () {
+            var Id = $(this).closest("tr").find("td").eq(0).html();
+            $.ajax({
+                type: "POST",
+                url: "/Admin/Warranti/Views",
+                data: '{Id: "' + Id + '" }',
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (response) {
+                    $('#createbody').html(response);
+                    $('#createmodal').modal('show');
+                }
+            });
+        });
+    </script>
+
+}

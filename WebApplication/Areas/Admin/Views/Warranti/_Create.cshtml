@@ -1,0 +1,347 @@
+﻿@model WebApplication.Models.Warranti
+@{
+
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Thông tin bảo hành</h3>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("CreateConfirm", "Warranti", new { area = "Admin" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control", @placeholder = "Số điện thoại", @required = "required", @onchange = "GetCustomer()" } })
+                </div>
+                <div class="form-group">
+                    @Html.Editor("CusName", new { htmlAttributes = new { @class = "form-control", @placeholder = "Tên khách hàng" } })
+                </div>
+                <div class="form-group hidden">
+                    @Html.EditorFor(model => model.PhoneExtra, new { htmlAttributes = new { @class = "form-control", @placeholder = "Số khác" } })
+                </div>
+                <div class="form-group">
+                    @Html.DropDownListFor(model => model.Province, new SelectList(Enumerable.Empty<SelectListItem>(), "Name", "Name"), "Thành phố/ Tỉnh", new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    @Html.DropDownListFor(model => model.District, new SelectList(Enumerable.Empty<SelectListItem>(), "Name", "Name"), "Quận/ Huyện", new { @class = "form-control" })
+                </div>
+
+                <div class="form-group">
+                    @Html.DropDownListFor(model => model.Ward, new SelectList(Enumerable.Empty<SelectListItem>(), "Name", "Name"), "Phường/ Xã", new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control", @placeholder = "Địa chỉ" } })
+                </div>
+                @*<div class="form-group" id="box-product">
+                    @Html.EditorFor(model => model.ProductCode, new { htmlAttributes = new { @class = "form-control", @placeholder = "Serial",@onchange= "GetProduct()" } })
+                </div>*@
+                <div class="form-group" id="NoSelect">
+                        @Html.EditorFor(model => model.ProductCode, new { htmlAttributes = new { @class = "form-control", @placeholder = "Serial máy", @onchange="GetProductBySeriBr()" } })
+                </div>
+                <div class="form-group" id="box-product-select" style="display:none">
+                    <select class="form-control" type="text" name="ProductCode1" id="ProductCode1" onchange="GetProductBySeriBr1()">
+                        <option>--Chọn sản phẩm</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    @Html.EditorFor(model => model.Model, new { htmlAttributes = new { @class = "form-control", @placeholder = "Model" } })
+                </div>
+                <div class="form-group">
+                    @Html.EditorFor(model => model.ProductName, new { htmlAttributes = new { @class = "form-control", @placeholder = "Sản phẩm" } })
+                </div>
+                <div class="form-group">
+                    <select id="Warranti_Cate" name="Warranti_Cate" class="form-control">
+                        <option value="">--Chọn phân loại--</option>
+                        <option value="Bảo hành">Bảo hành</option>
+                        <option value="Tính phí">Tính phí</option>
+                        <option value="Lắp đặt">Lắp đặt</option>
+                        <option value="Bảo trì, bảo dưỡng">Bảo trì, bảo dưỡng</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    @Html.TextAreaFor(model => model.Note, new { @class = "form-control", @placeholder = "Mô tả lỗi" })
+                </div>
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-primary"><i class="ti ti-check"></i> Lưu</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="ti ti-close"></i> Thoát</button>
+                </div>
+
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        //$("#Cate").autocomplete({
+        //    source: function (request, response) {
+        //        $.ajax({
+        //            url: "/Admin/Warranti/GetCate",
+        //            type: "POST",
+        //            dataType: "json",
+        //            data: { text: request.term },
+        //            success: function (data) {
+        //                response($.map(data, function (item) {
+        //                    return { label: item.Name, value: item.Name };
+        //                }))
+
+        //            }
+        //        })
+        //    },
+        //    messages: {
+        //        noResults: "", results: ""
+        //    }
+        //});
+        //$("#ProductCode").autocomplete({
+        //    source: function (request, response) {
+        //        $.ajax({
+        //            url: "/Admin/Warranti/GetCode",
+        //            type: "POST",
+        //            dataType: "json",
+        //            data: { text: request.term },
+        //            success: function (data) {
+        //                response($.map(data, function (item) {
+        //                    return { label: item.Code, value: item.Code, label1: item.Serial, label2: item.Model, label3: item.Name };
+        //                }))
+
+        //            }
+        //        })
+        //    },
+        //    select: function (event, ui) {
+        //        $("#Serial").val(ui.item.label1);
+        //        $("#Model").val(ui.item.label2);
+        //        $("#ProductName").val(ui.item.label3);
+        //    },
+        //    messages: {
+        //        noResults: "", results: ""
+        //    }
+        //});
+        //$("#Serial").autocomplete({
+        //    source: function (request, response) {
+        //        $.ajax({
+        //            url: "/Admin/Warranti/GetSerial",
+        //            type: "POST",
+        //            dataType: "json",
+        //            data: { text: request.term },
+        //            success: function (data) {
+        //                response($.map(data, function (item) {
+        //                    return { label: item.Serial, value: item.Serial, label1: item.Code, label2: item.Model, label3: item.Name };
+        //                }))
+
+        //            }
+        //        })
+        //    },
+        //    select: function (event, ui) {
+        //        $("#ProductCode").val(ui.item.label1);
+        //        $("#Model").val(ui.item.label2);
+        //        $("#ProductName").val(ui.item.label3);
+        //    },
+        //    messages: {
+        //        noResults: "", results: ""
+        //    }
+        //});
+        //$("#Model").autocomplete({
+        //    source: function (request, response) {
+        //        $.ajax({
+        //            url: "/Admin/Warranti/GetModel",
+        //            type: "POST",
+        //            dataType: "json",
+        //            data: { text: request.term },
+        //            success: function (data) {
+        //                response($.map(data, function (item) {
+        //                    return { label: item.Model, value: item.Model };
+        //                }))
+
+        //            }
+        //        })
+        //    },
+        //    messages: {
+        //        noResults: "", results: ""
+        //    }
+        //});
+        $("#Province").click(function () {
+            $.ajax
+                ({
+                    url: '/User/GetProvince',
+                    type: 'POST',
+                    datatype: 'application/json',
+                    contentType: 'application/json',
+                    success: function (data) {
+                        $("#District").empty();
+                        $("#Ward").empty();
+                        if ($("#Province option").length < 3) {
+                            $.each(data, function (i, province) {
+                                $("#Province").append($('<option></option>').val(province.Name).html(province.Name))
+                            })
+                        }
+                    }
+                });
+        });
+        $("#District").click(function () {
+            var name = $("#Province").val();
+            $.ajax
+                ({
+                    url: '/User/GetDistrict',
+                    type: 'POST',
+                    datatype: 'application/json',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        text: name
+                    }),
+                    success: function (data) {
+                        $("#Ward").empty();
+                        if ($("#District option").length < 3) {
+                            $.each(data, function (i, district) {
+                                $("#District").append($('<option></option>').val(district.Name).html(district.Name))
+                            })
+                        }
+                    }
+                });
+        });
+        $("#Ward").click(function () {
+            var name = $("#District").val();
+            $.ajax
+                ({
+                    url: '/User/GetWard',
+                    type: 'POST',
+                    datatype: 'application/json',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        text: name
+                    }),
+                    success: function (data) {
+                        if ($("#Ward option").length < 3) {
+                            $.each(data, function (i, district) {
+                                $("#Ward").append($('<option></option>').val(district.Name).html(district.Name))
+                            })
+                        }
+                    }
+                });
+        });
+
+    })
+    var apiUrl = '@System.Configuration.ConfigurationManager.AppSettings["DOMAIN"]';
+    function GetCustomer() {
+        var phone = $("#Phone").val();
+        $.ajax
+            ({
+                url: '/Admin/Warranti/GetCustomer',
+                type: 'POST',
+                datatype: 'application/json',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    phone: phone
+                }),
+                success: function (result) {
+                    if (result.Province != null) {
+                        //$('#CusName').empty();
+                        $('#Province').empty();
+                        $('#District').empty();
+                        $('#Ward').empty();
+                        $("#Address").empty();
+                        $("#CusName").empty();
+
+                        //$("#CusName").val(result.Name);
+                        $('#Province').append(new Option(result.Province, result.Province, true, true));
+                        $('#District').append(new Option(result.District, result.District, true, true));
+                        $('#Ward').append(new Option(result.Ward, result.Ward, true, true));
+                        $("#Address").val(result.Address);
+                        $("#CusName").val(result.Name);
+                        
+                        if (result.ListProduct.length > 0) {
+
+                            var list = result.ListProduct;
+                            $("#box-product-select").css("display", "");
+                            $("#NoSelect").css("display", "none");
+                            $.each(list, function (i, ward) {
+                                $("#ProductCode1").append($('<option></option>').val(ward.SerialBrand).html(ward.SerialBrand))
+                            })
+                        }
+                    }
+
+                }
+            });
+    }
+    function GetProductBySeriBr() {
+        var code1 = $("#ProductCode").val();
+        $.ajax
+            ({
+                url: apiUrl + '/api/action/getproduct?code=' + code1,
+                type: 'GET',
+                datatype: 'application/json',
+                contentType: 'application/json',
+                success: function (result) {
+                    //$('#ProductCode').val("");
+                    $('#ProductName').val("");
+                    $('#Model').val("");
+                    if (result.Data.length > 0) {
+                        var product = result.Data[0];
+                        if (product.Status == 1 || product.Status == 0) {//kích hoạt rồi thì map thông tin
+
+                            $("#ProductName").val(product.Name);
+                            $("#Model").val(product.Model);
+                            //$("#ProductCode").val(product.Code);
+                        }
+                    }
+
+                }
+            });
+    }
+    function GetProductBySeriBr1() {
+        var code1 = $("#ProductCode1").val();
+        $.ajax
+            ({
+                url: apiUrl + '/api/action/getproduct?code=' + code1,
+                type: 'GET',
+                datatype: 'application/json',
+                contentType: 'application/json',
+                success: function (result) {
+                    //$('#ProductCode').val("");
+                    $('#ProductName').val("");
+                    $('#Model').val("");
+                    if (result.Data.length > 0) {
+                        var product = result.Data[0];
+                        if (product.Status == 1 || product.Status == 0) {//kích hoạt rồi thì map thông tin
+
+                            $("#ProductName").val(product.Name);
+                            $("#Model").val(product.Model);
+                            //$("#ProductCode").val(product.Code);
+                        }
+                    }
+
+                }
+            });
+    }
+    //function GetProduct() {
+    //    var code = $("#ProductCode").val();
+    //    $.ajax
+    //        ({
+    //            url: apiUrl + '/api/action/getproduct?code=' + code,
+    //            type: 'GET',
+    //            datatype: 'application/json',
+    //            contentType: 'application/json',
+    //            success: function (result) {
+    //                $('#ProductCode').val("");
+    //                $('#ProductName').val("");
+    //                $('#Model').val("");
+    //                $('#Trademark').val("");
+    //                if (result.Data.length > 0) {
+    //                    var product = result.Data[0];
+    //                    if (product.Status == 1 || product.Status == 0) {//kích hoạt rồi thì map thông tin
+
+    //                        $("#ProductName").val(product.Name);
+    //                        $("#Model").val(product.Model);
+    //                        $("#Trademark").val(product.Trademark);
+    //                        $("#ProductCode").val(product.Code);
+    //                    }
+    //                }
+
+    //            }
+    //        });
+    //}
+</script>

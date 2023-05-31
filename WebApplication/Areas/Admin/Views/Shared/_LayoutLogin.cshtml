@@ -1,0 +1,46 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <title>@ViewBag.Title | BẢO HÀNH ĐIỆN TỬ HIKAWA</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
+    <link href="/assets/css/bootstrap-custom.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/app.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/assets/images/favicon.png">
+    
+</head>
+<body>
+
+    <!-- WRAPPER -->
+    <div id="wrapper" class="d-flex align-items-center justify-content-center">
+        <div class="auth-box ">
+            <div class="left">
+                <div class="content">
+                    <div class="header">
+                        <div class="logo text-center"><img src="https://hikawa.com.vn/public/upload/logo.png" alt="LOGO" style="width:200px"></div>
+                        <p class="lead">Login to your account</p>
+                    </div>
+                    @RenderBody()
+                </div>
+            </div>
+            <div class="right">
+                <div class="overlay"></div>
+                <div class="content text">
+                    @*<h1 class="heading">Klorofil Pro - Bootstrap dashboard template</h1>
+                    <p>by The Develovers</p>*@
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END WRAPPER -->
+    
+    @RenderSection("scripts", required: false)
+</body>
+</html>

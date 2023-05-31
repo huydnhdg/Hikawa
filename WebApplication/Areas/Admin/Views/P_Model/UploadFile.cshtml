@@ -1,0 +1,92 @@
+﻿
+@model List<WebApplication.Models.P_Model>
+@{
+    ViewBag.Title = "P_Model";
+    var index = 0;
+    var done = 0;
+    var fail = 0;
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">Form</div>
+                <div class="card-body">
+                    @using (Html.BeginForm("UploadFile", "P_Model", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        <div class="input-group mb-3">
+                            <div class="col-md-8">
+                                <input type="file" name="UploadedFile" class="form-control" />
+                            </div>
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-primary"><i class="ti ti-upload"></i> Upload</button>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="col-md-6">
+                                <a href="~/File/temp_model_import.xlsx" class="btn btn-outline-warning"><i class="ti ti-file"></i> File mẫu</a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">Database</div>
+                <div class="card-body">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Model</th>
+                                <th>Tên sản phẩm</th>
+                                <th>Công suất</th>
+                                <th>Hạn bảo hành</th>
+                                <th>Thương hiệu</th>
+                                <th>Mô tả</th>
+                                <th>#</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                index++;
+                                <tr>
+                                    <td>@index</td>
+                                    <td>@item.Model</td>
+                                    <td>@item.ProductName</td>
+                                    <td>@item.Capacity</td>
+                                    <td>@item.Limited</td>
+                                    <td>@item.Trademark</td>
+                                    <td>@item.Description</td>
+                                    <td>
+                                        @if (item.Id == 0)
+                                        {
+                                            <span class="text-danger">Model đã tồn tại</span>
+                                            fail++;
+                                        }
+                                        else
+                                        {
+                                            <span class="text-success">thành công</span>
+                                            done++;
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                Tài thành công: <content class="text-success">@done</content> --- tải thất bại: <content><a class="text-danger" href="/Admin/P_Model/UploadFail">Chi tiết</a></content>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+

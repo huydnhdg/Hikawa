@@ -1,0 +1,201 @@
+﻿@model WebApplication.Areas.Admin.Data.A_Export_Model
+@{
+    ViewBag.Title = "Accessary";
+}
+<style>
+    .money {
+        text-align: right;
+    }
+
+    thead tr td {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    tbody tr td {
+        padding: unset !important;
+    }
+</style>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Xuất linh kiện cho trạm</h3>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("Edit", "AExport", FormMethod.Post, new { area = "Admin", enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.Id)
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <div class="form-group row">
+                            @Html.Label("Mã phiếu", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">@Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control" } })</div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("Xuất đến", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">@Html.EditorFor(model => model.Id_Key, new { htmlAttributes = new { @class = "form-control" } })</div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("Lưu ý", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">@Html.EditorFor(model => model.Note, new { htmlAttributes = new { @class = "form-control" } })</div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-12">
+                        <table class="col-md-12 table table-bordered" style="color:#fff">
+                            <thead class="bg-danger">
+                                <tr>
+                                    <td style="width:100px;">Ngày đặt</td>
+                                    <td>Tên linh kiện</td>
+                                    <td style="width:100px;">Model</td>
+                                    <td style="width:53px;">Số lượng</td>
+                                    <td style="width:100px;">Giá</td>
+                                    <td style="width:100px;">Tổng</td>
+                                    <td style="text-align:center">Ghi chú</td>
+                                </tr>
+                            </thead>
+                            <tbody id="tblBills">
+
+                                @for (var i = 0; i < Model.ListItem.Count(); i++)
+                                {
+
+
+                                    <tr>
+                                        <td>
+                                            @Html.EditorFor(model => model.ListItem[i].Id, new { htmlAttributes = new { @class = "form-control hide", @readonly="readonly" } })
+                                            @if (Model.ListItem[i].Orderdate != null)
+                                            {
+                                                @Html.EditorFor(model => model.ListItem[i].Orderdate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                            }
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(model => model.ListItem[i].Code, new { htmlAttributes = new { @class = "form-control hide" } })
+                                            @Html.EditorFor(model => model.ListItem[i].Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                        </td>
+                                        <td>@Html.EditorFor(model => model.ListItem[i].Model, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })</td>
+                                        
+                                        <td>@Html.EditorFor(model => model.ListItem[i].Quantity, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })</td>
+                                        <td>@Html.EditorFor(model => model.ListItem[i].Price, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })</td>
+                                        <td>@Html.EditorFor(model => model.ListItem[i].Amount, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })</td>
+                                        <td>@Html.EditorFor(model => model.ListItem[i].Note, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })</td>
+                                    </tr>
+                                }
+
+                            </tbody>
+                        </table>
+                        @*<div class="text-right">
+                            <a href="#" id="addRow" style="font-size:21px;font-weight:bold" class="text-danger" onclick="addRow();"><i class="ti-plus" data-name="mdi-plus"></i> </a>
+                        </div>*@
+                    </div>
+                </div>
+
+
+                <div class="form-group text-center">
+                    @*@if (User.IsInRole("Admin - Quản trị toàn hệ thống"))
+                    {
+                        <button type="submit" class="btn btn-primary"><i class="ti ti-check"></i> Lưu</button>
+                    }*@
+                    <a class="btn btn-danger" href="/admin/abig"><i class="ti ti-close"></i> Thoát</a>
+                </div>
+
+            </div>
+        }
+    </div>
+</div>
+@section scripts{
+    <script>
+        function addRow() {
+            var index = $("#tblBills").children("tr").length;
+            var orderdate = '<td><input class="form-control" id="ListItem_' + index + '__Orderdate" name="ListItem[' + index + '].Orderdate" type="date" /></td >';
+
+            var name = '<td><input class="form-control" id="ListItem_' + index + '__Name" name="ListItem[' + index + '].Name" type="text" onchange="getprice(this.id)"/><input class="form-control hide" id="ListItem_' + index + '__Code" name="ListItem[' + index + '].Code" type="text" onchange="getprice(this.id)"/></td >';
+            var model = '<td><input class="form-control" id="ListItem_' + index + '__Model" name="ListItem[' + index + '].Model" type="text" /></td >';
+            
+            var quantity = '<td><input class="form-control text-center" id="ListItem_' + index + '__Quantity" name="ListItem[' + index + '].Quantity" type="text" onchange="quantitychange(this.id)"/></td >';
+            var price = '<td><input class="form-control money" id="ListItem_' + index + '__Price" name="ListItem[' + index + '].Price" type="text" /></td >';
+            var amount = '<td><input class="form-control money" id="ListItem_' + index + '__Amount" name="ListItem[' + index + '].Amount" type="text" /></td >';
+            var note = '<td><input class="form-control" id="ListItem_' + index + '__Note" name="ListItem[' + index + '].Note" type="text" /></td >';
+            var newRow = "<tr id='trBook" + index + "'>" + orderdate + name + model  + quantity + price + amount + note + "</tr>";
+            $("#tblBills").append(newRow);
+
+            $("#ListItem_" + index + "__Name").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Admin/ABig/GetAccessary",
+                        type: "POST",
+                        dataType: "json",
+                        data: { text: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.Name, value: item.Name, label1: item.Code, label2: item.Model };
+                            }))
+
+                        }
+                    })
+                },
+                select: function (event, ui) {
+                    $("#ListItem_" + index + "__Code").val(ui.item.label1);
+                    $("#ListItem_" + index + "__Model").val(ui.item.label2);
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+
+        }
+        function getprice(id) {
+            var name = $('#' + id).val();
+            var index = id.split('_')[1];
+            $.ajax({
+                url: '/Admin/ABig/GetPriceAccess',
+                type: "POST",
+                dataType: "JSON",
+                data: { name: name },
+                success: function (result) {
+                    $("#ListItem_" + index + "__Price").html("");
+                    $("#ListItem_" + index + "__Price").val(result);
+
+                }
+            });
+        }
+        function quantitychange(id) {
+            var quantity = $('#' + id).val();
+            var index = id.split('_')[1];
+            var price = $("#ListItem_" + index + "__Price").val();
+
+            var amount = quantity * price;
+            $("#ListItem_" + index + "__Amount").val(amount);
+            var cate = $("#ListItem_" + index + "__Cate").val();
+            if (cate === "Bảo hành") {
+                $("#ListItem_" + index + "__Amount").val(0);
+            }
+        }
+        $(document).ready(function () {
+            $("#Id_Key").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Admin/Warranti/GetStation",
+                        type: "POST",
+                        dataType: "json",
+                        data: { text: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.UserName, value: item.UserName };
+                            }))
+
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+        })
+
+    </script>
+}
+
+

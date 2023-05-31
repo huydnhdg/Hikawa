@@ -1,0 +1,53 @@
+﻿
+@model WebApplication.Models.Agent_Bonus
+@{
+
+}
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Thanh toán cho tài khoản @Model.UserName</h3>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("EditConfirm", "AgentBonus", new { area = "Admin" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+                @Html.HiddenFor(model => model.UserName)
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    <label class="control-label">Tổng tiền tích lũy</label>
+                    @Html.EditorFor(model => model.Active, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Đã thanh toán</label>
+                    @Html.EditorFor(model => model.Used, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Còn lại</label>
+                    @Html.Editor("Amount", new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+                </div>
+
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-primary"><i class="ti ti-check"></i> Thanh toán</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="ti ti-close"></i> Thoát</button>
+                </div>
+
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var active = $('#Active').val();
+        var used = $('#Used').val();
+
+        var amount = active - used;
+        $('#Amount').val(amount);
+    });
+
+</script>
+
+
+
+

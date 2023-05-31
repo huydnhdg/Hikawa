@@ -1,0 +1,68 @@
+﻿@using WebApplication.Models
+@model LoginViewModel
+<style>
+    .hidden {
+        display: none;
+    }
+    .toggle-password {
+        position: absolute;
+        top: 25px;
+        right: 125px;
+        color: gray;
+    }
+    .pass{
+        margin:auto;
+    }
+</style>
+@using (Html.BeginForm("Login", "Account", new { area = "" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="text-center">
+        <div class="form-group">
+            <input class="form-control hidden" type="text" required id="lUserName" name="UserName" value="@Model.UserName" style="margin:auto" />
+        </div>
+        <div class="form-group">
+            @*<input placeholder="mật khẩu" class="form-control" type="password" required id="Password" name="Password" style="margin:auto" />*@
+            <input id="lPassword" type="password" class="form-control pass" required name="Password" value="">
+            <span toggle="#Password" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-danger rounded-pill" id="btn-register"> Xác nhận</button>
+        </div>
+        <div class="form-group">
+            <a href="#" id="sendcode" class="remember underline" title="quên mật khẩu">Quên mật khẩu?</a>
+        </div>
+    </div>
+}
+<script>
+    
+    $(".toggle-password").click(function () {
+
+        $(this).toggleClass("fa-eye fa-eye-slash");
+        var input = $($(this).attr("toggle"));
+        if (input.attr("type") == "password") {
+            input.attr("type", "text");
+        } else {
+            input.attr("type", "password");
+        }
+    });
+    var apiUrl = '@System.Configuration.ConfigurationManager.AppSettings["DOMAIN"]';
+    $("#sendcode").click(function () {
+        //alert("");
+        var phone = $('#lUserName').val();
+        $.ajax({
+            url: apiUrl + 'api/action/sendcode',
+            type: 'GET',
+            dataType: 'json',
+            data: {
+                Phone: phone
+            },
+            success: function (result) {
+                $('#UserOTP').val(phone);
+                $('#model-login').modal('hide');
+                $('#model-sendcode').modal('show');
+            }
+        });
+
+    });
+</script>

@@ -1,0 +1,216 @@
+﻿@model WebApplication.Areas.Admin.Data.E_Order_Details
+@{
+    int index = 0;
+    var Items = Model.Items;
+}
+<style>
+    .money {
+        text-align: right;
+    }
+
+    @@media (min-width: 576px) {
+        .modal-dialog {
+            max-width: 915px;
+        }
+    }
+
+    #myTable .form-control {
+        padding: 0;
+        border: unset;
+        text-align: right;
+    }
+
+    tr th {
+        text-align: center;
+    }
+
+    #myTable tr th, #myTable tr td {
+        font-size: 13px;
+        padding: 3px;
+        vertical-align: middle;
+    }
+
+    .number-input {
+        width: 50px;
+        float: left;
+    }
+</style>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Thông tin đơn hàng <span class="text-danger">@Model.Code</span></h3>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("Confirm", "Order", new { area = "Admin" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.Id)
+                <div class="form-group row">
+                    @Html.Label("Mã đơn hàng", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control col-md-4", @readonly = "readonly" } })
+                </div>
+                <div class="form-group row">
+                    @Html.Label("Ngày tạo", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.TextBoxFor(model => model.Createdate, "{0:yyyy/MM/dd}", new { @class = "form-control col-md-4", @readonly = "readonly" })
+                </div>
+                <div class="form-group row">
+                    @Html.Label("Đại lý", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.Agent_Id, new { htmlAttributes = new { @class = "form-control col-md-4", @readonly = "readonly" } })
+
+                </div>
+                <div class="form-group row">
+                    @Html.Label("Ngày duyệt", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.TextBoxFor(model => model.Checkdate, "{0:yyyy/MM/dd}", new { @class = "form-control col-md-4", @readonly = "readonly" })
+                </div>
+                <div class="form-group row">
+                    @Html.Label("Người duyệt", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.EditorFor(model => model.Checkby, new { htmlAttributes = new { @class = "form-control col-md-4", @readonly = "readonly" } })
+                </div>
+
+                <table class="table table-bordered" id="myTable">
+                    <thead class="bg-danger text-white">
+                        <tr>
+                            <th>STT</th>
+                            <th style="width: 110px">Mã hàng</th>
+                            <th style="width: 200px">Tên hàng hoá</th>
+                            <th>ĐVT</th>
+                            <th>Số lượng</th>
+                            <th>Đơn giá</th>
+                            <th>Thành tiền</th>
+                            <th style="width:70px">Chiếc khấu (%)</th>
+                            <th>Thanh toán</th>
+                        </tr>
+                    </thead>
+                    @if (Model.Status == 1)
+                    {
+                        <tbody id="tblBills">
+                            @for (var i = 0; i < Items.Count(); i++)
+                            {
+                                index++;
+                                <tr style="height: 41px">
+                                    <td style="text-align:center">@index</td>
+                                    <td style="text-align:center">@Items[i].ProductCode</td>
+                                    <td>@Items[i].Product</td>
+                                    <td>@Items[i].ProductUnit</td>
+                                    <td>
+                                        @Items[i].Quantity
+
+                                    </td>
+                                    <td class="money">
+                                        @string.Format("{0:#,##0}", Items[i].Price)
+
+                                    </td>
+                                    <td class="money">
+                                        @string.Format("{0:#,##0}", Items[i].Amount)
+
+                                    </td>
+                                    <td>
+                                        @Items[i].Discount%
+
+
+                                    </td>
+                                    <td class="money">
+                                        @string.Format("{0:#,##0}", Items[i].Total)
+
+                                    </td>
+                                    <td style="display: none">
+                                        @Html.EditorFor(model => model.Items[i].Id, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    </td>
+                                </tr>
+                            }
+
+
+                        </tbody>
+                    }
+                    else
+                    {
+                        <tbody id="tblBills">
+                            @for (var i = 0; i < Items.Count(); i++)
+                            {
+                                index++;
+                                <tr style="height: 41px">
+                                    <td style="text-align:center">@index</td>
+                                    <td style="text-align:center">@Items[i].ProductCode</td>
+                                    <td>@Items[i].Product</td>
+                                    <td>@Items[i].ProductUnit</td>
+                                    <td>
+                                        @*@item.Quantity*@
+                                        @Html.EditorFor(model => model.Items[i].Quantity, new { htmlAttributes = new { @class = "form-control number-input", @onchange = "ChangeQuantity(this.id)" } })
+                                    </td>
+                                    <td class="money">
+                                        @*@string.Format("{0:#,##0}", Items[i].Price)*@
+                                        @Html.EditorFor(model => model.Items[i].Price, new { htmlAttributes = new { @class = "form-control" } })
+                                    </td>
+                                    <td class="money">
+                                        @*@string.Format("{0:#,##0}", Items[i].Amount)*@
+                                        @Html.EditorFor(model => model.Items[i].Amount, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    </td>
+                                    <td>
+                                        @*@item.Discount%*@
+                                        @Html.EditorFor(model => model.Items[i].Discount, new { htmlAttributes = new { @class = "form-control number-input", @onchange = "ChangeDiscount(this.id)" } })
+
+                                    </td>
+                                    <td class="money">
+                                        @*@string.Format("{0:#,##0}", Items[i].Total)*@
+                                        @Html.EditorFor(model => model.Items[i].Total, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    </td>
+                                    <td style="display: none">
+                                        @Html.EditorFor(model => model.Items[i].Id, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                                    </td>
+                                </tr>
+                            }
+
+
+                        </tbody>
+                    }
+
+                </table>
+
+                <div class="form-group text-center">
+                    @if (Model.Status == 0 && User.IsInRole("Admin - Quản trị toàn hệ thống"))
+                    {
+                        <button type="submit" class="btn btn-primary"><i class="ti ti-check"></i> Xác nhận đơn hàng</button>
+                        <a href="/admin/order/Cancel/@Model.Id" class="btn btn-dark"><i class="ti ti-trash"></i> Huỷ đơn</a>
+                    }
+
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="ti ti-close"></i> Thoát</button>
+                </div>
+
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    function ChangeQuantity(id) {
+        var index = id.split('_')[1];
+        var quantity = $("#Items_" + index + "__Quantity").val();
+        var price = $("#Items_" + index + "__Price").val();
+        var amount = quantity * price;
+        $("#Items_" + index + "__Amount").val(amount);
+
+        //tinh thành tiền
+        //tinh thanh toán
+        var discount = $("#Items_" + index + "__Discount").val();
+        var sumdiscount = (amount * discount / 100);
+        var total = amount - sumdiscount;
+
+        $("#Items_" + index + "__Total").val(total);
+
+    }
+    function ChangeDiscount(id) {
+        //tính thanh toán
+        var index = id.split('_')[1];
+        var discount = $("#Items_" + index + "__Discount").val();
+        var amount = $("#Items_" + index + "__Amount").val();
+
+        var sumdiscount = (amount * discount / 100);
+        var total = amount - sumdiscount;
+
+        $("#Items_" + index + "__Total").val(total);
+    }
+</script>
+
+

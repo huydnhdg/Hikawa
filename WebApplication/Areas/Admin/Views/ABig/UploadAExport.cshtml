@@ -1,0 +1,90 @@
+﻿@model List<WebApplication.Models.Acessary_Export_Item>
+@{
+    ViewBag.Title = "Accessary";
+    var index = 0;
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">Form</div>
+                <div class="card-body">
+                    @using (Html.BeginForm("UploadAExport", "ABig", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        <div class="input-group mb-3">
+                            <div class="col-md-8">
+                                <input type="file" name="UploadedFile" class="form-control" />
+                            </div>
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-primary"><i class="ti ti-upload"></i> Upload</button>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="col-md-6">
+                                <a href="~/File/Vision_TempExport.xlsx" class="btn btn-outline-warning"><i class="ti ti-file"></i> File mẫu</a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">Database</div>
+                <div class="card-body">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Mã phiếu xuất</th>
+                                <th>Tài khoản Trạm</th>
+                                <th>Ngày đặt</th>
+                                <th>Mã linh kiện</th>
+                                <th>Tên linh kiện</th>
+                                <th>Tổng tiền</th>
+                                <th>Model</th>
+                                <th>Phân loại phiếu</th>
+                                <th>Số lượng</th>
+                                <th>Lưu ý</th>
+                                <th>#</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                index++;
+                                <tr>
+                                    <td>@index</td>
+                                    <td>@item.Code_Export</td>
+                                    <td>@item.UserKey</td>
+                                    <td>@item.Orderdate</td>
+                                    <td>@item.Code</td>
+                                    <td>@item.Name</td>
+                                    <td>@item.Amount</td>
+                                    <td>@item.Cate
+                                    </td>
+                                    <td>@item.Quantity</td>
+                                    <td>@item.Note</td>
+                                    <td>
+                                        @if (item.UserKey != null)
+                                        {
+                                            <span class="text-success">Thành công</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-danger">chưa thành công</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+

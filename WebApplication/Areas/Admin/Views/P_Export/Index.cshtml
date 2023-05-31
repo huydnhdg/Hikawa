@@ -1,0 +1,117 @@
+﻿@model PagedList.IPagedList<WebApplication.Models.P_Export>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "P_Export";
+    var index = 0;
+}
+
+<!-- validation by Bootstrap -->
+<div class="card">
+    <div class="card-header">Form filter</div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12">
+                <form class="needs-validation" novalidate>
+                    <div class="form-row">
+                        <div class="col-md-2 mb-2">
+                            <label for="ticket-name" class="col-form-label">Tìm kiếm</label>
+                            <div class="">
+                                <input type="text" class="form-control" name="textsearch" value="@ViewBag.textsearch">
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="ticket-type" class="col-sm-9 col-form-label">Ngày tạo</label>
+                            <div class="input-daterange input-group" data-provide="datepicker" data-date-format="dd/mm/yyyy">
+                                <input class="form-control" name="start_date" value="@ViewBag.start_date">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">to</span>
+                                </div>
+                                <input class="form-control" name="end_date" value="@ViewBag.end_date">
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" type="submit"><i class="ti ti-filter"></i> Tìm kiếm</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Table database</h3>
+    </div>
+    <div class="card-body">
+        <table class="table table-sm" id="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Mã phiếu</th>
+                    <th>Đại lý</th>
+                    <th>Số lượng</th>
+                    <th>Mô tả</th>
+                    <th>Hạn tồn kho</th>
+                    <th>Ngày tạo</th>
+                    <th>Người tạo</th>
+                    <th>#</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    index++;
+                    <tr>
+                        <td style="display:none">@item.Id</td>
+                        <td>@index</td>
+                        <td>@item.Code</td>
+                        <td>@item.Agent</td>
+                        <td>@item.Quantity</td>
+                        <td>@item.Note</td>
+                        <td>@item.Inventorydate (ngày)</td>
+
+                        <td>
+                            @if (item.Createdate != null)
+                            {@item.Createdate.Value.ToString("dd/MM/yyyy")}
+                        </td>
+                        <td>@item.Createby</td>
+                        <td>
+                            <div class="btn-group">
+                                <a class="btn btn-outline-info views" href="#"><i class="ti-eye"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="showing">Showing @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount</div>
+            </div>
+            <div class="col-sm-6">
+                @Html.PagedListPager(Model, page => Url.Action("Index", new { page, textsearch = ViewBag.textsearch, chanel = ViewBag.chanel, status = ViewBag.status, start_date = ViewBag.start_date, end_date = ViewBag.end_date }))
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script>
+        $("#table .views").click(function () {
+            var Id = $(this).closest("tr").find("td").eq(0).html();
+            $.ajax({
+                type: "POST",
+                url: "/Admin/P_Export/Views",
+                data: '{Id: "' + Id + '" }',
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                success: function (response) {
+                    $('#createbody').html(response);
+                    $('#createmodal').modal('show');
+                }
+            });
+        });
+    </script>
+}

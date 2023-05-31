@@ -1,0 +1,897 @@
+﻿@model WebApplication.Areas.Admin.Data.WarrantiDetail
+@{
+    ViewBag.Title = "Warranti";
+    var apiUrl = System.Configuration.ConfigurationManager.AppSettings["DOMAIN"];
+
+    string lat = Model.Lat.ToString().Replace(',', '.');
+    string lng = Model.Long.ToString().Replace(',', '.');
+}
+<style>
+    .money {
+        text-align: right;
+    }
+
+    .image-area {
+        position: relative;
+        background: #333;
+    }
+
+        .image-area img {
+            height: auto;
+        }
+
+    .remove-image {
+        display: none;
+        position: absolute;
+        top: 5px;
+        right: 5px;
+    }
+
+    .lk-money {
+        width: 30%;
+    }
+    .ui-widget.ui-widget-content {
+        color: #ff0000;
+    }
+</style>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Thông tin phiếu bảo hành <span class="text-danger">@Model.Code</span></h3>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("DetailConfirm", "Warranti", FormMethod.Post, new { area = "Admin", enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.Id)
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <div class="form-group row">
+                            @Html.Label("Mã phiếu BH", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">@Html.EditorFor(model => model.Code, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })</div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("Kênh tạo", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">@Html.EditorFor(model => model.Chanel, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })</div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("Ngày tạo", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">@Html.TextBoxFor(model => model.Createdate, "{0:yyyy/MM/dd HH:mm:ss}", new { @class = "form-control", @readonly = "readonly" })</div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("Người tạo", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">@Html.EditorFor(model => model.Createby, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })</div>
+                        </div>
+                        <hr />
+                        <div class="form-group row">
+                            @Html.Label("Số điện thoại", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">@Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })</div>
+                        </div>
+                        <div class="form-group row hidden">
+                            @Html.Label("Số khác", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">@Html.EditorFor(model => model.PhoneExtra, new { htmlAttributes = new { @class = "form-control" } })</div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("Họ tên", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">@Html.EditorFor(model => model.CusName, new { htmlAttributes = new { @class = "form-control" } })</div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("Thành phố/ Tỉnh", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8"> @Html.DropDownListFor(model => model.Province, new List<SelectListItem> { new SelectListItem { Value = Model.Province, Text = Model.Province } }, new { @class = "form-control" })</div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("Quận/ Huyện", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">@Html.DropDownListFor(model => model.District, new List<SelectListItem> { new SelectListItem { Value = Model.District, Text = Model.District } }, new { @class = "form-control" })</div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("Phường/ Xã", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">@Html.DropDownListFor(model => model.Ward, new List<SelectListItem> { new SelectListItem { Value = Model.Ward, Text = Model.Ward } }, new { @class = "form-control" })</div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("Địa chỉ", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">@Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })</div>
+                        </div>
+                        <hr />
+                        <div class="form-group row">
+                            @Html.Label("Serial máy", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">@Html.EditorFor(model => model.ProductCode, new { htmlAttributes = new { @class = "form-control", @onchange = "getserial()" } })</div>
+                        </div>
+                        <div class="form-group row">
+                                @Html.Label("Serial dàn nóng", htmlAttributes: new { @class = "control-label col-md-4" })
+                                <div class="col-md-8">@Html.EditorFor(model => model.Serial, new { htmlAttributes = new { @class = "form-control" } })</div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("Model", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">@Html.EditorFor(model => model.Model, new { htmlAttributes = new { @class = "form-control" } })</div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("Sản phẩm", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">@Html.EditorFor(model => model.ProductName, new { htmlAttributes = new { @class = "form-control" } })</div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("Ngày kích hoạt", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">@Html.EditorFor(model => model.Activedate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })</div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("Thời gian", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">@Html.EditorFor(model => model.Limited, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })</div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("Hạn bảo hành", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">@Html.EditorFor(model => model.Enddate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })</div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("Ngày mua", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="input-group date col-md-8" data-date-autoclose="true" data-provide="datepicker" data-date-format="yyyy/mm/dd">
+                                @Html.TextBoxFor(model => model.Buydate, "{0:yyyy/MM/dd}", new { @class = "form-control" })
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("Nơi mua", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">@Html.EditorFor(model => model.BuyAdr, new { htmlAttributes = new { @class = "form-control" } })</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group row">
+                            @Html.Label("Trạng thái", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                @Html.DropDownListFor(model => model.Status, new List<SelectListItem>{
+                                      new SelectListItem { Value = "0" , Text = "Mới tạo" },
+                                      new SelectListItem { Value = "2" , Text = "Chuyển trạm" },
+                                      //new SelectListItem { Value = "3" , Text = "SMS" },
+                                      new SelectListItem { Value = "4" , Text = "Trạm từ chối" },
+                                      new SelectListItem { Value = "5" , Text = "Đang xử lý" },
+                                      //new SelectListItem { Value = "11" , Text = "Sửa xong" },
+                                      new SelectListItem { Value = "6" , Text = "Đem về trạm" },
+                                      new SelectListItem { Value = "7" , Text = "Đợi linh kiện" },
+                                      new SelectListItem { Value = "8" , Text = "Chờ phản hồi" },
+                                      new SelectListItem { Value = "1" , Text = "Hoàn thành" },
+                                      new SelectListItem { Value = "9" , Text = "Hủy bỏ" },
+
+                           }, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("Phân loại phiếu", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                @Html.DropDownList("Warranti_Cate", new List<SelectListItem>{
+                                new SelectListItem { Value = "" , Text = "--Chọn phân loại--" },
+                                new SelectListItem { Value = "Bảo hành" , Text = "Bảo hành" },
+                                new SelectListItem { Value = "Tính phí" , Text = "Tính phí" },
+                                new SelectListItem { Value = "Lắp đặt" , Text = "Lắp đặt" },
+                                new SelectListItem { Value = "Bảo trì, bảo dưỡng" , Text = "Bảo trì, bảo dưỡng" }
+                           }, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("Nhóm lỗi", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">@Html.EditorFor(model => model.Cate, new { htmlAttributes = new { @class = "form-control" } })</div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("Mô tả", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">@Html.TextAreaFor(model => model.Note, new { @class = "form-control" })</div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("PK kèm theo", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">@Html.TextAreaFor(model => model.Extra, new { @class = "form-control" })</div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("Trạm BH", htmlAttributes: new { @class = "control-label col-md-4" })
+                            @if (User.IsInRole("Admin - Quản trị toàn hệ thống"))
+                            {
+                                <div class="col-md-8">@Html.EditorFor(model => model.Station_Warranti, new { htmlAttributes = new { @class = "form-control" } })</div>
+                            }
+                            else
+                            {
+                                <div class="col-md-8">@Html.EditorFor(model => model.Station_Warranti, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })</div>
+                            }
+
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("Tên trạm", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">@Html.EditorFor(model => model.Station, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })</div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("Dự kiến", htmlAttributes: new { @class = "control-label col-md-4" })
+                            @*<div class="input-group date col-md-8" data-date-autoclose="true" data-provide="datepicker" data-date-format="yyyy/mm/dd">
+                @Html.TextBoxFor(model => model.Deadline, "{0:yyyy/MM/dd HH:mm:ss}", new { @class = "form-control", @type = "datetime-local" })
+                <div class="input-group-append">
+                    <span class="input-group-text">
+                        <i class="fa fa-calendar"></i>
+                    </span>
+                </div>
+            </div>*@
+                            <div class="input-group date col-md-8">
+                                @Html.TextBoxFor(model => model.Deadline, "{0:yyyy/MM/dd HH:mm:ss}", new { @class = "form-control", @type = "datetime-local" })
+                            </div>
+
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("Kỹ thuật viên", htmlAttributes: new { @class = "control-label col-md-4" })
+                            @if (User.IsInRole("Trạm - Nhân viên kỹ thuật"))
+                            {
+                                <div class="col-md-8">@Html.EditorFor(model => model.KTV_Warranti, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })</div>
+                            }
+                            else
+                            {
+                                <div class="col-md-8">@Html.EditorFor(model => model.KTV_Warranti, new { htmlAttributes = new { @class = "form-control" } })</div>
+                            }
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("Họ tên", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">@Html.Editor("KTV", new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })</div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("Ngày giao KTV", htmlAttributes: new { @class = "control-label col-md-4" })
+                            @if (Model.Status == 1)
+                            {
+                                <div class="input-group date col-md-8">
+                                    @Html.TextBoxFor(model => model.Date_KTV, "{0:yyyy/MM/dd HH:mm:ss}", new { @class = "form-control", @readonly = "readonly" })
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="input-group date col-md-8">
+                                    @Html.TextBoxFor(model => model.Date_KTV, "{0:yyyy/MM/dd HH:mm:ss}", new { @class = "form-control", @type = "datetime-local" })
+                                </div>
+                            }
+
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("Hoàn thành", htmlAttributes: new { @class = "control-label col-md-4" })
+                            @if (Model.Status == 1)
+                            {
+                                <div class="input-group date col-md-8">
+                                    @Html.TextBoxFor(model => model.Successdate, "{0:yyyy/MM/dd HH:mm:ss}", new { @class = "form-control", @readonly = "readonly" })
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="input-group date col-md-8">
+                                    @Html.TextBoxFor(model => model.Successdate, "{0:yyyy/MM/dd HH:mm:ss}", new { @class = "form-control", @type = "datetime-local" })
+                                </div>
+                            }
+
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("Kết quả", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">@Html.TextAreaFor(model => model.Successnote, new { @class = "form-control" })</div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("Ghi chú khác", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">@Html.TextAreaFor(model => model.SuccessExtra, new { @class = "form-control" })</div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("Hình ảnh", htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                <input type="file" multiple id="Image" name="Image" class="form-control" />
+                                <div>
+                                    @if (Model.Image != null)
+                                    {
+                                        for (var i = 0; i < Model.Image.Count(); i++)
+                                        {
+                                            <div class="image-area" style="float:left;">
+                                                <img src="@apiUrl/@Model.Image[i].Image" alt="Preview" width="100" onclick="onClick(this)">
+                                                <a class="remove-image" onclick="return confirm('Xóa ảnh này?')" style="display: inline;" href="/Admin/Warranti/DeleteImage/@Model.Image[i].Id">&#215;</a>
+                                            </div>
+                                        }
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-4">
+
+                        <div class="form-group row">
+                            @Html.Label("Linh kiện", htmlAttributes: new { @class = "control-label col-md-12" })
+                            <table class="col-md-12">
+                                <tbody id="tblBills">
+                                    @for (var i = 0; i < Model.Warranti_Accessaries.Count(); i++)
+                                    {
+                                        <tr>
+                                            <td class="hide">@Html.EditorFor(model => model.Warranti_Accessaries[i].Id, new { htmlAttributes = new { @class = "form-control" } })</td>
+                                            @if (Model.Status == 1)
+                                            {
+                                                <td hidden class="">@Html.EditorFor(model => model.Warranti_Accessaries[i].Id, new { htmlAttributes = new { @class = "form-control" } })</td>
+                                                <td class="">@Html.EditorFor(model => model.Warranti_Accessaries[i].Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })</td>
+                                                <td class="lk-money">
+                                                    @Html.EditorFor(model => model.Warranti_Accessaries[i].Price, new { htmlAttributes = new { @class = "form-control money", @readonly = "readonly" } })
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td hidden class="">@Html.EditorFor(model => model.Warranti_Accessaries[i].Id, new { htmlAttributes = new { @class = "form-control" } })</td>
+                                                <td class="">@Html.EditorFor(model => model.Warranti_Accessaries[i].Name, new { htmlAttributes = new { @class = "form-control" } })</td>
+                                                <td class="lk-money">
+                                                    @Html.EditorFor(model => model.Warranti_Accessaries[i].Price, new { htmlAttributes = new { @class = "form-control money" } })
+                                                </td>
+                                                <td><a href="/admin/warranti/backlk?id=@Model.Id&lk=@Model.Warranti_Accessaries[i].Id" title="trả linh kiện cho trạm" class="text-danger"><i class="ti ti-close"></i></a></td>
+                                            }
+
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="text-right">
+                            @if (Model.Status != 1)
+                            {
+                                <a href="#" id="addRow" style="font-size:21px;font-weight:bold" class="text-danger" onclick="addRow();"><i class="ti ti-plus" data-name="mdi-plus"></i> </a>
+                            }
+                        </div>
+                        <hr />
+                        <div class="form-group row">
+                            @Html.Label("Tiền linh kiện", htmlAttributes: new { @class = "control-label col-md-8" })
+                            @if (Model.Status == 1)
+                            {
+                                <div class="col-md-4">@Html.EditorFor(model => model.Price_Accessary, new { htmlAttributes = new { @class = "form-control money", @readonly = "readonly" } })</div>
+                            }
+                            else 
+                            { 
+                                <div class="col-md-4">@Html.EditorFor(model => model.Price_Accessary, new { htmlAttributes = new { @class = "form-control money", @onchange = "amountchange()" } })</div>
+                            }
+                            
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("Di chuyển", htmlAttributes: new { @class = "control-label col-md-3" })
+                            @if (Model.Status == 1)
+                            {
+                                <div class="col-md-5">@Html.EditorFor(model => model.KM, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })</div>
+                                <div class="col-md-4">@Html.EditorFor(model => model.Price_Move, new { htmlAttributes = new { @class = "form-control money", @readonly = "readonly" } })</div>
+                            }
+                            else
+                            {
+                                <div class="col-md-5">@Html.EditorFor(model => model.KM, new { htmlAttributes = new { @class = "form-control", onchange = "movechange()" } })</div>
+                                <div class="col-md-4">@Html.EditorFor(model => model.Price_Move, new { htmlAttributes = new { @class = "form-control money", @onchange = "amountchange()" } })</div>
+                            }
+
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("Phí bảo hành", htmlAttributes: new { @class = "control-label col-md-3" })
+                            @if (Model.Status == 1)
+                            {
+                                <div class="col-md-5">@Html.EditorFor(model => model.Price_Cate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })</div>
+                                <div class="col-md-4">@Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control money", @readonly = "readonly" } })</div>
+                            }
+                            else
+                            {
+                                <div class="col-md-5">@Html.EditorFor(model => model.Price_Cate, new { htmlAttributes = new { @class = "form-control", @onchange = "pricechange()" } })</div>
+                                <div class="col-md-4">@Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control money", @onchange = "amountchange()" } })</div>
+                            }
+
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("Phí dịch vụ", htmlAttributes: new { @class = "control-label col-md-3" })
+                            @if (Model.Status == 1)
+                            {
+                                <div class="col-md-5">@Html.EditorFor(model => model.Service_Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })</div>
+                                <div class="col-md-4">@Html.EditorFor(model => model.Service_Price, new { htmlAttributes = new { @class = "form-control money", @readonly = "readonly" } })</div>
+                            }
+                            else
+                            {
+                                <div class="col-md-5">@Html.EditorFor(model => model.Service_Name, new { htmlAttributes = new { @class = "form-control", @onchange = "servicechange()" } })</div>
+                                <div class="col-md-4">@Html.EditorFor(model => model.Service_Price, new { htmlAttributes = new { @class = "form-control money", @onchange = "amountchange()" } })</div>
+                            }
+
+                        </div>
+                        <div class="form-group row">
+                            @Html.Label("Tổng tiền", htmlAttributes: new { @class = "control-label col-md-8" })
+                            @if (Model.Status == 1)
+                            {
+                                <div class="col-md-4">@Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control money", @readonly = "readonly" } })</div>
+                            }
+                            else
+                            {
+                                <div class="col-md-4">@Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control money" } })</div>
+                            }
+
+                        </div>
+
+                        @* Toạ độ *@
+                        <div class="form-group">
+                            @if (Model.Lat != null && Model.Lat != 0)
+                            {
+                                <iframe style="width: 100%; height: 300px;" src="https://maps.google.com/maps?q=@lat,@lng&hl=es;z=14&amp;output=embed"></iframe>
+                            }
+                        </div>
+                        @* Chữ ký *@
+                        <div class="form-group">
+                            @if (Model.Sign != null)
+                            {
+                                <img alt="chữ ký" height="100" width="500" src="@Model.Sign" />
+                            }
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="form-group text-center">
+                    @* trạm và thợ chỉ được xử lý phiếu khi được phân công *@
+                    @if (User.IsInRole("Admin - Quản trị toàn hệ thống"))
+                    {
+                        if (Model.Status != 1)
+                        {
+                            <button type="submit" class="btn btn-primary"><i class="ti ti-check"></i> Lưu</button>
+                        }
+
+                    }
+
+                    @if (Model.Station_Warranti != null && (Model.Station_Warranti.Equals(User.Identity.Name) && Model.Status > 1))
+                    {
+                        <button type="submit" class="btn btn-primary"><i class="ti ti-check"></i> Lưu</button>
+                    }
+                    @if (Model.KTV_Warranti != null && (Model.KTV_Warranti.Equals(User.Identity.Name) && Model.Status >= 5))
+                    {
+                        <button type="submit" class="btn btn-primary"><i class="ti ti-check"></i> Lưu</button>
+                        if (Model.Status == 5)
+                        {
+                            <button type="submit" class="btn btn-success"><i class="ti ti-check"></i> Hoàn thành</button>
+                        }
+                    }
+                    <a href="/admin/warranti" class="btn btn-danger"><i class="ti ti-close"></i> Thoát</a>
+                </div>
+
+            </div>
+        }
+    </div>
+</div>
+
+<div id="modal01" class="w3-modal" onclick="this.style.display='none'">
+    <span class="w3-button w3-hover-red w3-xlarge w3-display-topright">&times;</span>
+    <div class="w3-modal-content w3-animate-zoom">
+        <img id="img01" style="width:100%">
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        function onClick(element) {
+            document.getElementById("img01").src = element.src;
+            document.getElementById("modal01").style.display = "block";
+        }
+        //function closesuccess() {
+        //    var Id = $("#Id").val();
+        //    $.ajax({
+        //        url: '/Admin/Warranti/Confirmation?Id=' + Id,
+        //        type: "GET",
+        //        datatype: "JSON",
+        //        success: function (result) {
+        //            if (result.Status == 1) {
+        //                $("#Successdate").prop("readonly", true);
+        //            }
+        //        }
+        //    });
+        //}
+        function amountchange() {
+            //cong tong tien
+            var cost = $("#Price_Accessary").val();
+            var move = $("#Price_Move").val();
+            var price = $("#Price").val();
+            var service = $("#Service_Price").val();
+            debugger;
+            var amount = Number(move) + Number(price) + Number(cost) + Number(service);
+            $("#Amount").val(amount);
+        }
+        function getprice(id) {
+            var Name = $('#' + id).val();
+            var index = id.split('_')[2];
+            var Id = $("#Warranti_Accessaries_" + index + "__IdAccessary").val();
+            var w_cate = $("#Warranti_Cate").val();
+
+            $.ajax({
+                url: '/Admin/Warranti/GetPriceAccess',
+                type: "POST",
+                dataType: "JSON",
+                data: { Id: Id },
+                success: function (result) {
+                    $("#Warranti_Accessaries_" + index + "__Price").html("");
+                    $("#Warranti_Accessaries_" + index + "__Price").val(result);
+                    //cong tien
+                    var cost = $("#Price_Accessary").val();
+                    var amount = Number(cost) + Number(result);
+                    if (w_cate === "Bảo hành" || w_cate === "Bảo trì, bảo dưỡng") {
+                        $("#Price_Accessary").val(0);
+                    } else {
+                        $("#Price_Accessary").val(amount);
+                    }
+
+                    //cong tong tien
+                    var cost = $("#Price_Accessary").val();
+                    var move = $("#Price_Move").val();
+                    var price = $("#Price").val();
+                    var priceService = $("#Service_Price").val();
+                    var amount = Number(move) + Number(price) + Number(cost) + Number(priceService);
+                    $("#Amount").val(amount);
+                }
+            });
+        }
+        function addRow() {
+            var index = $("#tblBills").children("tr").length;
+            var id = '<td class="hide"><input class="form-control " id="Warranti_Accessaries_' + index + '__IdAccessary" name="Warranti_Accessaries[' + index + '].IdAccessary" type="text" "/></td >';
+            var name = '<td class=""><input class="form-control" id="Warranti_Accessaries_' + index + '__Name" name="Warranti_Accessaries[' + index + '].Name" type="text" onchange="getprice(this.id)"/></td >';
+            var price = '<td class="lk-money"><input class="form-control money" id="Warranti_Accessaries_' + index + '__Price" name="Warranti_Accessaries[' + index + '].Price" type="text" /></td >';
+
+            var newRow = "<tr id='trBook" + index + "'>" + id + name + price + "</tr>";
+            $("#tblBills").append(newRow);
+
+            $("#Warranti_Accessaries_" + index + "__Name").autocomplete({
+                source: function (request, response) {
+                    var station = $("#Station_Warranti").val();
+                    if (station != "") {
+                        $.ajax({
+                            url: "/Admin/Warranti/GetAccessary",
+                            type: "POST",
+                            dataType: "json",
+                            data: { text: request.term, station: station },
+                            success: function (data) {
+                                response($.map(data, function (item) {
+
+                                    //var code = item.Code;
+                                    return { label: item.Code + " " + item.Name, value: item.Code + " - " + item.Name, label1: item.Id, label2: item.Code };
+                                }))
+
+                            }
+                        })
+                    } else {
+                        alert("Chọn trạm bảo hành có linh kiện");
+                    }
+
+                },
+                select: function (event, ui) {
+                    var station = $("#Station_Warranti").val();
+                    $("#Warranti_Accessaries_" + index + "__IdAccessary").val(ui.item.label1);
+                    //check xem con linh kien khong
+                    checkvalidaccess(ui.item.label2, station);
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+        }
+        function checkvalidaccess(CODE, station) {
+            $.ajax
+                ({
+                    url: '/Admin/Warranti/CheckvalidAccess',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { text: CODE, station: station },
+                    success: function (result) {
+                        if (result == 0) {
+
+                        } else {
+                            alert("Linh kiện không còn ở trạm.");
+                            $("#tblBills tr:last").remove();
+                        }
+                    }
+                });
+        }
+
+        function movechange() {
+            var cate = $("#KM").val();
+            $.ajax
+                ({
+                    url: '/Admin/Warranti/GetPriceMove',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { text: cate },
+                    success: function (result) {
+                        $("#Price_Move").val(result);
+                        //cong tong tien
+                        var cost = $("#Price_Accessary").val();
+                        var move = $("#Price_Move").val();
+                        var price = $("#Price").val();
+                        var priceService = $("#Service_Price").val();
+                        var amount = Number(move) + Number(price) + Number(cost) + Number(priceService);
+                        $("#Amount").val(amount);
+                    }
+                });
+        }
+        function pricechange() {
+            var cate = $("#Price_Cate").val();
+            var model = $("#Model").val();
+            $.ajax
+                ({
+                    url: '/Admin/Warranti/GetPriceCate',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { text: cate, model: model },
+                    success: function (result) {
+                        $("#Price").val(result);
+                        //cong tong tien
+                        var cost = $("#Price_Accessary").val();
+                        var move = $("#Price_Move").val();
+                        var price = $("#Price").val();
+                        var priceService = $("#Service_Price").val();
+                        var amount = Number(move) + Number(price) + Number(cost) + Number(priceService);
+                        $("#Amount").val(amount);
+                    }
+                });
+        }
+        function servicechange() {
+            var service = $("#Service_Name").val();
+            debugger;
+            var model = $("#Model").val();
+            $.ajax
+                ({
+                    url: '/Admin/Warranti/GetPriceService',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { text: service, model: model },
+                    success: function (result) {
+                        debugger;
+                        $("#Service_Price").val(result);
+                        //cong tong tien
+                        var cost = $("#Price_Accessary").val();
+                        var move = $("#Price_Move").val();
+                        var price = $("#Price").val();
+                        var priceService = $("#Service_Price").val();
+
+                        var amount = Number(move) + Number(price) + Number(cost) + Number(priceService);
+                        $("#Amount").val(amount);
+                    }
+                });
+        }
+        function getserial() {
+            var code = $("#ProductCode").val();
+            $.ajax
+                ({
+                    url: '/Admin/Warranti/GetProduct',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { text: code },
+                    success: function (result) {
+                        if (result.Activedate != null) {
+                            $("#ProductName").val(result.Name);
+                            $("#Activedate").val(result.Activedate);
+                            $("#Limited").val(result.Limited);
+                            $("#Enddate").val(result.Enddate);
+                            $("#Model").val(result.Model);
+                            //$("#Serial").val(result.Serial);
+                            $("#BuyAdr").val(result.BuyAdr);
+                            $("#Buydate").val(result.Buydate);
+                        }
+                    }
+                });
+        }
+        $(document).ready(function () {
+            var code = $("#ProductCode").val();
+            var model = $("#Model").val();
+            if (code.length > 0) {
+                $.ajax
+                    ({
+                        url: '/Admin/Warranti/GetProduct',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: { text: code },
+                        success: function (result) {
+                            if (result.Activedate != null) {
+                                $("#ProductName").val(result.Name);
+                                $("#Activedate").val(result.Activedate);
+                                $("#Limited").val(result.Limited);
+                                $("#Enddate").val(result.Enddate);
+                                $("#Model").val(result.Model);
+                                //$("#Serial").val(result.Serial);
+                                $("#BuyAdr").val(result.BuyAdr);
+                                $("#Buydate").val(result.Buydate);
+                            }
+                        }
+                    });
+            }
+            var phone = $("#Phone").val();
+            var province = $("#Province").val();
+            if (province.length == 0) {
+                $.ajax
+                    ({
+                        url: '/Admin/Warranti/LoadCustomer',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: { text: phone },
+                        success: function (result) {
+                            if (result.Province != null) {
+                                $("#CusName").val(result.Name);
+                                $("#Province option").text(result.Province);
+                                $("#District option").text(result.District);
+                                $("#Ward option").text(result.Ward);
+                                $("#Address").val(result.Address);
+                            }
+                        }
+                    });
+            }
+            $("#Cate").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Admin/Warranti/GetCate",
+                        type: "POST",
+                        dataType: "json",
+                        data: { text: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.Name + " - " + item.Description, value: item.Name + " - " + item.Description };
+                            }))
+
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+            $("#Station_Warranti").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Admin/Warranti/GetStation",
+                        type: "POST",
+                        dataType: "json",
+                        data: { text: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.UserName + " - " + item.FullName, value: item.UserName, label1: item.FullName };
+                            }))
+                        }
+                    })
+                },
+                select: function (event, ui) {
+                    $("#Station").val(ui.item.label1);
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+            $("#KTV_Warranti").autocomplete({
+                source: function (request, response) {
+                    var station = $("#Station_Warranti").val();
+                    if (station.length != "") {
+                        $.ajax({
+                            url: "/Admin/Warranti/GetKTV",
+                            type: "POST",
+                            dataType: "json",
+                            data: { text: request.term, station: station },
+                            success: function (data) {
+                                response($.map(data, function (item) {
+                                    return { label: item.UserName + " - " + item.FullName, value: item.UserName, label1: item.FullName };
+                                }))
+
+                            }
+                        })
+                    } else {
+                        alert("Chọn trạm bảo hành.");
+                    }
+
+                },
+                select: function (event, ui) {
+                    $("#KTV").val(ui.item.label1);
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+            $("#KM").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Admin/Warranti/GetKM",
+                        type: "POST",
+                        dataType: "json",
+                        data: { text: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.Name, value: item.Name };
+                            }))
+
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+            $("#Price_Cate").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Admin/Warranti/GetPrice",
+                        type: "POST",
+                        dataType: "json",
+                        data: { text: request.term, modell: model },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.Name, value: item.Name };
+                            }))
+
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+            $("#Service_Name").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Admin/Warranti/GetService",
+                        type: "POST",
+                        dataType: "json",
+                        data: { text: request.term, modell: model },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.Name, value: item.Name };
+                            }))
+
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+            $("#Province").click(function () {
+                $.ajax
+                    ({
+                        url: '/Admin/User/GetProvince',
+                        type: 'POST',
+                        datatype: 'application/json',
+                        contentType: 'application/json',
+                        success: function (data) {
+                            $("#District").empty();
+                            $("#Ward").empty();
+                            if ($("#Province option").length < 3) {
+                                $.each(data, function (i, province) {
+                                    $("#Province").append($('<option></option>').val(province.Name).html(province.Name))
+                                })
+                            }
+                        }
+                    });
+            });
+            $("#District").click(function () {
+                var name = $("#Province").val();
+                $.ajax
+                    ({
+                        url: '/Admin/User/GetDistrict',
+                        type: 'POST',
+                        datatype: 'application/json',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            text: name
+                        }),
+                        success: function (data) {
+                            $("#Ward").empty();
+                            if ($("#District option").length < 3) {
+                                $.each(data, function (i, district) {
+                                    $("#District").append($('<option></option>').val(district.Name).html(district.Name))
+                                })
+                            }
+                        }
+                    });
+            });
+            $("#Ward").click(function () {
+                var name = $("#District").val();
+                $.ajax
+                    ({
+                        url: '/Admin/User/GetWard',
+                        type: 'POST',
+                        datatype: 'application/json',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            text: name
+                        }),
+                        success: function (data) {
+                            if ($("#Ward option").length < 3) {
+                                $.each(data, function (i, district) {
+                                    $("#Ward").append($('<option></option>').val(district.Name).html(district.Name))
+                                })
+                            }
+                        }
+                    });
+            });
+        })
+    </script>
+}

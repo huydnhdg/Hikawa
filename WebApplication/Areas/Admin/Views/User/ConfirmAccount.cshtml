@@ -1,0 +1,107 @@
+﻿@model WebApplication.Models.AspNetUser
+@{ 
+    var apiUrl = System.Configuration.ConfigurationManager.AppSettings["DOMAIN"];
+}
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Thông tin tài khoản</h3>
+    </div>
+    <div class="card-body">
+        @using (Html.BeginForm("ConfirmAccount", "User", new { area = "Admin" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.Id)
+                @Html.HiddenFor(model => model.EmailConfirmed)
+                @Html.HiddenFor(model => model.PasswordHash)
+                @Html.HiddenFor(model => model.SecurityStamp)
+                @Html.HiddenFor(model => model.PhoneNumberConfirmed)
+                @Html.HiddenFor(model => model.TwoFactorEnabled)
+                @Html.HiddenFor(model => model.LockoutEndDateUtc)
+                @Html.HiddenFor(model => model.LockoutEnabled)
+                @Html.HiddenFor(model => model.AccessFailedCount)
+                @Html.HiddenFor(model => model.Createdate)
+                @Html.HiddenFor(model => model.Createby)
+                @Html.HiddenFor(model => model.ImgIDBack)
+                @Html.HiddenFor(model => model.ImgIDFront)
+                @Html.HiddenFor(model => model.StatusConfirm)
+                <table>
+                    <tbody>
+                        <tr>
+                            <td class="col-2">Tên tài khoản</td>
+                            <td class="col-10">@Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control", @placeholder = "Tài khoản", @required = "required", @readonly = "readonly" } })</td>
+                        </tr>
+                        <tr>
+                            <td class="col-2">Quyền</td>
+                            <td class="col-10">@Html.EditorFor(model => model.AspNetRoles.FirstOrDefault().Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })</td>
+                        </tr>
+                        <tr>
+                            <td class="col-2">Số điện thoại</td>
+                            <td class="col-10">@Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control", @placeholder = "Số điện thoại", @readonly = "readonly" } })</td>
+                        </tr>
+                        <tr>
+                            <td class="col-2">Tên chủ tài khoản</td>
+                            <td class="col-10">@Html.EditorFor(model => model.FullName, new { htmlAttributes = new { @class = "form-control", @placeholder = "Tên đầy đủ", @readonly = "readonly" } })</td>
+                        </tr>
+                        <tr>
+                            <td class="col-2">Trạm tạo</td>
+                            <td class="col-10">@Html.EditorFor(model => model.Createby, new { htmlAttributes = new { @class = "form-control", @placeholder = "Người tạo", @readonly = "readonly" } })</td>
+                        </tr>
+                        <tr>
+                            <td class="col-2">Ngày tạo tài khoản</td>
+                            <td class="col-10">@Html.EditorFor(model => model.Createdate, new { htmlAttributes = new { @class = "form-control", @placeholder = "Ngày tạo", @readonly = "readonly" } })</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="form-group" id="img">
+                    <p style="padding-left:10px;" class="text-danger">* Thông tin CMND/ CCCD 2 mặt</p>
+                    <div class="col-6 float-left" style="padding-bottom:10px;">
+                        @if (Model.ImgIDBack == null)
+                        {
+                            <img id="imgfront" width="300" height="200" />
+                        }
+                        else
+                        {
+                            <img id="imgfront" src="@apiUrl/@Model.ImgIDFront" width="300" height="200" />
+                        }
+
+                    </div>
+                    <div class="float-right col-6">
+                        @if (Model.ImgIDFront == null)
+                        {
+                            <img id="imgback" width="300" height="200" />
+                        }
+                        else
+                        {
+                            <img id="imgback" src="@apiUrl/@Model.ImgIDBack" width="300" height="200" />
+                        }
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.DropDownListFor(model => model.Province, new List<SelectListItem> { new SelectListItem { Value = Model.Province, Text = Model.Province } }, new { @class = "form-control", @readonly = "readonly" })
+                </div>
+                <div class="form-group">
+                    @Html.DropDownListFor(model => model.District, new List<SelectListItem> { new SelectListItem { Value = Model.District, Text = Model.District } }, new { @class = "form-control", @readonly = "readonly" })
+                </div>
+
+                <div class="form-group">
+                    @Html.DropDownListFor(model => model.Ward, new List<SelectListItem> { new SelectListItem { Value = Model.Ward, Text = Model.Ward } }, new { @class = "form-control", @readonly = "readonly" })
+                </div>
+                <div class="form-group">
+                    @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control", @placeholder = "Địa chỉ", @readonly = "readonly" } })
+                </div>
+
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-primary"><i class="ti ti-check"></i> Duyệt</button>
+                    <a class="btn btn-outline-light" href="/admin/user/delete/@Model.Id" onclick="return confirm('Xóa tài khoản này?')" title="Từ chối duyệt"><i class="ti ti-trash text-danger"></i></a>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="ti ti-close"></i> Thoát</button>
+                </div>
+
+            </div>
+        }
+    </div>
+</div>

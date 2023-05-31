@@ -1,0 +1,163 @@
+﻿@model WebApplication.Areas.Admin.Data.HomeView
+@{
+    ViewBag.Title = "Home";
+    var index = 0;
+}
+<style>
+    table {
+        width: 100%;
+    }
+
+    thead, tbody tr {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    tbody {
+        display: block;
+        overflow-y: auto;
+        table-layout: fixed;
+        max-height: 300px;
+    }
+</style>
+
+<div class="row">
+    <div class="col-sm-6 col-lg-3">
+        <div class="widget widget-metric_1 animate">
+            <span class="icon-wrapper custom-bg-purple"><i class="ti ti-package"></i></span>
+            <div class="right">
+                <span class="value">@Model.sanpham <i class="change-icon change-up fa fa-sort-up text-indicator-green"></i></span>
+                <span class="title">SẢN PHẨM</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <div class="widget widget-metric_1 animate">
+            <span class="icon-wrapper custom-bg-orange"><i class="ti ti-support"></i></span>
+            <div class="right">
+                <span class="value">@Model.baohanh <i class="change-icon change-up fa fa-sort-up text-indicator-green"></i></span>
+                <span class="title">BẢO HÀNH</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <div class="widget widget-metric_1 animate">
+            <span class="icon-wrapper custom-bg-lightseagreen"><i class="ti ti-check"></i></span>
+            <div class="right">
+                <span class="value">@Model.kichhoat <i class="change-icon change-up fa fa-sort-up text-indicator-green"></i></span>
+                <span class="title">KÍCH HOẠT</span>
+            </div>
+        </div>
+    </div>
+    @if (User.IsInRole("Trạm - Trưởng trạm"))
+    {
+        <div class="col-sm-6 col-lg-3">
+            <div class="widget widget-metric_1 animate">
+                <span class="icon-wrapper custom-bg-blue2"><i class="fa fa-user"></i></span>
+                <div class="right">
+                    <span class="value">@Model.taikhoan <i class="change-icon change-down fa fa fa-sort-up text-indicator-green"></i></span>
+                    <span class="title">THỢ</span>
+                </div>
+            </div>
+        </div>
+    }
+    else if (User.IsInRole("Admin - Quản trị toàn hệ thống"))
+    {
+        <div class="col-sm-6 col-lg-3">
+            <div class="widget widget-metric_1 animate">
+                <span class="icon-wrapper custom-bg-blue2"><i class="fa fa-user"></i></span>
+                <div class="right">
+                    <span class="value">@Model.taikhoan <i class="change-icon change-down fa fa fa-sort-up text-indicator-green"></i></span>
+                    <span class="title">ĐẠI LÝ</span>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+<div class="row row-panel mb-5">
+    
+    <div class="col-lg-4">
+        <h2 class="heading-border">Kênh kích hoạt</h2>
+        <ul class="list-unstyled list-referrals">
+            <li>
+                <p><span class="value">@Model.ac_SMS</span><span class="text-muted">Kích hoạt qua SMS</span></p>
+                <div class="progress progress-transparent custom-color-blue" style="height: 5px;">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="@Model.ac_SMS_per" aria-valuemin="0" aria-valuemax="100" style="width:@Model.ac_SMS_per%"></div>
+                </div>
+            </li>
+            <li>
+                <p><span class="value">@Model.ac_APP</span><span class="text-muted">Kích hoạt qua APP</span></p>
+                <div class="progress progress-transparent custom-color-purple" style="height: 5px;">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="@Model.ac_APP_per" aria-valuemin="0" aria-valuemax="100" style="width:@Model.ac_APP_per%"></div>
+                </div>
+            </li>
+            <li>
+                <p><span class="value">@Model.ac_WEB</span><span class="text-muted">Kích hoạt qua WEB</span></p>
+                <div class="progress progress-transparent custom-color-green" style="height: 5px;">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="@Model.ac_WEB_per" aria-valuemin="0" aria-valuemax="100" style="width:@Model.ac_WEB_per%"></div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="row row-panel mb-8">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Thống kê phiếu bảo hành</h3>
+            </div>
+            <div class="card-body">
+                <table class="table table-hover">
+                    <thead>
+                        <tr><th>#</th><th>Trạm bảo hành</th><th style="text-align:right">Đã tạo</th><th style="text-align:right">Tiếp nhận</th><th style="text-align:right">Tổng chi phí</th></tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.keyreport)
+                        {
+                            ++index;
+                            <tr>
+                                <td>@index</td>
+                                <td>@item.Name</td>
+                                <td class="text-right">@item.Warranti_Create</td>
+                                <td class="text-right">@item.Warranti_Receive</td>
+                                <td class="text-right">@item.Amount</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <h2 class="heading-border">Kênh bảo hành</h2>
+        <ul class="list-unstyled list-referrals">
+            <li>
+                <p><span class="value">@Model.wa_SMS</span><span class="text-muted">Bảo hành qua SMS</span></p>
+                <div class="progress progress-transparent custom-color-blue" style="height: 5px;">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="@Model.wa_SMS_per" aria-valuemin="0" aria-valuemax="100" style="width:@Model.wa_SMS_per%"></div>
+                </div>
+            </li>
+            <li>
+                <p><span class="value">@Model.wa_APP</span><span class="text-muted">Bảo hành qua APP</span></p>
+                <div class="progress progress-transparent custom-color-purple" style="height: 5px;">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="@Model.wa_APP_per" aria-valuemin="0" aria-valuemax="100" style="width:@Model.wa_APP_per%"></div>
+                </div>
+            </li>
+            <li>
+                <p><span class="value">@Model.wa_WEB</span><span class="text-muted">Bảo hành qua WEB</span></p>
+                <div class="progress progress-transparent custom-color-green" style="height: 5px;">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="@Model.wa_WEB_per" aria-valuemin="0" aria-valuemax="100" style="width:@Model.wa_WEB_per%"></div>
+                </div>
+            </li>
+            <li>
+                <p><span class="value">@Model.wa_CMS</span><span class="text-muted">Bảo hành qua CMS</span></p>
+                <div class="progress progress-transparent custom-color-yellow" style="height: 5px;">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="@Model.wa_CMS_per" aria-valuemin="0" aria-valuemax="100" style="width:@Model.wa_CMS_per%"></div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

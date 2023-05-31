@@ -1,0 +1,197 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+<style>
+    .hidden {
+        display: none;
+    }
+</style>
+<div class="home-act">
+    <h2 class="text-center">TRA CỨU / ĐỔI THƯỞNG</h2>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="home-act-content">
+                <div class="form">
+                    <form>
+                        <div class="form-group text-center">
+                            <input style="margin:auto;" class="form-control" type="number" required id="Phone" name="Phone" placeholder="Vui lòng nhập số điện thoại" value="@ViewBag.phone" />
+
+                        </div>
+                        <div class="text-center">
+                            <button type="button" id="btn-search" class="btn btn-danger rounded-pill"> ĐĂNG NHẬP</button>
+                        </div>
+                    </form>
+                    <p class="sr-note">
+                        - Khách hàng kích hoạt thành công sẽ nhận thêm điểm thưởng<br />
+                        - Khách hàng sử dụng số điện thoại dùng để bảo hành, để tra cứu đổi thưởng<br />
+                        - Lần đầu đăng nhập quý khách sẽ nhận được tin nhắn OTP để xác thực đăng nhập
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- MODAL CREATE -->
+<div class="modal" tabindex="-1" role="dialog" id="model-sendcode" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <p class="text-center">
+                Vui lòng nhập mã OTP được gửi về qua tin nhắn
+            </p>
+            <h3 class="text-center">NHẬP MÃ OTP</h3>
+            <div class="modal-body" id="">
+                <div class="form-group hidden">
+                    <input class="form-control" type="text" required id="UserOTP" name="UserOTP" style="margin:auto" />
+                </div>
+                <div class="form-group">
+                    <input class="form-control" type="text" required id="OTP" name="OTP" style="margin:auto" />
+                </div>
+                <div class="text-center">
+                    <button type="button" class="btn btn-danger rounded-pill" id="btn-otp"> XÁC NHẬN</button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- MODAL CREATE -->
+<div class="modal" tabindex="-1" role="dialog" id="model-login" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <p class="text-center">
+                Số điện thoại đã được xác nhận.<br />
+                Vui lòng nhập mật khẩu để đăng nhập
+            </p>
+            <h3 class="text-center">NHẬP MẬT KHẨU</h3>
+            <div class="modal-body" id="loginbody">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL CREATE -->
+<div class="modal" tabindex="-1" role="dialog" id="model-register" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <p class="text-center">
+                Mật khẩu dùng để đăng nhập nhanh<br />
+                trong các lần tra cứu tiếp theo
+            </p>
+            <h3 class="text-center">TẠO MẬT KHẨU</h3>
+            <div class="modal-body" id="createbody">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script>
+        var apiUrl = '@System.Configuration.ConfigurationManager.AppSettings["DOMAIN"]';
+
+        $(document).ready(function () {
+            
+        });
+        $("#btn-search").click(function () {
+            submit();
+
+        });
+
+        function submit() {
+            var phone = $('#Phone').val();
+            if (phone.length == 10) {
+                $.ajax({
+                    url: apiUrl + 'api/action/checkUser',
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        Phone: phone
+                    },
+                    success: function (result) {
+                        if (result.Status == 0) {
+                            //show otp
+                            var OTP = $('#OTP').val('');
+                            $.ajax({
+                                url: apiUrl + 'api/action/sendcode',
+                                type: 'GET',
+                                dataType: 'json',
+                                data: {
+                                    Phone: phone
+                                },
+                                success: function (result) {
+                                    $('#UserOTP').val(phone);
+                                    $('#model-sendcode').modal('show');
+                                }
+                            });
+                        } else {
+                            //show login
+                            $.ajax({
+                                type: "POST",
+                                data: '{phone: "' + phone + '" }',
+                                contentType: "application/json; charset=utf-8",
+                                dataType: "html",
+                                url: "/LoginPhone/Login",
+                                success: function (response) {
+                                    $('#loginbody').html(response);
+                                    $('#model-login').modal('show');
+                                }
+                            });
+                        }
+                    }
+                });
+            } else {
+                alert("Số điện thoại không đúng.");
+            }
+
+        }
+
+        $("#btn-otp").click(function () {
+            var OTP = $('#OTP').val();
+            var phone = $('#UserOTP').val();
+                $.ajax({
+                    url: apiUrl + 'api/action/checkOTP',
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        Phone: phone,
+                        OTP: OTP
+                    },
+                    success: function (result) {
+                        if (result.Status == 0) {
+                            alert("OTP không đúng. Vui lòng kiểm tra lại");
+                            $('#model-sendcode').modal('hide');
+                        } else {
+                            $('#model-sendcode').modal('hide');
+                            $.ajax({
+                                type: "POST",
+                                data: '{phone: "' + phone + '" }',
+                                contentType: "application/json; charset=utf-8",
+                                dataType: "html",
+                                url: "/LoginPhone/Register",
+                                success: function (response) {
+                                    $('#createbody').html(response);
+                                    $('#model-register').modal('show');
+                                }
+                            });
+
+                        }
+                    }
+                });
+
+        });
+
+    </script>
+}
